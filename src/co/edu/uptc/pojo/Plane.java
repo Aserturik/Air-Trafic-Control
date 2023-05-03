@@ -26,6 +26,10 @@ public class Plane {
         //this.centerPlane = new Point(position.x + imagePlane.getIconWidth() / 2, position.y + imagePlane.getIconHeight() / 2);
     }
 
+    public void addPointToPath(Point point) {
+        path.add(point);
+    }
+
     public void draw(Graphics2D g) {
         this.g2d = g;
         if (position != null) {
