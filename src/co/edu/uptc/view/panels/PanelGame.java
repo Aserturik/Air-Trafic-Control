@@ -1,13 +1,16 @@
-package co.edu.uptc.view;
+package co.edu.uptc.view.panels;
 
 import co.edu.uptc.pojo.Plane;
+import co.edu.uptc.view.MyFrame;
 import co.edu.uptc.view.globals.ValuesGlobals;
+import util.UtilImages;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
+import java.awt.geom.AffineTransform;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -17,16 +20,26 @@ public class PanelGame extends JPanel implements MouseListener, MouseMotionListe
     private List<Plane> planes;
     private Plane selectedPlane;
     private Point lastMousePos;
-    private List<Point> temporalPath;
+    private ImageIcon imagePlane;
+    private JLabel imageLabel;
 
     public PanelGame(MyFrame myFrame) {
         super();
         this.frame = myFrame;
         planes = new ArrayList<>();
-        temporalPath = new ArrayList<>();
         this.setBackground(Color.BLACK);
+        imagePlane = getImagePlane();
         setSizes();
         initComponents();
+    }
+
+    private ImageIcon getImagePlane() {
+        UtilImages utilImages = new UtilImages();
+        imageLabel = new JLabel();
+        imageLabel.setBounds(10, 10, 40, 40);
+        Icon img = utilImages.loadScaleImage(ValuesGlobals.PHAT_PLANE_IMAGE_ORIGINAL, imageLabel.getWidth(), imageLabel.getHeight());
+        imageLabel.setIcon(img);
+        return new ImageIcon(((ImageIcon) img).getImage().getScaledInstance(imageLabel.getWidth(), imageLabel.getHeight(), Image.SCALE_DEFAULT));
     }
 
     private void setSizes() {
@@ -44,12 +57,13 @@ public class PanelGame extends JPanel implements MouseListener, MouseMotionListe
         this.addMouseMotionListener(this);
         this.setVisible(true);
     }
+
     /*
     @Override
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
         g2d = (Graphics2D) g;
-        for (Plane plane : planes) {
+        for (Plane plane : planes/home/alex/Desarrollo/Cuarto Semestre/JAVA/Proyecto Aviones Final MVP/src/co/edu/uptc/view/panels) {
             plane.draw(g2d);
         }
     }
@@ -59,14 +73,18 @@ public class PanelGame extends JPanel implements MouseListener, MouseMotionListe
         // Dibujar aviones y cualquier otro objeto en el panel
         super.paintComponent(g);
         g2d = (Graphics2D) g;
-        for (Plane plane : planes) {
-            plane.draw(g2d);
-        }
+        drawAllPlanes();
 
         // Dibujar una línea de puntos roja desde el avión seleccionado hasta la posición del ratón
         if (selectedPlane == null) {
             g2d.setColor(Color.white);
             g2d.fillRect(getCenterPanel().x, getCenterPanel().y, 10, 10);
+        }
+    }
+
+    private void drawAllPlanes() {
+        for (Plane plane : planes) {
+
         }
     }
 
@@ -96,6 +114,29 @@ public class PanelGame extends JPanel implements MouseListener, MouseMotionListe
                 }
             }
         }).start();
+    }
+
+    private void drawImage(Plane plane) {
+        double rotationRequired = Math.toRadians(plane.getAngle());
+        AffineTransform tx = g2d.getTransform();
+
+        int imageWidth = imagePlane.getIconWidth();
+        int imageHeight = imagePlane.getIconHeight();
+        int drawX = plane.getPosition().x - imageWidth / 2;
+        int drawY = plane.getPosition().y - imageHeight / 2;
+
+        g2d.rotate(rotationRequired, plane.getPosition().x, plane.getPosition().y);
+        g2d.drawImage(imagePlane.getImage(), drawX, drawY, null);
+        g2d.setTransform(tx);
+    }
+
+    public boolean isColliding(Point point) {
+        int x = point.x;
+        int y = point.y;
+        int imgWidth = imagePlane.getIconWidth();
+        int imgHeight = imagePlane.getIconHeight();
+        //return x >= position.x && x <= position.x + imgWidth && y >= position.y && y <= position.y + imgHeight;
+         return false;
     }
 
     private void reOrderPlane() {
@@ -146,8 +187,7 @@ public class PanelGame extends JPanel implements MouseListener, MouseMotionListe
     public void mouseDragged(MouseEvent e) {
         // TODO: los metodos de pintar el camino que sigue el avion deben llamarse aqui
         if (selectedPlane != null) {
-            temporalPath.add(e.getPoint());
-            selectedPlane.setPath(temporalPath);
+            selectedPlane.addPoint(e.getPoint());
         }
     }
 

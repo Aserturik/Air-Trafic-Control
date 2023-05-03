@@ -21,8 +21,6 @@ public class ManagerModel implements Contract.Model {
 
     }
 
-
-
     private void createPlane(){
         // TODO: crear un hilo nuevo que le mande el Avion al presenter
     }
