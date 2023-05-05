@@ -12,10 +12,10 @@ public class PrincipalPanel extends JPanel {
 
     public PrincipalPanel(MyFrame myFrame) {
         super();
-        this.setSizes();
         this.frame = myFrame;
         panelGame = new PanelGame(myFrame);
-        initComponents();
+        this.add(panelGame);
+        this.setSizes();
     }
 
     private void setSizes() {
@@ -26,10 +26,6 @@ public class PrincipalPanel extends JPanel {
         this.setLayout(null);
         System.out.println("El tamaño del PrincipalPanel es: " + this.getWidth() + " " + this.getHeight());
         this.setVisible(true);
-    }
-
-    private void initComponents() {
-        this.add(panelGame);
     }
 
     public PanelGame getPanelGame() {

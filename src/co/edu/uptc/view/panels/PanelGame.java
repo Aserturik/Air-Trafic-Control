@@ -24,11 +24,11 @@ public class PanelGame extends JPanel implements MouseListener, MouseMotionListe
     public PanelGame(MyFrame myFrame) {
         super();
         this.frame = myFrame;
-        planes = new ArrayList<>();
+        planes = new ArrayList<Plane>();
         imagePlane = getImagePlane();
-        this.setBackground(Color.BLACK);
         setSizes();
         initComponents();
+        this.setBackground(Color.BLACK);
     }
 
     private void initComponents() {
@@ -38,8 +38,20 @@ public class PanelGame extends JPanel implements MouseListener, MouseMotionListe
     }
 
     @Override
-    protected void paintComponent(Graphics g) {
+    public void paintComponent(Graphics g) {
         super.paintComponent(g);
+        g2d = (Graphics2D) g;
+    }
+
+    @Override
+    public void paint(Graphics g) {
+        super.paint(g);
+        g2d = (Graphics2D) g;
+    }
+
+    @Override
+    public void paintComponents(Graphics g) {
+        super.paintComponents(g);
         g2d = (Graphics2D) g;
     }
 
@@ -49,6 +61,7 @@ public class PanelGame extends JPanel implements MouseListener, MouseMotionListe
     }
 
     public void drawAllPlanes() {
+        repaint();
         for (Plane plane : planes) {
             drawImage(plane);
         }
@@ -132,6 +145,6 @@ public class PanelGame extends JPanel implements MouseListener, MouseMotionListe
     }
 
     public void setPlanes(List<Plane> planes) {
-         this.planes = planes;
+        this.planes = planes;
     }
 }

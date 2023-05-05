@@ -4,8 +4,9 @@ import co.edu.uptc.model.ManagerModel;
 import co.edu.uptc.view.MyFrame;
 
 public class ManagerGeneral {
-    private ManagerGeneral(){
+    private ManagerGeneral() {
     }
+
     private static ManagerGeneral instance;
     private Contract.View view;
     private Contract.Model model;
@@ -15,19 +16,26 @@ public class ManagerGeneral {
         return instance == null ? instance = new ManagerGeneral() : instance;
     }
 
-    private void CreateMVP(){
+    private void CreateMVP() {
         model = new ManagerModel();
         presenter = new Presenter();
         view = new MyFrame();
         view.setPresenter(presenter);
         model.setPresenter(presenter);
-        presenter.setModel(model);
         presenter.setView(view);
+        presenter.setModel(model);
     }
 
-    public void runProject(){
+    public void runProject() {
         CreateMVP();
-        view.start();
-        presenter.startGame();
+        new Thread(() -> {
+            view.start();
+            try {
+                Thread.sleep(500);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            presenter.startGame();
+        }).start();
     }
 }

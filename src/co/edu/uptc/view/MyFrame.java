@@ -17,6 +17,7 @@ public class MyFrame extends JFrame implements Contract.View {
         super();
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setVisible(false);
+        initComponents();
         setSizes();
     }
 
@@ -37,7 +38,6 @@ public class MyFrame extends JFrame implements Contract.View {
 
     @Override
     public void start() {
-        initComponents();
         this.setVisible(true);
     }
 
