@@ -37,12 +37,15 @@ public interface Contract {
         void addPointToPath(Plane plane, Point point);
 
         Contract.Model getModel();
+
+        View getView();
     }
 
     public interface Model {
         void setPresenter(Presenter presenter);
 
         List<Plane> getPlanes();
+        void setPlanes(List<Plane> planes);
 
         void addPointToPath(Plane plane, Point point);
 

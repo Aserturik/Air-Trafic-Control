@@ -21,7 +21,7 @@ public class Presenter implements Contract.Presenter {
 
     @Override
     public void startGame() {
-         view.startGame();
+         model.startGame();
     }
 
     @Override
@@ -42,5 +42,10 @@ public class Presenter implements Contract.Presenter {
     @Override
     public Contract.Model getModel() {
         return model;
+    }
+
+    @Override
+    public Contract.View getView() {
+        return view;
     }
 }

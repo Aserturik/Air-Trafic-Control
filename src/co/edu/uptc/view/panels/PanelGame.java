@@ -23,7 +23,6 @@ public class PanelGame extends JPanel implements MouseListener, MouseMotionListe
 
     public PanelGame(MyFrame myFrame) {
         super();
-        this.repaint();
         this.frame = myFrame;
         planes = new ArrayList<>();
         imagePlane = getImagePlane();
@@ -49,7 +48,7 @@ public class PanelGame extends JPanel implements MouseListener, MouseMotionListe
         drawAllPlanes();
     }
 
-    private void drawAllPlanes() {
+    public void drawAllPlanes() {
         for (Plane plane : planes) {
             drawImage(plane);
         }
@@ -72,6 +71,8 @@ public class PanelGame extends JPanel implements MouseListener, MouseMotionListe
             g2d.rotate(rotationRequired, plane.getPosition().x, plane.getPosition().y);
             g2d.drawImage(imagePlane.getImage(), drawX, drawY, null);
             g2d.setTransform(tx);
+        } else if (g2d == null) {
+            System.out.println("g2d es null");
         }
     }
 
@@ -121,12 +122,16 @@ public class PanelGame extends JPanel implements MouseListener, MouseMotionListe
 
     @Override
     public void mouseDragged(MouseEvent e) {
-         Plane planeSelected = frame.getPresenter().getModel().getPlaneSelected(e.getPoint());
+        Plane planeSelected = frame.getPresenter().getModel().getPlaneSelected(e.getPoint());
         System.out.println("El avion seleccionado es: " + planeSelected);
     }
 
     @Override
     public void mouseMoved(MouseEvent e) {
 
+    }
+
+    public void setPlanes(List<Plane> planes) {
+         this.planes = planes;
     }
 }

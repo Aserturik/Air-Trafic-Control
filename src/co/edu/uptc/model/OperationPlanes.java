@@ -1,6 +1,7 @@
 package co.edu.uptc.model;
 
 import co.edu.uptc.pojo.Plane;
+import co.edu.uptc.presenter.Contract;
 import co.edu.uptc.view.globals.ValuesGlobals;
 import util.UtilImages;
 
@@ -18,8 +19,10 @@ public class OperationPlanes {
     private Point endPoint;
     private boolean isFollowingPath = false;
     private static final int SPEED = 5;
+    private Contract.Model model;
 
-    public OperationPlanes() {
+    public OperationPlanes(Contract.Model model) {
+        this.model = model;
         planes = new ArrayList<>();
         imageLabel = new JLabel();
         position = new Point();
@@ -40,9 +43,11 @@ public class OperationPlanes {
         planes.add(newPlane);
         return newPlane;
     }
+
     public void addPointToPath(Plane plane, Point point) {
         plane.addPoint(point);
     }
+
     private void randomPositionGenerator(Plane plane) {
         Random random = new Random();
         switch (random.nextInt(4 - 1 + 1) + 1) {
@@ -184,28 +189,28 @@ public class OperationPlanes {
     }
 
     public void isSelectedPlane(Point point) {
-         if (checkBounds(new Rectangle(point.x, point.y, 40, 40))) {
-               System.out.println("Seleccionado");
-         }
+        if (checkBounds(new Rectangle(point.x, point.y, 40, 40))) {
+            System.out.println("Seleccionado");
+        }
     }
 
-    private Rectangle getAreaPosition(Point position){
-         int x = position.x;
-         int y = position.y;
-         int width = 40;
-         int height = 40;
+    private Rectangle getAreaPosition(Point position) {
+        int x = position.x;
+        int y = position.y;
+        int width = 40;
+        int height = 40;
 
-         return new Rectangle(x, y, width, height);
+        return new Rectangle(x, y, width, height);
     }
 
     public Plane getPlaneSelected(Point point) {
-         Rectangle planeArea;
-         for(Plane plane : planes) {
-             planeArea = getAreaPosition(plane.getPosition());
-             if (planeArea.contains(point)) {
-                 return plane;
-             }
-         }
-         return null;
+        Rectangle planeArea;
+        for (Plane plane : planes) {
+            planeArea = getAreaPosition(plane.getPosition());
+            if (planeArea.contains(point)) {
+                return plane;
+            }
+        }
+        return null;
     }
 }

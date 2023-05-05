@@ -73,7 +73,8 @@ public class MyFrame extends JFrame implements Contract.View {
 
     @Override
     public void paintPlanes(List<Plane> planes) {
-
+        principalPanel.getPanelGame().setPlanes(planes);
+        principalPanel.getPanelGame().drawAllPlanes();
     }
 
     public Contract.Presenter getPresenter() {
