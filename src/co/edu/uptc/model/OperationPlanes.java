@@ -6,6 +6,7 @@ import util.UtilImages;
 
 import javax.swing.*;
 import java.awt.*;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
@@ -19,7 +20,7 @@ public class OperationPlanes {
     private static final int SPEED = 5;
 
     public OperationPlanes() {
-        planes = new java.util.ArrayList<>();
+        planes = new ArrayList<>();
         imageLabel = new JLabel();
         position = new Point();
         endPoint = new Point();
@@ -28,9 +29,11 @@ public class OperationPlanes {
     public List<Plane> getPlanes() {
         planes = new java.util.ArrayList<>();
         planes.add(new Plane());
-        planes.add(new Plane());
-        planes.add(new Plane());
-        planes.add(new Plane());
+        planes.get(0).addPoint(new Point(50, 50));
+        planes.get(0).setAngle(45.0);
+        //planes.add(new Plane());
+        //planes.add(new Plane());
+        //planes.add(new Plane());
         return planes;
     }
 
@@ -104,7 +107,7 @@ public class OperationPlanes {
     }
 
 
-    private void setRandomPlanePosition(){
+    private void setRandomPlanePosition() {
         if (position.y >= ValuesGlobals.HEIGHT_FRAME) {
             endPoint.x = (int) (Math.random() * ValuesGlobals.WIDTH_FRAME);
             endPoint.y = 0;
@@ -121,9 +124,9 @@ public class OperationPlanes {
     }
 
     private void getEndPoint() {
-        if (isNewPlane){
+        if (isNewPlane) {
             setNewPlanePosition();
-        }else {
+        } else {
             setRandomPlanePosition();
         }
     }
@@ -154,7 +157,7 @@ public class OperationPlanes {
         return new Point(x, y);
     }
 
-    private void setNewPlanePosition(){
+    private void setNewPlanePosition() {
         if (position.y >= ValuesGlobals.HEIGHT_FRAME) {
             endPoint.x = ValuesGlobals.WIDTH_FRAME - position.x;
             endPoint.y = 0;
@@ -179,5 +182,9 @@ public class OperationPlanes {
         Icon img = utilImages.loadScaleImage(ValuesGlobals.PHAT_PLANE_IMAGE_ORIGINAL, imageLabel.getWidth(), imageLabel.getHeight());
         imageLabel.setIcon(img);
         return new ImageIcon(((ImageIcon) img).getImage().getScaledInstance(imageLabel.getWidth(), imageLabel.getHeight(), Image.SCALE_DEFAULT));
+    }
+
+    public void addPointToPath(Plane plane, Point point) {
+        plane.addPoint(point);
     }
 }

@@ -29,7 +29,6 @@ public class PrincipalPanel extends JPanel {
     }
 
     private void initComponents() {
-        panelGame.setPlanes(frame.getPresenter().getPlanes());
         this.add(panelGame);
     }
 

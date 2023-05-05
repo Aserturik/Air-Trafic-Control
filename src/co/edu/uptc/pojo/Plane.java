@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Plane {
-    private Double angle;
+    private Double angle = 0.0;
     private List<Point> path;
 
     public Plane() {

@@ -1,10 +1,12 @@
 package co.edu.uptc.view;
 
+import co.edu.uptc.pojo.Plane;
 import co.edu.uptc.presenter.Contract;
 import co.edu.uptc.view.globals.ValuesGlobals;
 import co.edu.uptc.view.panels.PrincipalPanel;
 
 import javax.swing.*;
+import java.util.List;
 
 public class MyFrame extends JFrame implements Contract.View {
     private Contract.Presenter presenter;
@@ -50,5 +52,9 @@ public class MyFrame extends JFrame implements Contract.View {
 
     public Contract.Presenter getPresenter() {
         return presenter;
+    }
+
+    public List<Plane> getModelPhoto() {
+         return presenter.getPlanes();
     }
 }

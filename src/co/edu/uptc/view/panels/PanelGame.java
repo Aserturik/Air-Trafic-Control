@@ -15,7 +15,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class PanelGame extends JPanel implements MouseListener, MouseMotionListener {
-    private JFrame frame;
+    private MyFrame frame;
     private Graphics2D g2d;
     private List<Plane> planes;
     private Plane selectedPlane;
@@ -27,8 +27,9 @@ public class PanelGame extends JPanel implements MouseListener, MouseMotionListe
         super();
         this.frame = myFrame;
         planes = new ArrayList<>();
-        this.setBackground(Color.BLACK);
         imagePlane = getImagePlane();
+        lastMousePos = new Point();
+        this.setBackground(Color.BLACK);
         setSizes();
         initComponents();
     }
@@ -57,20 +58,8 @@ public class PanelGame extends JPanel implements MouseListener, MouseMotionListe
         this.addMouseMotionListener(this);
         this.setVisible(true);
     }
-
-    /*
-    @Override
-    public void paintComponent(Graphics g) {
-        super.paintComponent(g);
-        g2d = (Graphics2D) g;
-        for (Plane plane : planes/home/alex/Desarrollo/Cuarto Semestre/JAVA/Proyecto Aviones Final MVP/src/co/edu/uptc/view/panels) {
-            plane.draw(g2d);
-        }
-    }
-     */
     @Override
     protected void paintComponent(Graphics g) {
-        // Dibujar aviones y cualquier otro objeto en el panel
         super.paintComponent(g);
         g2d = (Graphics2D) g;
         drawAllPlanes();
@@ -84,7 +73,7 @@ public class PanelGame extends JPanel implements MouseListener, MouseMotionListe
 
     private void drawAllPlanes() {
         for (Plane plane : planes) {
-
+            drawImage(plane);
         }
     }
 
@@ -99,13 +88,14 @@ public class PanelGame extends JPanel implements MouseListener, MouseMotionListe
     }
 
 
-    private JFrame getFrame() {
+    private MyFrame getFrame() {
         return this.frame;
     }
 
     public void paintRecorride() {
         new Thread(() -> {
             while (true) {
+                getModelPhoto();
                 repaint();
                 try {
                     Thread.sleep(50);
@@ -114,6 +104,10 @@ public class PanelGame extends JPanel implements MouseListener, MouseMotionListe
                 }
             }
         }).start();
+    }
+
+    private void getModelPhoto() {
+        planes = getFrame().getModelPhoto();
     }
 
     private void drawImage(Plane plane) {
