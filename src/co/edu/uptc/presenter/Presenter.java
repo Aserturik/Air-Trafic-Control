@@ -19,8 +19,8 @@ public class Presenter implements Contract.Presenter {
     }
 
     @Override
-    public void startRecorride() {
-         view.startRecorride();
+    public void startGame() {
+         view.startGame();
     }
 
     @Override

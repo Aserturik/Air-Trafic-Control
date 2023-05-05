@@ -46,7 +46,7 @@ public class MyFrame extends JFrame implements Contract.View {
     }
 
     @Override
-    public void startRecorride() {
+    public void startGame() {
         principalPanel.getPanelGame().paintRecorride();
     }
 

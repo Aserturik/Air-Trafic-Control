@@ -28,6 +28,6 @@ public class ManagerGeneral {
     public void runProject(){
         CreateMVP();
         view.start();
-        presenter.startRecorride();
+        presenter.startGame();
     }
 }

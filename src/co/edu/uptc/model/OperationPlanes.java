@@ -31,9 +31,6 @@ public class OperationPlanes {
         planes.add(new Plane());
         planes.get(0).addPoint(new Point(50, 50));
         planes.get(0).setAngle(45.0);
-        //planes.add(new Plane());
-        //planes.add(new Plane());
-        //planes.add(new Plane());
         return planes;
     }
 
