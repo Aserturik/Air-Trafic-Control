@@ -2,6 +2,7 @@ package co.edu.uptc.presenter;
 
 import co.edu.uptc.pojo.Plane;
 
+import java.awt.*;
 import java.util.List;
 
 public class Presenter implements Contract.Presenter {
@@ -26,5 +27,20 @@ public class Presenter implements Contract.Presenter {
     @Override
     public List<Plane> getPlanes() {
         return model.getPlanes();
+    }
+
+    @Override
+    public void isSelectedPlane(Point point) {
+        model.isSelectedPlane(point);
+    }
+
+    @Override
+    public void addPointToPath(Plane plane, Point point) {
+
+    }
+
+    @Override
+    public Contract.Model getModel() {
+        return model;
     }
 }

@@ -35,4 +35,13 @@ public class Plane {
     public Point getPosition() {
         return path.get(0);
     }
+
+    @Override
+      public String toString() {
+         return "Plane{" +
+                  "angle=" + angle +
+                  ", path=" + path +
+                 ", position=" + getPosition() +
+                  '}';
+      }
 }

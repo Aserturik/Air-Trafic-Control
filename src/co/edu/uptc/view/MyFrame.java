@@ -6,6 +6,7 @@ import co.edu.uptc.view.globals.ValuesGlobals;
 import co.edu.uptc.view.panels.PrincipalPanel;
 
 import javax.swing.*;
+import java.awt.*;
 import java.util.List;
 
 public class MyFrame extends JFrame implements Contract.View {
@@ -47,7 +48,32 @@ public class MyFrame extends JFrame implements Contract.View {
 
     @Override
     public void startGame() {
-        principalPanel.getPanelGame().paintRecorride();
+        principalPanel.getPanelGame().paintRecorrides();
+    }
+
+    @Override
+    public void restartGame() {
+
+    }
+
+    @Override
+    public void pauseGame() {
+
+    }
+
+    @Override
+    public void resumeGame() {
+
+    }
+
+    @Override
+    public void stopGame() {
+
+    }
+
+    @Override
+    public void paintPlanes(List<Plane> planes) {
+
     }
 
     public Contract.Presenter getPresenter() {
@@ -55,6 +81,6 @@ public class MyFrame extends JFrame implements Contract.View {
     }
 
     public List<Plane> getModelPhoto() {
-         return presenter.getPlanes();
+        return presenter.getPlanes();
     }
 }

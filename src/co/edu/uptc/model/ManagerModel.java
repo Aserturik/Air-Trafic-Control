@@ -30,6 +30,7 @@ public class ManagerModel implements Contract.Model {
         return operationPlanes.getPlanes();
     }
 
+
     @Override
     public void startGame() {
 
@@ -68,5 +69,15 @@ public class ManagerModel implements Contract.Model {
     @Override
     public String timeGame() {
         return null;
+    }
+
+    @Override
+    public void isSelectedPlane(Point point) {
+         operationPlanes.isSelectedPlane(point);
+    }
+
+    @Override
+    public Plane getPlaneSelected(Point point) {
+        return operationPlanes.getPlaneSelected(point);
     }
 }

@@ -12,6 +12,16 @@ public interface Contract {
         void setPresenter(Presenter presenter);
 
         void startGame();
+
+        void restartGame();
+
+        void pauseGame();
+
+        void resumeGame();
+
+        void stopGame();
+
+        void paintPlanes(List<Plane> planes);
     }
 
     public interface Presenter {
@@ -22,18 +32,26 @@ public interface Contract {
         void startGame();
 
         List<Plane> getPlanes();
+
+        void isSelectedPlane(Point point);
+        void addPointToPath(Plane plane, Point point);
+
+        Contract.Model getModel();
     }
 
     public interface Model {
         void setPresenter(Presenter presenter);
 
         List<Plane> getPlanes();
+
         void addPointToPath(Plane plane, Point point);
 
         void startGame();
 
         void RestartGame();
+
         void pauseGame();
+
         void resumeGame();
 
         void stopGame();
@@ -43,5 +61,9 @@ public interface Contract {
         String numberPlanesInAir();
 
         String timeGame();
+
+        void isSelectedPlane(Point point);
+
+        Plane getPlaneSelected(Point point);
     }
 }
