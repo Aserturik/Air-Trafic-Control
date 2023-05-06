@@ -84,27 +84,46 @@ public class OperationPlanes {
     private void randomPositionGenerator() {
         Plane plane = new Plane();
         addNewPlane(plane);
-        plane.setNextPosition(new Point(450, 300));
         plane.setAngle(getAngle(plane));
         moveToRoute(plane);
+    }
+
+    private Point getInversePosition(Plane plane) {
+        Point position = plane.getPosition();
+        Point endPoint = new Point();
+        if (position.y >= ValuesGlobals.HEIGHT_FRAME) {
+            endPoint.x = ValuesGlobals.WIDTH_FRAME - position.x;
+            endPoint.y = 0;
+        } else if (position.y <= 0) {
+            endPoint.x = ValuesGlobals.WIDTH_FRAME - position.x;
+            endPoint.y = ValuesGlobals.HEIGHT_FRAME;
+        } else if (position.x >= ValuesGlobals.WIDTH_FRAME) {
+            endPoint.x = 0;
+            endPoint.y = ValuesGlobals.HEIGHT_FRAME - position.y;
+        } else if (position.x <= 0) {
+            endPoint.x = ValuesGlobals.WIDTH_FRAME;
+            endPoint.y = ValuesGlobals.HEIGHT_FRAME - position.y;
+        }
+        return endPoint;
     }
 
     private void addNewPlane(Plane plane) {
         Random random = new Random();
         switch (random.nextInt(4 - 1 + 1) + 1) {
             case 1:
-                plane.addPoint(new Point(0, random.nextInt(600 - 10 + 1) + 10));
+                plane.addPoint(new Point(0, random.nextInt(ValuesGlobals.HEIGHT_FRAME - 10 + 1) + 10));
                 break;
             case 2:
-                plane.addPoint(new Point(1010, random.nextInt(550 - 10 + 1) + 10));
+                plane.addPoint(new Point(1010, random.nextInt(ValuesGlobals.HEIGHT_FRAME - 10 + 1) + 10));
                 break;
             case 3:
-                plane.addPoint(new Point(random.nextInt(850 - 10 + 1) + 10, 20));
+                plane.addPoint(new Point(random.nextInt(ValuesGlobals.WIDTH_FRAME - 10 + 1) + 10, 0));
                 break;
             case 4:
-                plane.addPoint(new Point(random.nextInt(850 - 10 + 1) + 10, 500));
+                plane.addPoint(new Point(random.nextInt(ValuesGlobals.WIDTH_FRAME - 10 + 1) + 10, ValuesGlobals.HEIGHT_FRAME));
                 break;
         }
+        plane.setNextPosition(getInversePosition(plane));
         planes.add(plane);
     }
 
