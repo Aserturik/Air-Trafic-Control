@@ -67,7 +67,6 @@ public class PanelGame extends JPanel implements MouseListener, MouseMotionListe
     private void drawPath(Plane plane, Graphics2D g2d) {
         g2d.setColor(Color.RED);
         g2d.setStroke(new BasicStroke(2));
-        System.out.println("El tamaño del path es: " + plane.getPath().size());
         for (Point i : plane.getPath()) {
             g2d.drawLine(i.x, i.y, i.x, i.y);
         }

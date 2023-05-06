@@ -43,7 +43,7 @@ public class OperationPlanes {
         startThread();
     }
 
-    private void startThread() {
+    private synchronized void startThread() {
         Thread thread = new Thread(() -> {
             while (isStartGame) {
                 try {
@@ -59,15 +59,18 @@ public class OperationPlanes {
     }
 
     private void randomPositionGenerator() {
-        addNewPlane();
+        Plane plane = new Plane();
+        addNewPlane(plane);
+        plane.setNextPosition(new Point(450,300));
+        moveToRoute(plane);
+        advance();
     }
 
-    private void addNewPlane() {
-        Plane plane = new Plane();
+    private void addNewPlane(Plane plane) {
         Random random = new Random();
         switch (random.nextInt(4 - 1 + 1) + 1) {
             case 1:
-                plane.addPoint(new Point(0, random.nextInt(550 - 10 + 1) + 10));
+                plane.addPoint(new Point(0, random.nextInt(600 - 10 + 1) + 10));
                 break;
             case 2:
                 plane.addPoint(new Point(1010, random.nextInt(550 - 10 + 1) + 10));
@@ -79,13 +82,10 @@ public class OperationPlanes {
                 plane.addPoint(new Point(random.nextInt(850 - 10 + 1) + 10, 500));
                 break;
         }
-        System.out.println("se agrego un nuevo avion en la posicion: " + plane.getPosition().toString());
         planes.add(plane);
-        plane.setNextPosition(new Point(450, 300));
-        moveToCenter(plane);
     }
 
-    public void moveToCenter(Plane plane) {
+    public void moveToRoute(Plane plane) {
         double distance = getDistanceTo(plane, plane.getNextPosition());
         System.out.println("la distancia es: " + distance);
         double dx = plane.getNextPosition().x - plane.getPosition().x;
@@ -106,7 +106,7 @@ public class OperationPlanes {
     public void advance() {
         for (Plane plane : planes) {
             if (plane.isNewPlane()) {
-                moveToCenter(plane);
+                moveToRoute(plane);
             } else {
                 double radians = Math.toRadians(getAngle(plane));
                 int dx = (int) Math.round(SPEED * Math.sin(radians));
