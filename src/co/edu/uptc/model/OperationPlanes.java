@@ -113,6 +113,7 @@ public class OperationPlanes {
                 int dy = (int) Math.round(-SPEED * Math.cos(radians));
                 plane.getPosition().translate(dx, dy);
             }
+            plane.setAngle(getAngle(plane));
         }
     }
 
