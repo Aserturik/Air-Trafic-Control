@@ -22,8 +22,10 @@ public class OperationPlanes {
     private LocalDate dateStartGame;
     private LocalDate datePauseGame;
     private LocalDate dateStopGame;
+    private Object lock;
 
     public OperationPlanes(Contract.Model model) {
+        lock = new Object();
         this.model = model;
         planes = new ArrayList<>();
     }
@@ -41,29 +43,50 @@ public class OperationPlanes {
         isStartGame = true;
         dateStartGame = LocalDate.now();
         startThread();
+        createPlanes();
     }
 
     private synchronized void startThread() {
         Thread thread = new Thread(() -> {
             while (isStartGame) {
                 try {
+                    synchronized (lock) {
+                        model.setPlanes(planes);
+                        advance();
+                        lock.notifyAll();
+                    }
                     Thread.sleep(ValuesGlobals.TIME_SLEEP);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
-                model.setPlanes(planes);
-                randomPositionGenerator();
             }
         });
         thread.start();
     }
 
+    private synchronized void createPlanes() {
+        Thread addPlanes = new Thread(() -> {
+            while (isStartGame) {
+                randomPositionGenerator();
+                try {
+                    synchronized (lock) {
+                        lock.wait();
+                    }
+                    Thread.sleep(ValuesGlobals.TIME_GENERATE_PLANE);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+        addPlanes.start();
+    }
+
     private void randomPositionGenerator() {
         Plane plane = new Plane();
         addNewPlane(plane);
-        plane.setNextPosition(new Point(450,300));
+        plane.setNextPosition(new Point(450, 300));
+        plane.setAngle(getAngle(plane));
         moveToRoute(plane);
-        advance();
     }
 
     private void addNewPlane(Plane plane) {
@@ -108,12 +131,11 @@ public class OperationPlanes {
             if (plane.isNewPlane()) {
                 moveToRoute(plane);
             } else {
-                double radians = Math.toRadians(getAngle(plane));
+                double radians = Math.toRadians(plane.getAngle());
                 int dx = (int) Math.round(SPEED * Math.sin(radians));
                 int dy = (int) Math.round(-SPEED * Math.cos(radians));
                 plane.getPosition().translate(dx, dy);
             }
-            plane.setAngle(getAngle(plane));
         }
     }
 
@@ -132,8 +154,7 @@ public class OperationPlanes {
 
     private void getNextPosition(Plane plane) {
         if (plane.isNewPlane()) {
-            setNewPlanePosition(plane);
-            plane.setNewPlane(false);
+            setNextPlanePosition(plane);
         } else {
             // para cuando tiene que seguir el camino
         }
@@ -147,7 +168,6 @@ public class OperationPlanes {
         int y2 = plane.getPosition().y;
 
         double angle = Math.atan2(y2 - y1, x2 - x1);
-        //System.out.println("El angulo es: " + Math.toDegrees(angle));
 
         return Math.toDegrees(angle);
     }
@@ -165,7 +185,7 @@ public class OperationPlanes {
         return new Point(x, y);
     }
 
-    private void setNewPlanePosition(Plane plane) {
+    private void setNextPlanePosition(Plane plane) {
         if (plane.getPosition().y >= ValuesGlobals.HEIGHT_FRAME) {
             plane.getNextPosition().x = ValuesGlobals.WIDTH_FRAME - plane.getPosition().x;
             plane.getNextPosition().y = 0;
@@ -179,7 +199,6 @@ public class OperationPlanes {
             plane.getNextPosition().x = ValuesGlobals.WIDTH_FRAME;
             plane.getNextPosition().y = ValuesGlobals.HEIGHT_FRAME - plane.getPosition().y;
         }
-
     }
 
     public void isSelectedPlane(Point point) {

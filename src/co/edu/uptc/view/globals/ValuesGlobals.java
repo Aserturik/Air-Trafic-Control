@@ -8,7 +8,7 @@ public class ValuesGlobals {
     public static final int WIDTH_FRAME = 900;
     public static final int HEIGHT_FRAME = 600;
     public static final long TIME_SLEEP = 100;
-    public static final int TIME_GENERATE_PLANE = 400;
+    public static final int TIME_GENERATE_PLANE = 3500;
 
     public static Point getCenterFrame() {
         return new Point(WIDTH_FRAME / 2, HEIGHT_FRAME / 2);
