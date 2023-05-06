@@ -43,6 +43,7 @@ public class PanelGame extends JPanel implements MouseListener, MouseMotionListe
         g2d = (Graphics2D) g;
 
         drawAllPlanes(g2d);
+        drawAllPaths(g2d);
     }
 
     public void paintRecorrides() {
@@ -54,6 +55,21 @@ public class PanelGame extends JPanel implements MouseListener, MouseMotionListe
         for (Plane plane : planes) {
             drawImage(plane, g2d);
             printInfoPlane(plane);
+        }
+    }
+
+    private void drawAllPaths(Graphics2D g2d) {
+        for (Plane plane : planes) {
+            drawPath(plane, g2d);
+        }
+    }
+
+    private void drawPath(Plane plane, Graphics2D g2d) {
+        g2d.setColor(Color.RED);
+        g2d.setStroke(new BasicStroke(2));
+        System.out.println("El tamaño del path es: " + plane.getPath().size());
+        for (Point i : plane.getPath()) {
+            g2d.drawLine(i.x, i.y, i.x, i.y);
         }
     }
 
