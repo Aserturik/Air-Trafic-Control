@@ -7,6 +7,7 @@ import util.UtilImages;
 
 import javax.swing.*;
 import java.awt.*;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -20,20 +21,26 @@ public class OperationPlanes {
     private boolean isFollowingPath = false;
     private static final int SPEED = 5;
     private Contract.Model model;
+    private boolean isStartGame = false;
+    private boolean isPauseGame = false;
+    private boolean isStopGame = false;
+    private LocalDate dateStartGame;
+    private LocalDate datePauseGame;
+    private LocalDate dateStopGame;
 
     public OperationPlanes(Contract.Model model) {
         this.model = model;
         planes = new ArrayList<>();
         imageLabel = new JLabel();
-        position = new Point();
-        endPoint = new Point();
+        position = new Point(50, 50);
+        endPoint = new Point(200, 200);
     }
 
     public List<Plane> getPlanes() {
         planes = new java.util.ArrayList<>();
         planes.add(new Plane());
-        planes.get(0).addPoint(new Point(50, 50));
-        planes.get(0).setAngle(45.0);
+        planes.get(0).addPoint(position);
+        planes.get(0).setAngle(225.0);
         return planes;
     }
 
@@ -48,26 +55,51 @@ public class OperationPlanes {
         plane.addPoint(point);
     }
 
+
+    public void startGame() {
+        isStartGame = true;
+        dateStartGame = LocalDate.now();
+        //createLocalPlane();
+        moveToCenter();
+        startThread();
+    }
+
+    private void startThread() {
+        Thread thread = new Thread(() -> {
+            while (isStartGame) {
+                advance();
+                model.setPlanes(planes);
+                try {
+                    Thread.sleep(ValuesGlobals.TIME_SLEEP);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+        thread.start();
+    }
+
     private void randomPositionGenerator(Plane plane) {
         Random random = new Random();
         switch (random.nextInt(4 - 1 + 1) + 1) {
             case 1:
-                plane.addPoint(new Point(0, random.nextInt(700 - 10 + 1) + 10));
+                plane.addPoint(new Point(0, random.nextInt(550 - 10 + 1) + 10));
                 break;
             case 2:
-                plane.addPoint(new Point(1010, random.nextInt(700 - 10 + 1) + 10));
+                plane.addPoint(new Point(1010, random.nextInt(550 - 10 + 1) + 10));
                 break;
             case 3:
-                plane.addPoint(new Point(random.nextInt(1010 - 10 + 1) + 10, 0));
+                plane.addPoint(new Point(random.nextInt(850 - 10 + 1) + 10, 20));
                 break;
             case 4:
-                plane.addPoint(new Point(random.nextInt(1010 - 10 + 1) + 10, 610));
+                plane.addPoint(new Point(random.nextInt(850 - 10 + 1) + 10, 500));
                 break;
         }
     }
 
     public void moveToCenter() {
         double distance = getDistanceTo(endPoint);
+        System.out.println("la distancia es: " + distance);
         double dx = endPoint.x - position.x;
         double dy = endPoint.y - position.y;
 

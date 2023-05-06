@@ -26,9 +26,9 @@ public class PanelGame extends JPanel implements MouseListener, MouseMotionListe
         this.frame = myFrame;
         planes = new ArrayList<Plane>();
         imagePlane = getImagePlane();
-        setSizes();
-        initComponents();
         this.setBackground(Color.BLACK);
+        initComponents();
+        setSizes();
     }
 
     private void initComponents() {
@@ -41,52 +41,44 @@ public class PanelGame extends JPanel implements MouseListener, MouseMotionListe
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
         g2d = (Graphics2D) g;
-    }
 
-    @Override
-    public void paint(Graphics g) {
-        super.paint(g);
-        g2d = (Graphics2D) g;
-    }
-
-    @Override
-    public void paintComponents(Graphics g) {
-        super.paintComponents(g);
-        g2d = (Graphics2D) g;
+        drawAllPlanes(g2d);
     }
 
     public void paintRecorrides() {
-        planes = getFrame().getModelPhoto();
-        drawAllPlanes();
+        //planes = getFrame().getModelPhoto();
+        //drawAllPlanes();
     }
 
-    public void drawAllPlanes() {
-        repaint();
+    public void drawAllPlanes(Graphics2D g2d) {
         for (Plane plane : planes) {
-            drawImage(plane);
+            drawImage(plane, g2d);
+            printInfoPlane(plane);
         }
+    }
+
+    private void printInfoPlane(Plane plane) {
+        System.out.println("El avión está en: " + plane.getPosition().x + " " + plane.getPosition().y);
+        System.out.println("El avión tiene un ángulo de: " + plane.getAngle());
     }
 
     private MyFrame getFrame() {
         return this.frame;
     }
 
-    private void drawImage(Plane plane) {
-        if (planes != null && g2d != null) {
-            double rotationRequired = Math.toRadians(plane.getAngle());
-            AffineTransform tx = g2d.getTransform();
+    private void drawImage(Plane plane, Graphics2D g2d) {
+        double rotationRequired = Math.toRadians(plane.getAngle());
+        AffineTransform tx = g2d.getTransform();
 
-            int imageWidth = imagePlane.getIconWidth();
-            int imageHeight = imagePlane.getIconHeight();
-            int drawX = plane.getPosition().x - imageWidth / 2;
-            int drawY = plane.getPosition().y - imageHeight / 2;
+        int imageWidth = imagePlane.getIconWidth();
+        int imageHeight = imagePlane.getIconHeight();
+        int drawX = plane.getPosition().x - imageWidth / 2;
+        int drawY = plane.getPosition().y - imageHeight / 2;
 
-            g2d.rotate(rotationRequired, plane.getPosition().x, plane.getPosition().y);
-            g2d.drawImage(imagePlane.getImage(), drawX, drawY, null);
-            g2d.setTransform(tx);
-        } else if (g2d == null) {
-            System.out.println("g2d es null");
-        }
+        g2d.rotate(rotationRequired, plane.getPosition().x, plane.getPosition().y);
+        g2d.drawImage(imagePlane.getImage(), drawX, drawY, null);
+        g2d.setTransform(tx);
+        System.out.println("Dibujando en: " + drawX + " " + drawY);
     }
 
     private ImageIcon getImagePlane() {

@@ -4,6 +4,7 @@ import co.edu.uptc.pojo.Plane;
 import co.edu.uptc.presenter.Contract;
 
 import java.awt.*;
+import java.time.LocalDate;
 import java.util.List;
 
 public class ManagerModel implements Contract.Model {
@@ -26,7 +27,8 @@ public class ManagerModel implements Contract.Model {
 
     @Override
     public List<Plane> getPlanes() {
-        return operationPlanes.getPlanes();
+        //return operationPlanes.getPlanes();}
+         return null;
     }
 
     @Override
@@ -34,9 +36,9 @@ public class ManagerModel implements Contract.Model {
         presenter.getView().paintPlanes(planes);
     }
 
-
     @Override
     public void startGame() {
+        operationPlanes.startGame();
         presenter.getView().paintPlanes(operationPlanes.getPlanes());
     }
 
@@ -77,7 +79,7 @@ public class ManagerModel implements Contract.Model {
 
     @Override
     public void isSelectedPlane(Point point) {
-         operationPlanes.isSelectedPlane(point);
+        operationPlanes.isSelectedPlane(point);
     }
 
     @Override
