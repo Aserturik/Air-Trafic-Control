@@ -73,8 +73,8 @@ public class PanelGame extends JPanel implements MouseListener, MouseMotionListe
     }
 
     private void printInfoPlane(Plane plane) {
-        System.out.println("El avión está en: " + plane.getPosition().x + " " + plane.getPosition().y);
-        System.out.println("El avión tiene un ángulo de: " + plane.getAngle());
+        //System.out.println("El avión está en: " + plane.getPosition().x + " " + plane.getPosition().y);
+        //System.out.println("El avión tiene un ángulo de: " + plane.getAngle());
     }
 
     private MyFrame getFrame() {
@@ -93,7 +93,7 @@ public class PanelGame extends JPanel implements MouseListener, MouseMotionListe
         g2d.rotate(rotationRequired, plane.getPosition().x, plane.getPosition().y);
         g2d.drawImage(imagePlane.getImage(), drawX, drawY, null);
         g2d.setTransform(tx);
-        System.out.println("Dibujando en: " + drawX + " " + drawY);
+        //System.out.println("Dibujando en: " + drawX + " " + drawY);
     }
 
     private ImageIcon getImagePlane() {
@@ -111,7 +111,7 @@ public class PanelGame extends JPanel implements MouseListener, MouseMotionListe
         this.setMinimumSize(this.getSize());
         this.setMaximumSize(this.getSize());
         this.setLayout(null);
-        System.out.println("El tamaño del PanelGame es: " + this.getWidth() + " " + this.getHeight());
+        //System.out.println("El tamaño del PanelGame es: " + this.getWidth() + " " + this.getHeight());
         this.setVisible(true);
     }
 
@@ -143,7 +143,7 @@ public class PanelGame extends JPanel implements MouseListener, MouseMotionListe
     @Override
     public void mouseDragged(MouseEvent e) {
         Plane planeSelected = frame.getPresenter().getModel().getPlaneSelected(e.getPoint());
-        System.out.println("El avion seleccionado es: " + planeSelected);
+        //System.out.println("El avion seleccionado es: " + planeSelected);
     }
 
     @Override

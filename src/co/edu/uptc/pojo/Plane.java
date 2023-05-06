@@ -44,10 +44,6 @@ public class Plane {
         return newPlane;
     }
 
-    public void setNewPlane(boolean newPlane) {
-        this.newPlane = newPlane;
-    }
-
     public void setPosition(Point position) {
         this.position = position;
     }

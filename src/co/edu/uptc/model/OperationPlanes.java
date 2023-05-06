@@ -44,6 +44,7 @@ public class OperationPlanes {
         dateStartGame = LocalDate.now();
         startThread();
         createPlanes();
+        eliminatePlanes();
     }
 
     private synchronized void startThread() {
@@ -79,6 +80,45 @@ public class OperationPlanes {
             }
         });
         addPlanes.start();
+    }
+
+    private void eliminatePlanes() {
+        Thread eliminatePlanes = new Thread(() -> {
+            while (isStartGame) {
+                try {
+                    synchronized (lock) {
+                        verifyPlanes();
+                        lock.wait();
+                    }
+                    Thread.sleep(ValuesGlobals.TIME_ELIMINATE_PLANE);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+        eliminatePlanes.start();
+    }
+
+    private void verifyPlanes() {
+        for (Plane plane : planes) {
+            if (getDistanceTo(plane,plane.getNextPosition()) == 0 && plane.getPosition().x == 0) {
+                System.out.println("El tamaño de la lista es: " + planes.size());
+                planes.remove(plane);
+                break;
+            } else if (getDistanceTo(plane,plane.getNextPosition()) == 0 && plane.getPosition().x == ValuesGlobals.WIDTH_FRAME) {
+                System.out.println("El tamaño de la lista es: " + planes.size());System.out.println("El tamaño de la lista es: " + planes.size());
+                planes.remove(plane);
+                break;
+            } else if (getDistanceTo(plane,plane.getNextPosition()) == 0 && plane.getPosition().y == 0) {
+                System.out.println("El tamaño de la lista es: " + planes.size());
+                planes.remove(plane);
+                break;
+            } else if (getDistanceTo(plane,plane.getNextPosition()) == 0 && plane.getPosition().y == ValuesGlobals.HEIGHT_FRAME) {
+                System.out.println("El tamaño de la lista es: " + planes.size());
+                planes.remove(plane);
+                break;
+            }
+        }
     }
 
     private void randomPositionGenerator() {
@@ -125,11 +165,12 @@ public class OperationPlanes {
         }
         plane.setNextPosition(getInversePosition(plane));
         planes.add(plane);
+        System.out.println("El tamaño del array es: " + planes.size());
     }
 
     public void moveToRoute(Plane plane) {
         double distance = getDistanceTo(plane, plane.getNextPosition());
-        System.out.println("la distancia es: " + distance);
+        //System.out.println("la distancia es: " + distance);
         double dx = plane.getNextPosition().x - plane.getPosition().x;
         double dy = plane.getNextPosition().y - plane.getPosition().y;
 

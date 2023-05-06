@@ -24,7 +24,7 @@ public class PrincipalPanel extends JPanel {
         this.setMinimumSize(this.getSize());
         this.setMaximumSize(this.getSize());
         this.setLayout(null);
-        System.out.println("El tamaño del PrincipalPanel es: " + this.getWidth() + " " + this.getHeight());
+        //System.out.println("El tamaño del PrincipalPanel es: " + this.getWidth() + " " + this.getHeight());
         this.setVisible(true);
     }
 

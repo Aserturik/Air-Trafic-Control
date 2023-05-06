@@ -27,7 +27,7 @@ public class MyFrame extends JFrame implements Contract.View {
         this.setMinimumSize(this.getSize());
         this.setMaximumSize(this.getSize());
         this.setLocationRelativeTo(null);
-        System.out.println("El tamaño del Frame es: " + this.getWidth() + " " + this.getHeight());
+        //System.out.println("El tamaño del Frame es: " + this.getWidth() + " " + this.getHeight());
         //this.setResizable(false);
     }
 
