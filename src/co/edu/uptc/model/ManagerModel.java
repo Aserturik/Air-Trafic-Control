@@ -39,7 +39,6 @@ public class ManagerModel implements Contract.Model {
     @Override
     public void startGame() {
         operationPlanes.startGame();
-        presenter.getView().paintPlanes(operationPlanes.getPlanes());
     }
 
     @Override

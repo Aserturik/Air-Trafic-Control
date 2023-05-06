@@ -14,7 +14,6 @@ import java.util.Random;
 
 public class OperationPlanes {
     private List<Plane> planes;
-    private JLabel imageLabel;
     private static final int SPEED = 5;
     private Contract.Model model;
     private boolean isStartGame = false;
@@ -27,8 +26,6 @@ public class OperationPlanes {
     public OperationPlanes(Contract.Model model) {
         this.model = model;
         planes = new ArrayList<>();
-        imageLabel = new JLabel();
-        randomPositionGenerator();
     }
 
     public List<Plane> getPlanes() {
@@ -49,30 +46,20 @@ public class OperationPlanes {
     private void startThread() {
         Thread thread = new Thread(() -> {
             while (isStartGame) {
-                randomPositionGenerator();
-                advance();
-                model.setPlanes(planes);
                 try {
                     Thread.sleep(ValuesGlobals.TIME_SLEEP);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
+                model.setPlanes(planes);
+                randomPositionGenerator();
             }
         });
         thread.start();
     }
 
     private void randomPositionGenerator() {
-        Thread thread = new Thread(() -> {
-            while (isStartGame) {
-                addNewPlane();
-                try {
-                    Thread.sleep(ValuesGlobals.TIME_GENERATE_PLANE);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-            }
-        });
+        addNewPlane();
     }
 
     private void addNewPlane() {
@@ -92,32 +79,32 @@ public class OperationPlanes {
                 plane.addPoint(new Point(random.nextInt(850 - 10 + 1) + 10, 500));
                 break;
         }
+        System.out.println("se agrego un nuevo avion en la posicion: " + plane.getPosition().toString());
         planes.add(plane);
+        plane.setNextPosition(new Point(450, 300));
+        moveToCenter(plane);
     }
 
     public void moveToCenter(Plane plane) {
-        double distance = getDistanceTo(plane,plane.getNextPosition());
+        double distance = getDistanceTo(plane, plane.getNextPosition());
         System.out.println("la distancia es: " + distance);
         double dx = plane.getNextPosition().x - plane.getPosition().x;
         double dy = plane.getNextPosition().y - plane.getPosition().y;
 
         if (distance <= SPEED) {
             plane.getPosition().setLocation(plane.getNextPosition());
-            //centerPlane.setLocation(centerPanel.x + imagePlane.getIconWidth() / 2, centerPanel.y + imagePlane.getIconHeight() / 2);
         } else {
             double angle = Math.atan2(dy, dx);
             int deltaX = (int) Math.round(SPEED * Math.cos(angle));
             int deltaY = (int) Math.round(SPEED * Math.sin(angle));
 
             plane.getPosition().x += deltaX;
-            //centerPlane.x += deltaX;
             plane.getPosition().y += deltaY;
-            //centerPlane.y += deltaY;
         }
     }
 
     public void advance() {
-        for(Plane plane: planes) {
+        for (Plane plane : planes) {
             if (plane.isNewPlane()) {
                 moveToCenter(plane);
             } else {
@@ -129,18 +116,13 @@ public class OperationPlanes {
         }
     }
 
-    public void followPath() {
-
-    }
-
-
     public boolean checkBounds(Rectangle bounds) {
         int imgWidth = 40;
         int imgHeight = 40;
         for (Plane plane : planes) {
             int x = plane.getPosition().x;
             int y = plane.getPosition().y;
-            if (bounds.contains(x, y, imgWidth, imgHeight)){
+            if (bounds.contains(x, y, imgWidth, imgHeight)) {
                 return true;
             }
         }
@@ -197,15 +179,6 @@ public class OperationPlanes {
             plane.getNextPosition().y = ValuesGlobals.HEIGHT_FRAME - plane.getPosition().y;
         }
 
-    }
-
-    public ImageIcon getPlaneImage() {
-        UtilImages utilImages = new UtilImages();
-        imageLabel = new JLabel();
-        imageLabel.setBounds(10, 10, 40, 40);
-        Icon img = utilImages.loadScaleImage(ValuesGlobals.PHAT_PLANE_IMAGE_ORIGINAL, imageLabel.getWidth(), imageLabel.getHeight());
-        imageLabel.setIcon(img);
-        return new ImageIcon(((ImageIcon) img).getImage().getScaledInstance(imageLabel.getWidth(), imageLabel.getHeight(), Image.SCALE_DEFAULT));
     }
 
     public void isSelectedPlane(Point point) {
