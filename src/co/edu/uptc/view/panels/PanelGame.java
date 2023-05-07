@@ -10,6 +10,7 @@ import java.awt.*;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
+import java.awt.font.FontRenderContext;
 import java.awt.geom.AffineTransform;
 import java.util.ArrayList;
 import java.util.List;
@@ -20,12 +21,14 @@ public class PanelGame extends JPanel implements MouseListener, MouseMotionListe
     private List<Plane> planes;
     private ImageIcon imagePlane;
     private JLabel imageLabel;
+    private Font font;
 
     public PanelGame(MyFrame myFrame) {
         super();
         this.frame = myFrame;
         planes = new ArrayList<Plane>();
         imagePlane = getImagePlane();
+        font = new Font("Arial", Font.BOLD, 12);
         this.setBackground(Color.BLACK);
         initComponents();
         setSizes();
@@ -44,6 +47,18 @@ public class PanelGame extends JPanel implements MouseListener, MouseMotionListe
 
         drawAllPlanes(g2d);
         drawAllPaths(g2d);
+        g2d.drawRect(0, 0, ValuesGlobals.WIDTH_FRAME, ValuesGlobals.HEIGHT_FRAME);
+        printNumberPlanes();
+        frame.getPresenter().notifyModel();
+    }
+
+    private void printNumberPlanes() {
+        g2d.setColor(Color.WHITE);
+        FontRenderContext fontRenderContext = g2d.getFontRenderContext();
+        RenderingHints renderingHints = new RenderingHints(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
+        g2d.setRenderingHints(renderingHints);
+        g2d.setFont(font);
+        g2d.drawString("Cantidad de Aviones: " + planes.size(), 10, 20);
     }
 
     public void paintRecorrides() {
@@ -66,9 +81,9 @@ public class PanelGame extends JPanel implements MouseListener, MouseMotionListe
 
     private void drawPath(Plane plane, Graphics2D g2d) {
         g2d.setColor(Color.RED);
-        g2d.setStroke(new BasicStroke(2));
-        for (Point i : plane.getPath()) {
-            g2d.drawLine(i.x, i.y, i.x, i.y);
+        g2d.setStroke(new BasicStroke(3));
+        for (Plane plane1 : planes) {
+            g2d.drawLine(plane1.getPath().get(0).x, plane1.getPath().get(0).y, plane1.getNextPosition().x, plane1.getNextPosition().y);
         }
     }
 
@@ -109,10 +124,11 @@ public class PanelGame extends JPanel implements MouseListener, MouseMotionListe
 
     private void setSizes() {
         this.setSize(ValuesGlobals.WIDTH_FRAME, ValuesGlobals.HEIGHT_FRAME);
-        this.setPreferredSize(this.getSize());
-        this.setMinimumSize(this.getSize());
-        this.setMaximumSize(this.getSize());
-        this.setLayout(null);
+        this.setPreferredSize(new Dimension(ValuesGlobals.WIDTH_FRAME, ValuesGlobals.HEIGHT_FRAME));
+        this.setMinimumSize(new Dimension(ValuesGlobals.WIDTH_FRAME, ValuesGlobals.HEIGHT_FRAME));
+        this.setMaximumSize(new Dimension(ValuesGlobals.WIDTH_FRAME, ValuesGlobals.HEIGHT_FRAME));
+        this.setLayout(new BorderLayout());
+        this.setLocation(0, 0);
         //System.out.println("El tamaño del PanelGame es: " + this.getWidth() + " " + this.getHeight());
         this.setVisible(true);
     }

@@ -5,6 +5,7 @@ import co.edu.uptc.view.globals.ValuesGlobals;
 import co.edu.uptc.view.panels.PanelGame;
 
 import javax.swing.*;
+import java.awt.*;
 
 public class PrincipalPanel extends JPanel {
     private PanelGame panelGame;
@@ -20,10 +21,11 @@ public class PrincipalPanel extends JPanel {
 
     private void setSizes() {
         this.setSize(ValuesGlobals.WIDTH_FRAME, ValuesGlobals.HEIGHT_FRAME);
-        this.setPreferredSize(this.getSize());
-        this.setMinimumSize(this.getSize());
-        this.setMaximumSize(this.getSize());
-        this.setLayout(null);
+        this.setPreferredSize(new Dimension(ValuesGlobals.WIDTH_FRAME, ValuesGlobals.HEIGHT_FRAME));
+        this.setMinimumSize(new Dimension(ValuesGlobals.WIDTH_FRAME, ValuesGlobals.HEIGHT_FRAME));
+        this.setMaximumSize(new Dimension(ValuesGlobals.WIDTH_FRAME, ValuesGlobals.HEIGHT_FRAME));
+        this.setLayout(new BorderLayout());
+        this.setLocation(0, 0);
         //System.out.println("El tamaño del PrincipalPanel es: " + this.getWidth() + " " + this.getHeight());
         this.setVisible(true);
     }

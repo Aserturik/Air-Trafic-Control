@@ -22,13 +22,13 @@ public class MyFrame extends JFrame implements Contract.View {
     }
 
     private void setSizes() {
-        this.setSize(ValuesGlobals.WIDTH_FRAME, ValuesGlobals.HEIGHT_FRAME);
-        this.setPreferredSize(this.getSize());
-        this.setMinimumSize(this.getSize());
-        this.setMaximumSize(this.getSize());
+        this.setSize(ValuesGlobals.WIDTH_FRAME, ValuesGlobals.HEIGHT_FRAME+36);
+        this.setPreferredSize(new Dimension(ValuesGlobals.WIDTH_FRAME, ValuesGlobals.HEIGHT_FRAME+36));
+        this.setMinimumSize(new Dimension(ValuesGlobals.WIDTH_FRAME, ValuesGlobals.HEIGHT_FRAME+36));
+        this.setMaximumSize(new Dimension(ValuesGlobals.WIDTH_FRAME, ValuesGlobals.HEIGHT_FRAME + 36));
         this.setLocationRelativeTo(null);
         //System.out.println("El tamaño del Frame es: " + this.getWidth() + " " + this.getHeight());
-        //this.setResizable(false);
+        this.setResizable(false);
     }
 
     private void initComponents() {

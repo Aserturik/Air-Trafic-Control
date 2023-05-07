@@ -85,4 +85,9 @@ public class ManagerModel implements Contract.Model {
     public Plane getPlaneSelected(Point point) {
         return null;
     }
+
+    @Override
+    public void viewIsReady() {
+        operationPlanes.viewIsReady();
+    }
 }

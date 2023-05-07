@@ -3,9 +3,7 @@ package co.edu.uptc.model;
 import co.edu.uptc.pojo.Plane;
 import co.edu.uptc.presenter.Contract;
 import co.edu.uptc.view.globals.ValuesGlobals;
-import util.UtilImages;
 
-import javax.swing.*;
 import java.awt.*;
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -41,6 +39,10 @@ public class OperationPlanes {
         startThread();
         createPlanes();
         eliminatePlanes();
+    }
+
+    public void viewIsReady() {
+        this.lock = true;
     }
 
     private synchronized void startThread() {
@@ -84,7 +86,7 @@ public class OperationPlanes {
                 try {
                     synchronized (lock) {
                         verifyPlanes();
-                        lock.wait();
+                        lock.notifyAll();
                     }
                     Thread.sleep(ValuesGlobals.TIME_ELIMINATE_PLANE);
                 } catch (InterruptedException e) {
@@ -97,20 +99,16 @@ public class OperationPlanes {
 
     private void verifyPlanes() {
         for (Plane plane : planes) {
-            if (getDistanceTo(plane,plane.getNextPosition()) == 0 && plane.getPosition().x == 0) {
-                System.out.println("El tamaño de la lista es: " + planes.size());
+            if (getDistanceTo(plane, plane.getNextPosition()) == 0 && plane.getPosition().x == 0) {
                 planes.remove(plane);
                 break;
-            } else if (getDistanceTo(plane,plane.getNextPosition()) == 0 && plane.getPosition().x == ValuesGlobals.WIDTH_FRAME) {
-                System.out.println("El tamaño de la lista es: " + planes.size());System.out.println("El tamaño de la lista es: " + planes.size());
+            } else if (getDistanceTo(plane, plane.getNextPosition()) == 0 && plane.getPosition().x == ValuesGlobals.WIDTH_FRAME) {
                 planes.remove(plane);
                 break;
-            } else if (getDistanceTo(plane,plane.getNextPosition()) == 0 && plane.getPosition().y == 0) {
-                System.out.println("El tamaño de la lista es: " + planes.size());
+            } else if (getDistanceTo(plane, plane.getNextPosition()) == 0 && plane.getPosition().y == 0) {
                 planes.remove(plane);
                 break;
-            } else if (getDistanceTo(plane,plane.getNextPosition()) == 0 && plane.getPosition().y == ValuesGlobals.HEIGHT_FRAME) {
-                System.out.println("El tamaño de la lista es: " + planes.size());
+            } else if (getDistanceTo(plane, plane.getNextPosition()) == 0 && plane.getPosition().y == ValuesGlobals.HEIGHT_FRAME) {
                 planes.remove(plane);
                 break;
             }
@@ -161,7 +159,6 @@ public class OperationPlanes {
         }
         plane.setNextPosition(getInversePosition(plane));
         planes.add(plane);
-        System.out.println("El tamaño del array es: " + planes.size());
     }
 
     public void moveToRoute(Plane plane) {
@@ -209,25 +206,20 @@ public class OperationPlanes {
     }
 
     public Plane getPlaneSelected(Rectangle bounds) {
-         int imgWidth = 40;
-         int imgHeight = 40;
-         for (Plane plane : planes) {
-               int x = plane.getPosition().x;
-               int y = plane.getPosition().y;
-               if (bounds.contains(x, y, imgWidth, imgHeight)) {
-                  return plane;
-               }
-         }
-         return null;
+        int imgWidth = 40;
+        int imgHeight = 40;
+        for (Plane plane : planes) {
+            int x = plane.getPosition().x;
+            int y = plane.getPosition().y;
+            if (bounds.contains(x, y, imgWidth, imgHeight)) {
+                return plane;
+            }
+        }
+        return null;
     }
 
     private void getNextPosition(Plane plane) {
-        if (plane.isNewPlane()) {
-            setNextPlanePosition(plane);
-        } else {
-            plane.getPath().remove(0);
-            plane.setNextPosition(plane.getPath().get(0));
-        }
+        setNextPlanePosition(plane);
     }
 
     private double getAngle(Plane plane) {
@@ -248,7 +240,18 @@ public class OperationPlanes {
 
         return Math.sqrt(dx * dx + dy * dy);
     }
+
     private void setNextPlanePosition(Plane plane) {
+        if (plane.isNewPlane()) {
+            setNewNextPlanePosition(plane);
+        } else {
+            plane.getPath().remove(0);
+            plane.setNextPosition(plane.getPath().get(0));
+
+        }
+    }
+
+    private void setNewNextPlanePosition(Plane plane) {
         if (plane.getPosition().y >= ValuesGlobals.HEIGHT_FRAME) {
             plane.getNextPosition().x = ValuesGlobals.WIDTH_FRAME - plane.getPosition().x;
             plane.getNextPosition().y = 0;
@@ -270,6 +273,9 @@ public class OperationPlanes {
             Plane plane = getPlaneSelected(re);
             plane.addPoint(point);
             plane.setNewPlane(false);
+            plane.setAngle(getAngle(plane));
+            //moveToRoute(plane);
+            advance();
         }
     }
 }

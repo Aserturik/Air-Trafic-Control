@@ -39,6 +39,8 @@ public interface Contract {
         Contract.Model getModel();
 
         View getView();
+
+        void notifyModel();
     }
 
     public interface Model {
@@ -68,5 +70,7 @@ public interface Contract {
         void isSelectedPlane(Point point);
 
         Plane getPlaneSelected(Point point);
+
+        void viewIsReady();
     }
 }
