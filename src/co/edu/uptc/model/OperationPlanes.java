@@ -4,7 +4,10 @@ import co.edu.uptc.pojo.Plane;
 import co.edu.uptc.presenter.Contract;
 import co.edu.uptc.view.globals.ValuesGlobals;
 
+import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -14,6 +17,7 @@ public class OperationPlanes {
     private List<Plane> planes;
     private static final int SPEED = 5;
     private Contract.Model model;
+    private Plane planeSelected;
     private boolean isStartGame = false;
     private boolean isPauseGame = false;
     private LocalDate dateStartGame;
@@ -24,10 +28,6 @@ public class OperationPlanes {
         lock = new Object();
         this.model = model;
         planes = new ArrayList<>();
-    }
-
-    public void addPointToPath(Plane plane, Point point) {
-        plane.addPoint(point);
     }
 
 
@@ -155,13 +155,13 @@ public class OperationPlanes {
                 plane.addPoint(new Point(random.nextInt(ValuesGlobals.WIDTH_FRAME - 10 + 1) + 10, ValuesGlobals.HEIGHT_FRAME));
                 break;
         }
+        plane.setPosition(plane.getPath().get(0));
         plane.setNextPosition(getInversePosition(plane));
         planes.add(plane);
     }
 
     public void moveToRoute(Plane plane) {
         double distance = getDistanceTo(plane, plane.getNextPosition());
-        //System.out.println("la distancia es: " + distance);
         double dx = plane.getNextPosition().x - plane.getPosition().x;
         double dy = plane.getNextPosition().y - plane.getPosition().y;
 
@@ -190,30 +190,14 @@ public class OperationPlanes {
         }
     }
 
-    public boolean checkBounds(Rectangle bounds) {
-        int imgWidth = 40;
-        int imgHeight = 40;
+    public boolean checkBounds(Point point) {
         for (Plane plane : planes) {
-            int x = plane.getPosition().x;
-            int y = plane.getPosition().y;
-            if (bounds.contains(x, y, imgWidth, imgHeight)) {
+            if (plane.getRectangle().contains(point)) {
+                planeSelected = plane;
                 return true;
             }
         }
         return false;
-    }
-
-    public Plane getPlaneSelected(Rectangle bounds) {
-        int imgWidth = 40;
-        int imgHeight = 40;
-        for (Plane plane : planes) {
-            int x = plane.getPosition().x;
-            int y = plane.getPosition().y;
-            if (bounds.contains(x, y, imgWidth, imgHeight)) {
-                return plane;
-            }
-        }
-        return null;
     }
 
     private void getNextPosition(Plane plane) {
@@ -245,7 +229,6 @@ public class OperationPlanes {
         } else {
             plane.getPath().remove(0);
             plane.setNextPosition(plane.getPath().get(0));
-
         }
     }
 
@@ -266,15 +249,17 @@ public class OperationPlanes {
     }
 
     public void isSelectedPlane(Point point) {
-        Rectangle re = new Rectangle(point.x, point.y, 60, 60);
-        if (checkBounds(re)) {
-            Plane plane = getPlaneSelected(re);
-            plane.addPoint(point);
-            plane.setNewPlane(false);
-            plane.setAngle(getAngle(plane));
-            //moveToRoute(plane);
-            advance();
+        if(checkBounds(point)) {
+            System.out.println("Plane selected");
+            //planeSelected.setNewPlane(false);>
         }
+    }
+
+    public void addPointToPath(Point point) {
+        if (planeSelected!=null) {
+            planeSelected.addPoint(point);
+        }
+
     }
 
     public void pauseGame() {
@@ -289,5 +274,9 @@ public class OperationPlanes {
     private void returnGame() {
         startThread();
         eliminatePlanes();
+    }
+
+    public void selectedPlaneNull() {
+        planeSelected = null;
     }
 }

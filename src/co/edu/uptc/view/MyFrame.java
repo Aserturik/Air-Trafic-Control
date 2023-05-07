@@ -94,4 +94,8 @@ public class MyFrame extends JFrame implements Contract.View {
     public void showGame() {
         principalPanel.showGame();
     }
+
+    public void selectedPlaneNull() {
+        presenter.selectedPlaneNull();
+    }
 }
