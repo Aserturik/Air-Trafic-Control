@@ -83,6 +83,6 @@ public class ManagerModel implements Contract.Model {
 
     @Override
     public Plane getPlaneSelected(Point point) {
-        return operationPlanes.getPlaneSelected(point);
+        return null;
     }
 }

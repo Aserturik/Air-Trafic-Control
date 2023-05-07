@@ -30,10 +30,6 @@ public class OperationPlanes {
         planes = new ArrayList<>();
     }
 
-    public List<Plane> getPlanes() {
-        return planes;
-    }
-
     public void addPointToPath(Plane plane, Point point) {
         plane.addPoint(point);
     }
@@ -212,11 +208,25 @@ public class OperationPlanes {
         return false;
     }
 
+    public Plane getPlaneSelected(Rectangle bounds) {
+         int imgWidth = 40;
+         int imgHeight = 40;
+         for (Plane plane : planes) {
+               int x = plane.getPosition().x;
+               int y = plane.getPosition().y;
+               if (bounds.contains(x, y, imgWidth, imgHeight)) {
+                  return plane;
+               }
+         }
+         return null;
+    }
+
     private void getNextPosition(Plane plane) {
         if (plane.isNewPlane()) {
             setNextPlanePosition(plane);
         } else {
-            // para cuando tiene que seguir el camino
+            plane.getPath().remove(0);
+            plane.setNextPosition(plane.getPath().get(0));
         }
     }
 
@@ -238,13 +248,6 @@ public class OperationPlanes {
 
         return Math.sqrt(dx * dx + dy * dy);
     }
-
-    private Point getCenterPanel() {
-        int x = ValuesGlobals.getCenterFrame().x -= 20 / 2;
-        int y = ValuesGlobals.getCenterFrame().y -= 20 / 2;
-        return new Point(x, y);
-    }
-
     private void setNextPlanePosition(Plane plane) {
         if (plane.getPosition().y >= ValuesGlobals.HEIGHT_FRAME) {
             plane.getNextPosition().x = ValuesGlobals.WIDTH_FRAME - plane.getPosition().x;
@@ -262,28 +265,11 @@ public class OperationPlanes {
     }
 
     public void isSelectedPlane(Point point) {
-        if (checkBounds(new Rectangle(point.x, point.y, 40, 40))) {
-            System.out.println("Seleccionado");
+        Rectangle re = new Rectangle(point.x, point.y, 60, 60);
+        if (checkBounds(re)) {
+            Plane plane = getPlaneSelected(re);
+            plane.addPoint(point);
+            plane.setNewPlane(false);
         }
-    }
-
-    private Rectangle getAreaPosition(Point position) {
-        int x = position.x;
-        int y = position.y;
-        int width = 40;
-        int height = 40;
-
-        return new Rectangle(x, y, width, height);
-    }
-
-    public Plane getPlaneSelected(Point point) {
-        Rectangle planeArea;
-        for (Plane plane : planes) {
-            planeArea = getAreaPosition(plane.getPosition());
-            if (planeArea.contains(point)) {
-                return plane;
-            }
-        }
-        return null;
     }
 }

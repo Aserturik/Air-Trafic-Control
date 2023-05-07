@@ -64,4 +64,8 @@ public class Plane {
                 ", position=" + getPosition() +
                 '}';
     }
+
+    public void setNewPlane(boolean b) {
+         this.newPlane = b;
+    }
 }
