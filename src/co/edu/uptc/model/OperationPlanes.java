@@ -258,8 +258,8 @@ public class OperationPlanes {
     public void addPointToPath(Point point) {
         if (planeSelected!=null) {
             planeSelected.addPoint(point);
-        }
 
+        }
     }
 
     public void pauseGame() {
