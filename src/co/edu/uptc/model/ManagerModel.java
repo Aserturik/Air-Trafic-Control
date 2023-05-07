@@ -48,7 +48,7 @@ public class ManagerModel implements Contract.Model {
 
     @Override
     public void pauseGame() {
-
+        operationPlanes.pauseGame();
     }
 
     @Override

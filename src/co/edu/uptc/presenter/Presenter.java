@@ -53,4 +53,9 @@ public class Presenter implements Contract.Presenter {
     public void notifyModel() {
          model.viewIsReady();
     }
+
+    @Override
+    public void pauseGame() {
+        model.pauseGame();
+    }
 }

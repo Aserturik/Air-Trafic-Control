@@ -16,10 +16,8 @@ public class OperationPlanes {
     private Contract.Model model;
     private boolean isStartGame = false;
     private boolean isPauseGame = false;
-    private boolean isStopGame = false;
     private LocalDate dateStartGame;
     private LocalDate datePauseGame;
-    private LocalDate dateStopGame;
     private Object lock;
 
     public OperationPlanes(Contract.Model model) {
@@ -47,7 +45,7 @@ public class OperationPlanes {
 
     private synchronized void startThread() {
         Thread thread = new Thread(() -> {
-            while (isStartGame) {
+            while (!isPauseGame) {
                 try {
                     synchronized (lock) {
                         model.setPlanes(planes);
@@ -65,10 +63,10 @@ public class OperationPlanes {
 
     private synchronized void createPlanes() {
         Thread addPlanes = new Thread(() -> {
-            while (isStartGame) {
-                randomPositionGenerator();
+            while (!isPauseGame) {
                 try {
                     synchronized (lock) {
+                        randomPositionGenerator();
                         lock.wait();
                     }
                     Thread.sleep(ValuesGlobals.TIME_GENERATE_PLANE);
@@ -82,7 +80,7 @@ public class OperationPlanes {
 
     private void eliminatePlanes() {
         Thread eliminatePlanes = new Thread(() -> {
-            while (isStartGame) {
+            while (!isPauseGame) {
                 try {
                     synchronized (lock) {
                         verifyPlanes();
@@ -277,5 +275,19 @@ public class OperationPlanes {
             //moveToRoute(plane);
             advance();
         }
+    }
+
+    public void pauseGame() {
+        if (isPauseGame) {
+            isPauseGame = false;
+            returnGame();
+        } else {
+            isPauseGame = true;
+        }
+    }
+
+    private void returnGame() {
+        startThread();
+        eliminatePlanes();
     }
 }

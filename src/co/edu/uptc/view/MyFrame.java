@@ -7,6 +7,8 @@ import co.edu.uptc.view.panels.PrincipalPanel;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.util.List;
 
 public class MyFrame extends JFrame implements Contract.View {
@@ -22,9 +24,9 @@ public class MyFrame extends JFrame implements Contract.View {
     }
 
     private void setSizes() {
-        this.setSize(ValuesGlobals.WIDTH_FRAME, ValuesGlobals.HEIGHT_FRAME+36);
-        this.setPreferredSize(new Dimension(ValuesGlobals.WIDTH_FRAME, ValuesGlobals.HEIGHT_FRAME+36));
-        this.setMinimumSize(new Dimension(ValuesGlobals.WIDTH_FRAME, ValuesGlobals.HEIGHT_FRAME+36));
+        this.setSize(ValuesGlobals.WIDTH_FRAME, ValuesGlobals.HEIGHT_FRAME + 36);
+        this.setPreferredSize(new Dimension(ValuesGlobals.WIDTH_FRAME, ValuesGlobals.HEIGHT_FRAME + 36));
+        this.setMinimumSize(new Dimension(ValuesGlobals.WIDTH_FRAME, ValuesGlobals.HEIGHT_FRAME + 36));
         this.setMaximumSize(new Dimension(ValuesGlobals.WIDTH_FRAME, ValuesGlobals.HEIGHT_FRAME + 36));
         this.setLocationRelativeTo(null);
         //System.out.println("El tamaño del Frame es: " + this.getWidth() + " " + this.getHeight());
@@ -83,5 +85,13 @@ public class MyFrame extends JFrame implements Contract.View {
 
     public List<Plane> getModelPhoto() {
         return presenter.getPlanes();
+    }
+
+    public void showMenu() {
+        principalPanel.showMenu();
+    }
+
+    public void showGame() {
+        principalPanel.showGame();
     }
 }

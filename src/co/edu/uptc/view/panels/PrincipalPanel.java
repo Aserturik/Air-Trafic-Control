@@ -10,13 +10,18 @@ import java.awt.*;
 public class PrincipalPanel extends JPanel {
     private PanelGame panelGame;
     private MyFrame frame;
+    private PanelMenu panelMenu;
 
     public PrincipalPanel(MyFrame myFrame) {
         super();
         this.frame = myFrame;
+        this.setSizes();
         panelGame = new PanelGame(myFrame);
         this.add(panelGame);
-        this.setSizes();
+        panelMenu = new PanelMenu(myFrame);
+        this.add(panelMenu, BorderLayout.CENTER);
+        panelGame.setFocusable(true);
+        panelGame.requestFocus();
     }
 
     private void setSizes() {
@@ -32,5 +37,21 @@ public class PrincipalPanel extends JPanel {
 
     public PanelGame getPanelGame() {
         return panelGame;
+    }
+
+    public void showMenu() {
+        panelMenu.setVisible(true);
+        panelGame.setVisible(false);
+        panelMenu.setFocusable(true);
+        panelMenu.requestFocus();
+        frame.getPresenter().pauseGame();
+    }
+
+    public void showGame() {
+        panelMenu.setVisible(false);
+        panelGame.setVisible(true);
+        panelGame.setFocusable(true);
+        panelGame.requestFocus();
+        frame.getPresenter().pauseGame();
     }
 }

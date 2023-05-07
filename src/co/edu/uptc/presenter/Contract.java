@@ -41,6 +41,8 @@ public interface Contract {
         View getView();
 
         void notifyModel();
+
+        void pauseGame();
     }
 
     public interface Model {

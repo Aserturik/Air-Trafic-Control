@@ -7,15 +7,13 @@ import util.UtilImages;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
-import java.awt.event.MouseMotionListener;
+import java.awt.event.*;
 import java.awt.font.FontRenderContext;
 import java.awt.geom.AffineTransform;
 import java.util.ArrayList;
 import java.util.List;
 
-public class PanelGame extends JPanel implements MouseListener, MouseMotionListener {
+public class PanelGame extends JPanel implements MouseListener, MouseMotionListener, KeyListener {
     private MyFrame frame;
     private Graphics2D g2d;
     private List<Plane> planes;
@@ -37,6 +35,7 @@ public class PanelGame extends JPanel implements MouseListener, MouseMotionListe
     private void initComponents() {
         this.addMouseListener(this);
         this.addMouseMotionListener(this);
+        this.addKeyListener(this);
         this.setVisible(true);
     }
 
@@ -168,6 +167,22 @@ public class PanelGame extends JPanel implements MouseListener, MouseMotionListe
     @Override
     public void mouseMoved(MouseEvent e) {
 
+    }
+
+
+    @Override
+    public void keyTyped(KeyEvent e) {
+        if (e.getKeyCode() == 0) {
+            frame.showMenu();
+        }
+    }
+
+    @Override
+    public void keyPressed(KeyEvent e) {
+    }
+
+    @Override
+    public void keyReleased(KeyEvent e) {
     }
 
     public void setPlanes(List<Plane> planes) {
