@@ -48,4 +48,14 @@ public class Presenter implements Contract.Presenter {
     public Contract.View getView() {
         return view;
     }
+
+    @Override
+    public void notifyModel() {
+         model.viewIsReady();
+    }
+
+    @Override
+    public void pauseGame() {
+        model.pauseGame();
+    }
 }

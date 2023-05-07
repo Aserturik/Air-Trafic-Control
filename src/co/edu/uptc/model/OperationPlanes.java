@@ -3,214 +3,291 @@ package co.edu.uptc.model;
 import co.edu.uptc.pojo.Plane;
 import co.edu.uptc.presenter.Contract;
 import co.edu.uptc.view.globals.ValuesGlobals;
-import util.UtilImages;
 
-import javax.swing.*;
 import java.awt.*;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
 public class OperationPlanes {
     private List<Plane> planes;
-    private JLabel imageLabel;
-    private boolean isNewPlane = true;
-    private Point position;
-    private Point endPoint;
-    private boolean isFollowingPath = false;
     private static final int SPEED = 5;
     private Contract.Model model;
+    private boolean isStartGame = false;
+    private boolean isPauseGame = false;
+    private LocalDate dateStartGame;
+    private LocalDate datePauseGame;
+    private Object lock;
 
     public OperationPlanes(Contract.Model model) {
+        lock = new Object();
         this.model = model;
         planes = new ArrayList<>();
-        imageLabel = new JLabel();
-        position = new Point();
-        endPoint = new Point();
-    }
-
-    public List<Plane> getPlanes() {
-        planes = new java.util.ArrayList<>();
-        planes.add(new Plane());
-        planes.get(0).addPoint(new Point(50, 50));
-        planes.get(0).setAngle(45.0);
-        return planes;
-    }
-
-    private Plane createLocalPlane() {
-        Plane newPlane = new Plane();
-        randomPositionGenerator(newPlane);
-        planes.add(newPlane);
-        return newPlane;
     }
 
     public void addPointToPath(Plane plane, Point point) {
         plane.addPoint(point);
     }
 
-    private void randomPositionGenerator(Plane plane) {
-        Random random = new Random();
-        switch (random.nextInt(4 - 1 + 1) + 1) {
-            case 1:
-                plane.addPoint(new Point(0, random.nextInt(700 - 10 + 1) + 10));
+
+    public void startGame() {
+        isStartGame = true;
+        dateStartGame = LocalDate.now();
+        startThread();
+        createPlanes();
+        eliminatePlanes();
+    }
+
+    public void viewIsReady() {
+        this.lock = true;
+    }
+
+    private synchronized void startThread() {
+        Thread thread = new Thread(() -> {
+            while (!isPauseGame) {
+                try {
+                    synchronized (lock) {
+                        model.setPlanes(planes);
+                        advance();
+                        lock.notifyAll();
+                    }
+                    Thread.sleep(ValuesGlobals.TIME_SLEEP);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+        thread.start();
+    }
+
+    private synchronized void createPlanes() {
+        Thread addPlanes = new Thread(() -> {
+            while (!isPauseGame) {
+                try {
+                    synchronized (lock) {
+                        randomPositionGenerator();
+                        lock.wait();
+                    }
+                    Thread.sleep(ValuesGlobals.TIME_GENERATE_PLANE);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+        addPlanes.start();
+    }
+
+    private void eliminatePlanes() {
+        Thread eliminatePlanes = new Thread(() -> {
+            while (!isPauseGame) {
+                try {
+                    synchronized (lock) {
+                        verifyPlanes();
+                        lock.notifyAll();
+                    }
+                    Thread.sleep(ValuesGlobals.TIME_ELIMINATE_PLANE);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+        eliminatePlanes.start();
+    }
+
+    private void verifyPlanes() {
+        for (Plane plane : planes) {
+            if (getDistanceTo(plane, plane.getNextPosition()) == 0 && plane.getPosition().x == 0) {
+                planes.remove(plane);
                 break;
-            case 2:
-                plane.addPoint(new Point(1010, random.nextInt(700 - 10 + 1) + 10));
+            } else if (getDistanceTo(plane, plane.getNextPosition()) == 0 && plane.getPosition().x == ValuesGlobals.WIDTH_FRAME) {
+                planes.remove(plane);
                 break;
-            case 3:
-                plane.addPoint(new Point(random.nextInt(1010 - 10 + 1) + 10, 0));
+            } else if (getDistanceTo(plane, plane.getNextPosition()) == 0 && plane.getPosition().y == 0) {
+                planes.remove(plane);
                 break;
-            case 4:
-                plane.addPoint(new Point(random.nextInt(1010 - 10 + 1) + 10, 610));
+            } else if (getDistanceTo(plane, plane.getNextPosition()) == 0 && plane.getPosition().y == ValuesGlobals.HEIGHT_FRAME) {
+                planes.remove(plane);
                 break;
+            }
         }
     }
 
-    public void moveToCenter() {
-        double distance = getDistanceTo(endPoint);
-        double dx = endPoint.x - position.x;
-        double dy = endPoint.y - position.y;
+    private void randomPositionGenerator() {
+        Plane plane = new Plane();
+        addNewPlane(plane);
+        plane.setAngle(getAngle(plane));
+        moveToRoute(plane);
+    }
+
+    private Point getInversePosition(Plane plane) {
+        Point position = plane.getPosition();
+        Point endPoint = new Point();
+        if (position.y >= ValuesGlobals.HEIGHT_FRAME) {
+            endPoint.x = ValuesGlobals.WIDTH_FRAME - position.x;
+            endPoint.y = 0;
+        } else if (position.y <= 0) {
+            endPoint.x = ValuesGlobals.WIDTH_FRAME - position.x;
+            endPoint.y = ValuesGlobals.HEIGHT_FRAME;
+        } else if (position.x >= ValuesGlobals.WIDTH_FRAME) {
+            endPoint.x = 0;
+            endPoint.y = ValuesGlobals.HEIGHT_FRAME - position.y;
+        } else if (position.x <= 0) {
+            endPoint.x = ValuesGlobals.WIDTH_FRAME;
+            endPoint.y = ValuesGlobals.HEIGHT_FRAME - position.y;
+        }
+        return endPoint;
+    }
+
+    private void addNewPlane(Plane plane) {
+        Random random = new Random();
+        switch (random.nextInt(4 - 1 + 1) + 1) {
+            case 1:
+                plane.addPoint(new Point(0, random.nextInt(ValuesGlobals.HEIGHT_FRAME - 10 + 1) + 10));
+                break;
+            case 2:
+                plane.addPoint(new Point(1010, random.nextInt(ValuesGlobals.HEIGHT_FRAME - 10 + 1) + 10));
+                break;
+            case 3:
+                plane.addPoint(new Point(random.nextInt(ValuesGlobals.WIDTH_FRAME - 10 + 1) + 10, 0));
+                break;
+            case 4:
+                plane.addPoint(new Point(random.nextInt(ValuesGlobals.WIDTH_FRAME - 10 + 1) + 10, ValuesGlobals.HEIGHT_FRAME));
+                break;
+        }
+        plane.setNextPosition(getInversePosition(plane));
+        planes.add(plane);
+    }
+
+    public void moveToRoute(Plane plane) {
+        double distance = getDistanceTo(plane, plane.getNextPosition());
+        //System.out.println("la distancia es: " + distance);
+        double dx = plane.getNextPosition().x - plane.getPosition().x;
+        double dy = plane.getNextPosition().y - plane.getPosition().y;
 
         if (distance <= SPEED) {
-            position.setLocation(endPoint);
-            //centerPlane.setLocation(centerPanel.x + imagePlane.getIconWidth() / 2, centerPanel.y + imagePlane.getIconHeight() / 2);
+            plane.getPosition().setLocation(plane.getNextPosition());
         } else {
             double angle = Math.atan2(dy, dx);
             int deltaX = (int) Math.round(SPEED * Math.cos(angle));
             int deltaY = (int) Math.round(SPEED * Math.sin(angle));
 
-            position.x += deltaX;
-            //centerPlane.x += deltaX;
-            position.y += deltaY;
-            //centerPlane.y += deltaY;
+            plane.getPosition().x += deltaX;
+            plane.getPosition().y += deltaY;
         }
     }
 
     public void advance() {
-        if (!isFollowingPath) {
-            moveToCenter();
-        } else {
-            double radians = Math.toRadians(getAngle());
-            int dx = (int) Math.round(SPEED * Math.sin(radians));
-            int dy = (int) Math.round(-SPEED * Math.cos(radians));
-            position.translate(dx, dy);
+        for (Plane plane : planes) {
+            if (plane.isNewPlane()) {
+                moveToRoute(plane);
+            } else {
+                double radians = Math.toRadians(plane.getAngle());
+                int dx = (int) Math.round(SPEED * Math.sin(radians));
+                int dy = (int) Math.round(-SPEED * Math.cos(radians));
+                plane.getPosition().translate(dx, dy);
+            }
         }
     }
-
-    public void followPath() {
-
-    }
-
 
     public boolean checkBounds(Rectangle bounds) {
-        int x = position.x;
-        int y = position.y;
         int imgWidth = 40;
         int imgHeight = 40;
-        return bounds.contains(x, y, imgWidth, imgHeight);
-    }
-
-
-    private void setRandomPlanePosition() {
-        if (position.y >= ValuesGlobals.HEIGHT_FRAME) {
-            endPoint.x = (int) (Math.random() * ValuesGlobals.WIDTH_FRAME);
-            endPoint.y = 0;
-        } else if (position.y <= 0) {
-            endPoint.x = (int) (Math.random() * ValuesGlobals.WIDTH_FRAME);
-            endPoint.y = ValuesGlobals.HEIGHT_FRAME;
-        } else if (position.x >= ValuesGlobals.WIDTH_FRAME) {
-            endPoint.x = 0;
-            endPoint.y = (int) (Math.random() * ValuesGlobals.HEIGHT_FRAME);
-        } else if (position.x <= 0) {
-            endPoint.x = ValuesGlobals.WIDTH_FRAME;
-            endPoint.y = (int) (Math.random() * ValuesGlobals.HEIGHT_FRAME);
-        }
-    }
-
-    private void getEndPoint() {
-        if (isNewPlane) {
-            setNewPlanePosition();
-        } else {
-            setRandomPlanePosition();
-        }
-    }
-
-    private double getAngle() {
-        getEndPoint();
-        int x1 = endPoint.x;
-        int y1 = endPoint.y;
-        int x2 = position.x;
-        int y2 = position.y;
-
-        double angle = Math.atan2(y2 - y1, x2 - x1);
-        //System.out.println("El angulo es: " + Math.toDegrees(angle));
-
-        return Math.toDegrees(angle);
-    }
-
-    private double getDistanceTo(Point point) {
-        double dx = point.x - position.x;
-        double dy = point.y - position.y;
-
-        return Math.sqrt(dx * dx + dy * dy);
-    }
-
-    private Point getCenterPanel() {
-        int x = ValuesGlobals.getCenterFrame().x -= 20 / 2;
-        int y = ValuesGlobals.getCenterFrame().y -= 20 / 2;
-        return new Point(x, y);
-    }
-
-    private void setNewPlanePosition() {
-        if (position.y >= ValuesGlobals.HEIGHT_FRAME) {
-            endPoint.x = ValuesGlobals.WIDTH_FRAME - position.x;
-            endPoint.y = 0;
-        } else if (position.y <= 0) {
-            endPoint.x = ValuesGlobals.WIDTH_FRAME - position.x;
-            endPoint.y = ValuesGlobals.HEIGHT_FRAME;
-        } else if (position.x >= ValuesGlobals.WIDTH_FRAME) {
-            endPoint.x = 0;
-            endPoint.y = ValuesGlobals.HEIGHT_FRAME - position.y;
-        } else if (position.x <= 0) {
-            endPoint.x = ValuesGlobals.WIDTH_FRAME;
-            endPoint.y = ValuesGlobals.HEIGHT_FRAME - position.y;
-        }
-
-        isNewPlane = false;
-    }
-
-    public ImageIcon getPlaneImage() {
-        UtilImages utilImages = new UtilImages();
-        imageLabel = new JLabel();
-        imageLabel.setBounds(10, 10, 40, 40);
-        Icon img = utilImages.loadScaleImage(ValuesGlobals.PHAT_PLANE_IMAGE_ORIGINAL, imageLabel.getWidth(), imageLabel.getHeight());
-        imageLabel.setIcon(img);
-        return new ImageIcon(((ImageIcon) img).getImage().getScaledInstance(imageLabel.getWidth(), imageLabel.getHeight(), Image.SCALE_DEFAULT));
-    }
-
-    public void isSelectedPlane(Point point) {
-        if (checkBounds(new Rectangle(point.x, point.y, 40, 40))) {
-            System.out.println("Seleccionado");
-        }
-    }
-
-    private Rectangle getAreaPosition(Point position) {
-        int x = position.x;
-        int y = position.y;
-        int width = 40;
-        int height = 40;
-
-        return new Rectangle(x, y, width, height);
-    }
-
-    public Plane getPlaneSelected(Point point) {
-        Rectangle planeArea;
         for (Plane plane : planes) {
-            planeArea = getAreaPosition(plane.getPosition());
-            if (planeArea.contains(point)) {
+            int x = plane.getPosition().x;
+            int y = plane.getPosition().y;
+            if (bounds.contains(x, y, imgWidth, imgHeight)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public Plane getPlaneSelected(Rectangle bounds) {
+        int imgWidth = 40;
+        int imgHeight = 40;
+        for (Plane plane : planes) {
+            int x = plane.getPosition().x;
+            int y = plane.getPosition().y;
+            if (bounds.contains(x, y, imgWidth, imgHeight)) {
                 return plane;
             }
         }
         return null;
+    }
+
+    private void getNextPosition(Plane plane) {
+        setNextPlanePosition(plane);
+    }
+
+    private double getAngle(Plane plane) {
+        getNextPosition(plane);
+        int x1 = plane.getNextPosition().x;
+        int y1 = plane.getNextPosition().y;
+        int x2 = plane.getPosition().x;
+        int y2 = plane.getPosition().y;
+
+        double angle = Math.atan2(y2 - y1, x2 - x1);
+
+        return Math.toDegrees(angle);
+    }
+
+    private double getDistanceTo(Plane plane, Point point) {
+        double dx = point.x - plane.getPosition().x;
+        double dy = point.y - plane.getPosition().y;
+
+        return Math.sqrt(dx * dx + dy * dy);
+    }
+
+    private void setNextPlanePosition(Plane plane) {
+        if (plane.isNewPlane()) {
+            setNewNextPlanePosition(plane);
+        } else {
+            plane.getPath().remove(0);
+            plane.setNextPosition(plane.getPath().get(0));
+
+        }
+    }
+
+    private void setNewNextPlanePosition(Plane plane) {
+        if (plane.getPosition().y >= ValuesGlobals.HEIGHT_FRAME) {
+            plane.getNextPosition().x = ValuesGlobals.WIDTH_FRAME - plane.getPosition().x;
+            plane.getNextPosition().y = 0;
+        } else if (plane.getPosition().y <= 0) {
+            plane.getNextPosition().x = ValuesGlobals.WIDTH_FRAME - plane.getPosition().x;
+            plane.getNextPosition().y = ValuesGlobals.HEIGHT_FRAME;
+        } else if (plane.getPosition().x >= ValuesGlobals.WIDTH_FRAME) {
+            plane.getNextPosition().x = 0;
+            plane.getNextPosition().y = ValuesGlobals.HEIGHT_FRAME - plane.getPosition().y;
+        } else if (plane.getPosition().x <= 0) {
+            plane.getNextPosition().x = ValuesGlobals.WIDTH_FRAME;
+            plane.getNextPosition().y = ValuesGlobals.HEIGHT_FRAME - plane.getPosition().y;
+        }
+    }
+
+    public void isSelectedPlane(Point point) {
+        Rectangle re = new Rectangle(point.x, point.y, 60, 60);
+        if (checkBounds(re)) {
+            Plane plane = getPlaneSelected(re);
+            plane.addPoint(point);
+            plane.setNewPlane(false);
+            plane.setAngle(getAngle(plane));
+            //moveToRoute(plane);
+            advance();
+        }
+    }
+
+    public void pauseGame() {
+        if (isPauseGame) {
+            isPauseGame = false;
+            returnGame();
+        } else {
+            isPauseGame = true;
+        }
+    }
+
+    private void returnGame() {
+        startThread();
+        eliminatePlanes();
     }
 }

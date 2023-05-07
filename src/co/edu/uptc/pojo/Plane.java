@@ -7,9 +7,13 @@ import java.util.List;
 public class Plane {
     private Double angle = 0.0;
     private List<Point> path;
+    private boolean newPlane;
+    private Point position;
+    private Point nextPosition;
 
     public Plane() {
         this.path = new ArrayList<Point>();
+        this.newPlane = true;
     }
 
     public void addPoint(Point point) {
@@ -36,12 +40,32 @@ public class Plane {
         return path.get(0);
     }
 
+    public boolean isNewPlane() {
+        return newPlane;
+    }
+
+    public void setPosition(Point position) {
+        this.position = position;
+    }
+
+    public Point getNextPosition() {
+        return nextPosition;
+    }
+
+    public void setNextPosition(Point nextPosition) {
+        this.nextPosition = nextPosition;
+    }
+
     @Override
-      public String toString() {
-         return "Plane{" +
-                  "angle=" + angle +
-                  ", path=" + path +
-                 ", position=" + getPosition() +
-                  '}';
-      }
+    public String toString() {
+        return "Plane{" +
+                "angle=" + angle +
+                ", path=" + path +
+                ", position=" + getPosition() +
+                '}';
+    }
+
+    public void setNewPlane(boolean b) {
+         this.newPlane = b;
+    }
 }
