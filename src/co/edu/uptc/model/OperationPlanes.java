@@ -216,6 +216,17 @@ public class OperationPlanes {
         return Math.toDegrees(angle);
     }
 
+    private double getAngle(Plane plane, Point point) {
+         int x1 = point.x;
+         int y1 = point.y;
+         int x2 = plane.getPosition().x;
+         int y2 = plane.getPosition().y;
+
+         double angle = Math.atan2(y2 - y1, x2 - x1);
+
+         return Math.toDegrees(angle);
+    }
+
     private double getDistanceTo(Plane plane, Point point) {
         double dx = point.x - plane.getPosition().x;
         double dy = point.y - plane.getPosition().y;
@@ -249,17 +260,43 @@ public class OperationPlanes {
     }
 
     public void isSelectedPlane(Point point) {
-        if(checkBounds(point)) {
+        if (checkBounds(point)) {
             System.out.println("Plane selected");
             //planeSelected.setNewPlane(false);>
         }
     }
 
-    public void addPointToPath(Point point) {
-        if (planeSelected!=null) {
-            planeSelected.addPoint(point);
+    private List<Point> calculateIntermediePoints(Point point1, Point point2) {
+        List<Point> points = new ArrayList<>();
+        int numberToDivide = this.SPEED;
 
+        int deltaX = point2.x - point1.x;
+        int deltaY = point2.y - point1.y;
+
+        for (int i = 1; i <= numberToDivide; i++) {
+            int intermediateX = point1.x + (deltaX * i) / numberToDivide;
+            int intermediateY = point1.y + (deltaY * i) / numberToDivide;
+            Point intermediatePoint = new Point(intermediateX, intermediateY);
+            points.add(intermediatePoint);
         }
+
+        return points;
+    }
+
+    public void addPointToPath(Point point) {
+        if (planeSelected != null) {
+            // aqui se añaden los puntos intermedios entre los puntos
+            planeSelected.addPoint(point);
+            followPath(planeSelected);
+        }
+    }
+
+    private void followPath(Plane planeSelected) {
+
+        planeSelected.setAngle(getAngle(planeSelected,planeSelected.getPath().get(1)));
+        //planeSelected.setNextPosition(planeSelected.getPath().get(0));
+        planeSelected.getPath().remove(0);
+
     }
 
     public void pauseGame() {
