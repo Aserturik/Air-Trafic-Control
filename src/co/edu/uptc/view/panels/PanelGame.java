@@ -68,7 +68,6 @@ public class PanelGame extends JPanel implements MouseListener, MouseMotionListe
     public void drawAllPlanes(Graphics2D g2d) {
         for (Plane plane : planes) {
             drawImage(plane, g2d);
-            printInfoPlane(plane);
         }
     }
 
@@ -88,11 +87,6 @@ public class PanelGame extends JPanel implements MouseListener, MouseMotionListe
         }
     }
 
-    private void printInfoPlane(Plane plane) {
-        //System.out.println("El avión está en: " + plane.getPosition().x + " " + plane.getPosition().y);
-        //System.out.println("El avión tiene un ángulo de: " + plane.getAngle());
-    }
-
     private MyFrame getFrame() {
         return this.frame;
     }
@@ -109,8 +103,6 @@ public class PanelGame extends JPanel implements MouseListener, MouseMotionListe
         g2d.rotate(rotationRequired, plane.getPosition().x, plane.getPosition().y);
         g2d.drawImage(imagePlane.getImage(), drawX, drawY, null);
         g2d.setColor(Color.RED);
-        Rectangle rectangle = plane.getRectangle();
-        g2d.drawRect(rectangle.x, rectangle.y, rectangle.width, rectangle.height);
         g2d.setTransform(tx);
         //System.out.println("Dibujando en: " + drawX + " " + drawY);
     }

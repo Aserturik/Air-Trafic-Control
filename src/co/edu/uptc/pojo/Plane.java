@@ -10,12 +10,10 @@ public class Plane {
     private boolean newPlane;
     private Point position;
     private Point nextPosition;
-    private Rectangle rectangle;
 
     public Plane() {
         this.path = new ArrayList<Point>();
         this.newPlane = true;
-        this.rectangle = new Rectangle();
     }
 
     public void addPoint(Point point) {
@@ -67,18 +65,7 @@ public class Plane {
                 '}';
     }
 
-    public Rectangle getRectangle() {
-        int drawX = this.getPosition().x - 20;
-        int drawY = this.getPosition().y -20;
-        rectangle.setBounds(drawX, drawY, 40, 40);
-        return rectangle;
-    }
-
-    public void setRectangle(Rectangle rectangle) {
-        this.rectangle = rectangle;
-    }
-
     public void setNewPlane(boolean b) {
-         this.newPlane = b;
+        this.newPlane = b;
     }
 }

@@ -264,9 +264,17 @@ public class OperationPlanes {
         }
     }
 
+    private Rectangle getRectangle(Plane plane) {
+        Rectangle rectangle = new Rectangle();
+        int drawX = plane.getPosition().x - 20;
+        int drawY = plane.getPosition().y -20;
+        rectangle.setBounds(drawX, drawY, 40, 40);
+        return rectangle;
+    }
+
     public void isSelectedPlane(Point point) {
         for (Plane plane : planes) {
-            if (plane.getRectangle().contains(point)) {
+            if (getRectangle(plane).contains(point)) {
                 planeSelected = plane;
             }
         }
