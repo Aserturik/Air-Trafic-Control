@@ -4,10 +4,7 @@ import co.edu.uptc.pojo.Plane;
 import co.edu.uptc.presenter.Contract;
 import co.edu.uptc.view.globals.ValuesGlobals;
 
-import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -302,36 +299,6 @@ public class OperationPlanes {
             planeSelected.addPoint(point);
         }
     }
-    /*
-    private void followPath(Plane planeSelected) {
-
-        planeSelected.getPath().remove(0);
-        planeSelected.setAngle(getAngle(planeSelected, planeSelected.getPath().get(0)));
-        planeSelected.setNextPosition(planeSelected.getPath().get(0));
-
-    }
-     */
-
-    private void followPath(Plane planeSelected) {
-        List<Point> path = planeSelected.getPath();
-
-        if (path.isEmpty()) {
-            // No hay más puntos en la ruta, el avión ha llegado a su destino
-            return;
-        }
-
-        Point nextPosition = path.get(0);
-        double angle = getAngle(planeSelected, nextPosition);
-
-        planeSelected.setAngle(angle);
-
-        // Mover el avión directamente a la siguiente posición en la ruta
-        planeSelected.setPosition(nextPosition);
-
-        // Eliminar el punto actual de la ruta, ya que el avión ha avanzado a esa posición
-        path.remove(0);
-    }
-
 
     public void pauseGame() {
         if (isPauseGame) {
