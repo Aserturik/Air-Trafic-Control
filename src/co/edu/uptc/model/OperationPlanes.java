@@ -193,11 +193,10 @@ public class OperationPlanes {
                         followTemporalPath();
                     }else {
                         planeSelected.setNewPlane(true);
-                        planeSelected.setNextPosition(new Point(300,300));
+                        planeSelected.setNextPosition(getInversePosition(planeSelected));
+                        planeSelected.setAngle(getAngle(planeSelected));
                     }
                 }
-                //moveToRoute(planeSelected);
-                //followPath(planeSelected);
             }
         }
     }
