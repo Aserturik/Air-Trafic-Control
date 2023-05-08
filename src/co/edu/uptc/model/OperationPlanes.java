@@ -50,8 +50,8 @@ public class OperationPlanes {
             while (!isPauseGame) {
                 try {
                     synchronized (lock) {
-                        model.setPlanes(planes);
                         advance();
+                        model.setPlanes(planes);
                         lock.notifyAll();
                     }
                     Thread.sleep(ValuesGlobals.TIME_SLEEP);
@@ -190,24 +190,15 @@ public class OperationPlanes {
                     planeSelected.addPoint(planeSelected.getNextPosition());
                 } else {
                     planeSelected.setPosition(planeSelected.getPath().get(0));
-                    planeSelected.setNextPosition(planeSelected.getPath().get(0));
-                    planeSelected.setAngle(getAngle(planeSelected, planeSelected.getPath().get(0)));
-                    planeSelected.setPath(calculateIntermediePoints(planeSelected.getPath()));
+                    planeSelected.setNextPosition(planeSelected.getPath().get(1));
+                    planeSelected.setAngle(getAngle(planeSelected, planeSelected.getPath().get(1)));
+                    planeSelected.getPath().remove(0);
+                    //planeSelected.setPath(calculateIntermediePoints(planeSelected.getPath()));
                 }
                 //moveToRoute(planeSelected);
                 //followPath(planeSelected);
             }
         }
-    }
-
-    public boolean checkBounds(Point point) {
-        for (Plane plane : planes) {
-            if (plane.getRectangle().contains(point)) {
-                planeSelected = plane;
-                return true;
-            }
-        }
-        return false;
     }
 
     private void getNextPosition(Plane plane) {
@@ -270,9 +261,10 @@ public class OperationPlanes {
     }
 
     public void isSelectedPlane(Point point) {
-        if (checkBounds(point)) {
-            System.out.println("Plane selected");
-            //planeSelected.setNewPlane(false);>
+        for (Plane plane : planes) {
+            if (plane.getRectangle().contains(point)) {
+                planeSelected = plane;
+            }
         }
     }
 
@@ -349,8 +341,7 @@ public class OperationPlanes {
     }
 
     public void selectedPlaneNull() {
+        planeSelected.setPath(calculateIntermediePoints(planeSelected.getPath()));
         planeSelected.setNewPlane(false);
-        startThread();
-        //planeSelected = null;
     }
 }
