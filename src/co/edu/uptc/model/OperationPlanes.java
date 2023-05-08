@@ -15,6 +15,7 @@ import java.util.Random;
 
 public class OperationPlanes {
     private List<Plane> planes;
+    private List<Point> temporalPath;
     private static final int SPEED = 5;
     private Contract.Model model;
     private Plane planeSelected;
@@ -28,6 +29,7 @@ public class OperationPlanes {
         lock = new Object();
         this.model = model;
         planes = new ArrayList<>();
+        temporalPath = new ArrayList<>();
     }
 
 
@@ -182,10 +184,18 @@ public class OperationPlanes {
             if (plane.isNewPlane()) {
                 moveToRoute(plane);
             } else {
-                double radians = Math.toRadians(plane.getAngle());
-                int dx = (int) Math.round(SPEED * Math.sin(radians));
-                int dy = (int) Math.round(-SPEED * Math.cos(radians));
-                plane.getPosition().translate(dx, dy);
+                if (planeSelected.getPath().size() == 0) {
+                    System.out.println("No hay mas puntos");
+                    setNewNextPlanePosition(planeSelected);
+                    planeSelected.addPoint(planeSelected.getNextPosition());
+                } else {
+                    planeSelected.setPosition(planeSelected.getPath().get(0));
+                    planeSelected.setNextPosition(planeSelected.getPath().get(0));
+                    planeSelected.setAngle(getAngle(planeSelected, planeSelected.getPath().get(0)));
+                    planeSelected.setPath(calculateIntermediePoints(planeSelected.getPath()));
+                }
+                //moveToRoute(planeSelected);
+                //followPath(planeSelected);
             }
         }
     }
@@ -217,14 +227,14 @@ public class OperationPlanes {
     }
 
     private double getAngle(Plane plane, Point point) {
-         int x1 = point.x;
-         int y1 = point.y;
-         int x2 = plane.getPosition().x;
-         int y2 = plane.getPosition().y;
+        int x1 = point.x;
+        int y1 = point.y;
+        int x2 = plane.getPosition().x;
+        int y2 = plane.getPosition().y;
 
-         double angle = Math.atan2(y2 - y1, x2 - x1);
+        double angle = Math.atan2(y2 - y1, x2 - x1);
 
-         return Math.toDegrees(angle);
+        return Math.toDegrees(angle);
     }
 
     private double getDistanceTo(Plane plane, Point point) {
@@ -266,38 +276,63 @@ public class OperationPlanes {
         }
     }
 
-    private List<Point> calculateIntermediePoints(Point point1, Point point2) {
-        List<Point> points = new ArrayList<>();
-        int numberToDivide = this.SPEED;
-
-        int deltaX = point2.x - point1.x;
-        int deltaY = point2.y - point1.y;
-
-        for (int i = 1; i <= numberToDivide; i++) {
-            int intermediateX = point1.x + (deltaX * i) / numberToDivide;
-            int intermediateY = point1.y + (deltaY * i) / numberToDivide;
-            Point intermediatePoint = new Point(intermediateX, intermediateY);
-            points.add(intermediatePoint);
+    private List<Point> calculateIntermediePoints(List<Point> points) {
+        List<Point> intermediatePoints = new ArrayList<>();
+        if (points.size() < 2) {
+            return intermediatePoints;
         }
 
-        return points;
+        for (int i = 0; i < points.size() - 1; i++) {
+            Point point1 = points.get(i);
+            Point point2 = points.get(i + 1);
+            double distance = point1.distance(point2);
+            double numberOfPoints = distance / this.SPEED;
+            double xIncrement = (point2.x - point1.x) / numberOfPoints;
+            double yIncrement = (point2.y - point1.y) / numberOfPoints;
+            for (int j = 1; j < numberOfPoints; j++) {
+                int x = (int) (point1.x + j * xIncrement);
+                int y = (int) (point1.y + j * yIncrement);
+                intermediatePoints.add(new Point(x, y));
+            }
+        }
+        return intermediatePoints;
     }
 
     public void addPointToPath(Point point) {
         if (planeSelected != null) {
-            // aqui se añaden los puntos intermedios entre los puntos
             planeSelected.addPoint(point);
-            followPath(planeSelected);
         }
     }
-
+    /*
     private void followPath(Plane planeSelected) {
 
-        planeSelected.setAngle(getAngle(planeSelected,planeSelected.getPath().get(1)));
-        //planeSelected.setNextPosition(planeSelected.getPath().get(0));
         planeSelected.getPath().remove(0);
+        planeSelected.setAngle(getAngle(planeSelected, planeSelected.getPath().get(0)));
+        planeSelected.setNextPosition(planeSelected.getPath().get(0));
 
     }
+     */
+
+    private void followPath(Plane planeSelected) {
+        List<Point> path = planeSelected.getPath();
+
+        if (path.isEmpty()) {
+            // No hay más puntos en la ruta, el avión ha llegado a su destino
+            return;
+        }
+
+        Point nextPosition = path.get(0);
+        double angle = getAngle(planeSelected, nextPosition);
+
+        planeSelected.setAngle(angle);
+
+        // Mover el avión directamente a la siguiente posición en la ruta
+        planeSelected.setPosition(nextPosition);
+
+        // Eliminar el punto actual de la ruta, ya que el avión ha avanzado a esa posición
+        path.remove(0);
+    }
+
 
     public void pauseGame() {
         if (isPauseGame) {
@@ -314,6 +349,8 @@ public class OperationPlanes {
     }
 
     public void selectedPlaneNull() {
-        planeSelected = null;
+        planeSelected.setNewPlane(false);
+        startThread();
+        //planeSelected = null;
     }
 }
