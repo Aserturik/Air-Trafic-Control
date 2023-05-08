@@ -189,16 +189,24 @@ public class OperationPlanes {
                     setNewNextPlanePosition(planeSelected);
                     planeSelected.addPoint(planeSelected.getNextPosition());
                 } else {
-                    planeSelected.setPosition(planeSelected.getPath().get(0));
-                    planeSelected.setNextPosition(planeSelected.getPath().get(1));
-                    planeSelected.setAngle(getAngle(planeSelected, planeSelected.getPath().get(1)));
-                    planeSelected.getPath().remove(0);
-                    //planeSelected.setPath(calculateIntermediePoints(planeSelected.getPath()));
+                    if(planeSelected.getPath().size() >= 2){
+                        followTemporalPath();
+                    }else {
+                        planeSelected.setNewPlane(true);
+                        planeSelected.setNextPosition(new Point(300,300));
+                    }
                 }
                 //moveToRoute(planeSelected);
                 //followPath(planeSelected);
             }
         }
+    }
+
+    private void followTemporalPath(){
+        planeSelected.setPosition(planeSelected.getPath().get(0));
+        planeSelected.setNextPosition(planeSelected.getPath().get(1));
+        planeSelected.setAngle(getAngle(planeSelected, planeSelected.getPath().get(1)));
+        planeSelected.getPath().remove(0);
     }
 
     private void getNextPosition(Plane plane) {
