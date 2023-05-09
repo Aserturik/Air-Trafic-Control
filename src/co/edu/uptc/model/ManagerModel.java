@@ -28,7 +28,7 @@ public class ManagerModel implements Contract.Model {
     @Override
     public List<Plane> getPlanes() {
         //return operationPlanes.getPlanes();}
-         return null;
+        return null;
     }
 
     @Override
@@ -93,11 +93,16 @@ public class ManagerModel implements Contract.Model {
 
     @Override
     public void selectedPlaneNull() {
-         operationPlanes.selectedPlaneNull();
+        operationPlanes.selectedPlaneNull();
     }
 
     @Override
     public void setLandedPlanes(int landedPlanes) {
-         presenter.getView().setLandedPlanes(landedPlanes);
+        presenter.getView().setLandedPlanes(landedPlanes);
+    }
+
+    @Override
+    public void gameOver() {
+        presenter.getView().gameOver();
     }
 }

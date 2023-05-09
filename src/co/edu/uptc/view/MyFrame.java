@@ -89,6 +89,11 @@ public class MyFrame extends JFrame implements Contract.View {
         principalPanel.getPanelGame().setLandedPlanes(landedPlanes);
     }
 
+    @Override
+    public void gameOver() {
+         principalPanel.getPanelGame().gameOver();
+    }
+
     public Contract.Presenter getPresenter() {
         return presenter;
     }

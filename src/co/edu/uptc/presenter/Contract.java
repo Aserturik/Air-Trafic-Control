@@ -26,6 +26,8 @@ public interface Contract {
         void chargeBackground();
 
         void setLandedPlanes(int landedPlanes);
+
+        void gameOver();
     }
 
     public interface Presenter {
@@ -84,5 +86,7 @@ public interface Contract {
         void selectedPlaneNull();
 
         void setLandedPlanes(int landedPlanes);
+
+        void gameOver();
     }
 }

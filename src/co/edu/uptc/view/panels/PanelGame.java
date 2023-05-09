@@ -208,4 +208,8 @@ public class PanelGame extends JPanel implements MouseListener, MouseMotionListe
     public void setPlanes(List<Plane> planes) {
         this.planes = planes;
     }
+
+    public void gameOver() {
+        JOptionPane.showMessageDialog(this, "GAME OVER");
+    }
 }

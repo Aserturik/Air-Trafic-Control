@@ -51,6 +51,7 @@ public class OperationPlanes {
                         advance();
                         model.setPlanes(planes);
                         landedPlanes();
+                        crashPlanes();
                         lock.notifyAll();
                     }
                     Thread.sleep(ValuesGlobals.TIME_SLEEP);
@@ -89,6 +90,24 @@ public class OperationPlanes {
         }
 
         model.setLandedPlanes(landedPlanes);
+    }
+
+    public void crashPlanes() {
+        int numPlanes = planes.size();
+        for (int i = 0; i < numPlanes - 1; i++) {
+            Plane plane1 = planes.get(i);
+            Rectangle rectangle1 = getRectangle(plane1);
+            for (int j = i + 1; j < numPlanes; j++) {
+                Plane plane2 = planes.get(j);
+                Rectangle rectangle2 = getRectangle(plane2);
+                if (rectangle1.intersects(rectangle2)) {
+                    isStartGame = false;
+                    model.gameOver();
+                    isPauseGame = true;
+                    return;
+                }
+            }
+        }
     }
 
     private void eliminatePlanes() {
