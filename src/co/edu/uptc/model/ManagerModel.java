@@ -105,4 +105,9 @@ public class ManagerModel implements Contract.Model {
     public void gameOver() {
         presenter.getView().gameOver();
     }
+
+    @Override
+    public void restartGame() {
+         //operationPlanes.restartGame();
+    }
 }

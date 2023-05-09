@@ -6,6 +6,12 @@ import java.awt.*;
 import java.util.List;
 
 public class Presenter implements Contract.Presenter {
+    private ManagerGeneral managerGeneral;
+
+    public Presenter(ManagerGeneral managerGeneral) {
+        this.managerGeneral = managerGeneral;
+    }
+
     Contract.View view;
     Contract.Model model;
 
@@ -21,7 +27,7 @@ public class Presenter implements Contract.Presenter {
 
     @Override
     public void startGame() {
-         model.startGame();
+        model.startGame();
     }
 
     @Override
@@ -38,6 +44,7 @@ public class Presenter implements Contract.Presenter {
     public void addPointToPath(Point point) {
         model.addPointToPath(point);
     }
+
     @Override
     public Contract.Model getModel() {
         return model;
@@ -50,7 +57,7 @@ public class Presenter implements Contract.Presenter {
 
     @Override
     public void notifyModel() {
-         model.viewIsReady();
+        model.viewIsReady();
     }
 
     @Override
@@ -61,5 +68,10 @@ public class Presenter implements Contract.Presenter {
     @Override
     public void selectedPlaneNull() {
         model.selectedPlaneNull();
+    }
+
+    @Override
+    public void restartGame() {
+        managerGeneral.restartGame();
     }
 }

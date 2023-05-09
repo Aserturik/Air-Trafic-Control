@@ -18,7 +18,7 @@ public class ManagerGeneral {
 
     private void CreateMVP() {
         model = new ManagerModel();
-        presenter = new Presenter();
+        presenter = new Presenter(this);
         view = new MyFrame();
         view.setPresenter(presenter);
         model.setPresenter(presenter);
@@ -35,8 +35,15 @@ public class ManagerGeneral {
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
-            view.chargeBackground();
+            //view.chargeBackground();
         }).start();
-            presenter.startGame();
+        presenter.startGame();
+    }
+
+    public void restartGame() {
+        presenter = null;
+        view = null;
+        model = null;
+        runProject();
     }
 }

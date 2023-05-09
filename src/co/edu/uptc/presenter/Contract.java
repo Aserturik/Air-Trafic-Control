@@ -51,6 +51,8 @@ public interface Contract {
         void pauseGame();
 
         void selectedPlaneNull();
+
+        void restartGame();
     }
 
     public interface Model {
@@ -88,5 +90,7 @@ public interface Contract {
         void setLandedPlanes(int landedPlanes);
 
         void gameOver();
+
+        void restartGame();
     }
 }

@@ -30,7 +30,6 @@ public class OperationPlanes {
         temporalPath = new ArrayList<>();
     }
 
-
     public void startGame() {
         isStartGame = true;
         dateStartGame = LocalDate.now();
@@ -80,9 +79,9 @@ public class OperationPlanes {
         addPlanes.start();
     }
 
-    public void landedPlanes(){
-        for(Plane plane: planes){
-            if(ValuesGlobals.LANDED_RECTANGLE.contains(plane.getPosition())){
+    public void landedPlanes() {
+        for (Plane plane : planes) {
+            if (ValuesGlobals.LANDED_RECTANGLE.contains(plane.getPosition())) {
                 landedPlanes++;
                 planes.remove(plane);
                 break;
