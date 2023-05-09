@@ -18,8 +18,6 @@ public class OperationPlanes {
     private Plane planeSelected;
     private boolean isStartGame = false;
     private boolean isPauseGame = false;
-    private LocalDate dateStartGame;
-    private LocalDate datePauseGame;
     private int landedPlanes = 0;
     private Object lock;
 
@@ -32,7 +30,6 @@ public class OperationPlanes {
 
     public void startGame() {
         isStartGame = true;
-        dateStartGame = LocalDate.now();
         startThread();
         createPlanes();
         eliminatePlanes();
@@ -343,9 +340,11 @@ public class OperationPlanes {
     public void pauseGame() {
         if (isPauseGame) {
             isPauseGame = false;
+            Cronometer.getInstance().start();
             returnGame();
         } else {
             isPauseGame = true;
+            Cronometer.getInstance().stop();
         }
     }
 

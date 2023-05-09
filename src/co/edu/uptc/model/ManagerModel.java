@@ -108,6 +108,11 @@ public class ManagerModel implements Contract.Model {
 
     @Override
     public void restartGame() {
-         //operationPlanes.restartGame();
+        //operationPlanes.restartGame();
+    }
+
+    @Override
+    public void setTimeGame(String time) {
+        presenter.getView().setTimeGame(time);
     }
 }

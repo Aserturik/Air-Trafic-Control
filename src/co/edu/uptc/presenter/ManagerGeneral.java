@@ -1,5 +1,6 @@
 package co.edu.uptc.presenter;
 
+import co.edu.uptc.model.Cronometer;
 import co.edu.uptc.model.ManagerModel;
 import co.edu.uptc.view.MyFrame;
 
@@ -37,6 +38,7 @@ public class ManagerGeneral {
             }
         }).start();
         presenter.startGame();
+        Cronometer.getInstance().start();
     }
 
     public void restartGame() {

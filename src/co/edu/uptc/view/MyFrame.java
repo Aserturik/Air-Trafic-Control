@@ -89,7 +89,12 @@ public class MyFrame extends JFrame implements Contract.View {
 
     @Override
     public void gameOver() {
-         principalPanel.getPanelGame().gameOver();
+        principalPanel.getPanelGame().gameOver();
+    }
+
+    @Override
+    public void setTimeGame(String time) {
+        principalPanel.getPanelGame().setTimeGame(time);
     }
 
     public Contract.Presenter getPresenter() {

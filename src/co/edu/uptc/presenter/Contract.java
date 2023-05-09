@@ -28,6 +28,8 @@ public interface Contract {
         void setLandedPlanes(int landedPlanes);
 
         void gameOver();
+
+        void setTimeGame(String time);
     }
 
     public interface Presenter {
@@ -92,5 +94,7 @@ public interface Contract {
         void gameOver();
 
         void restartGame();
+
+        void setTimeGame(String time);
     }
 }

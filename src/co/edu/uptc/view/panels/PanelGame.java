@@ -1,5 +1,6 @@
 package co.edu.uptc.view.panels;
 
+import co.edu.uptc.model.Cronometer;
 import co.edu.uptc.pojo.Plane;
 import co.edu.uptc.view.MyFrame;
 import util.ValuesGlobals;
@@ -22,6 +23,7 @@ public class PanelGame extends JPanel implements MouseListener, MouseMotionListe
     private Font font;
     private int landedPlanes;
     private RenderingHints renderingHints;
+    private String timeGame = "";
 
     public PanelGame(MyFrame myFrame) {
         super();
@@ -69,6 +71,7 @@ public class PanelGame extends JPanel implements MouseListener, MouseMotionListe
     private void printNumberPlanes() {
         g2d.drawString("Cantidad de Aviones: " + planes.size(), 10, 20);
         g2d.drawString("Cantidad de Aviones Aterrizados: " + landedPlanes, 220, 20);
+        g2d.drawString("Tiempo de Juego: " + Cronometer.getInstance().getTime(), 10, 40);
     }
 
     public void paintRecorrides() {
@@ -211,11 +214,15 @@ public class PanelGame extends JPanel implements MouseListener, MouseMotionListe
     public void gameOver() {
         JOptionPane optionPane = new JOptionPane();
         optionPane.setMessage("GAME OVER");
-        if (optionPane.showConfirmDialog(this, "¿Desea volver a jugar?", "GAME OVER", optionPane.YES_NO_OPTION) == optionPane.YES_OPTION) {
+        if (optionPane.showConfirmDialog(this, "¿Desea volver a jugar?" + "\n El numero de aviones aterrizados es " + landedPlanes + "\n El tiempo es: " + Cronometer.getInstance().getTime(), "GAME OVER", optionPane.YES_NO_OPTION) == optionPane.YES_OPTION) {
             frame.setVisible(false);
             frame.getPresenter().restartGame();
         } else {
             System.exit(0);
         }
+    }
+
+    public void setTimeGame(String timeGame) {
+        this.timeGame = timeGame;
     }
 }
