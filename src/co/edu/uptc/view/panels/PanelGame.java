@@ -8,7 +8,6 @@ import util.UtilImages;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
-import java.awt.font.FontRenderContext;
 import java.awt.geom.AffineTransform;
 import java.util.ArrayList;
 import java.util.List;
@@ -213,6 +212,7 @@ public class PanelGame extends JPanel implements MouseListener, MouseMotionListe
         JOptionPane optionPane = new JOptionPane();
         optionPane.setMessage("GAME OVER");
         if (optionPane.showConfirmDialog(this, "¿Desea volver a jugar?", "GAME OVER", optionPane.YES_NO_OPTION) == optionPane.YES_OPTION) {
+            frame.setVisible(false);
             frame.getPresenter().restartGame();
         } else {
             System.exit(0);

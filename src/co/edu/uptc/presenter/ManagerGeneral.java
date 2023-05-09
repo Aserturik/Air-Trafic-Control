@@ -26,7 +26,7 @@ public class ManagerGeneral {
         presenter.setModel(model);
     }
 
-    public void runProject() {
+    public void runProject() {CreateMVP();
         CreateMVP();
         new Thread(() -> {
             view.start();
@@ -35,7 +35,6 @@ public class ManagerGeneral {
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
-            //view.chargeBackground();
         }).start();
         presenter.startGame();
     }
