@@ -2,7 +2,7 @@ package co.edu.uptc.view.panels;
 
 import co.edu.uptc.pojo.Plane;
 import co.edu.uptc.view.MyFrame;
-import co.edu.uptc.view.globals.ValuesGlobals;
+import util.ValuesGlobals;
 import util.UtilImages;
 
 import javax.swing.*;

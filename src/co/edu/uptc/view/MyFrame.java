@@ -2,13 +2,11 @@ package co.edu.uptc.view;
 
 import co.edu.uptc.pojo.Plane;
 import co.edu.uptc.presenter.Contract;
-import co.edu.uptc.view.globals.ValuesGlobals;
+import util.ValuesGlobals;
 import co.edu.uptc.view.panels.PrincipalPanel;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
 import java.util.List;
 
 public class MyFrame extends JFrame implements Contract.View {

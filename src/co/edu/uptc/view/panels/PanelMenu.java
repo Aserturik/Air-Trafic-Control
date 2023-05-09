@@ -1,7 +1,7 @@
 package co.edu.uptc.view.panels;
 
 import co.edu.uptc.view.MyFrame;
-import co.edu.uptc.view.globals.ValuesGlobals;
+import util.ValuesGlobals;
 
 import javax.swing.*;
 import java.awt.*;

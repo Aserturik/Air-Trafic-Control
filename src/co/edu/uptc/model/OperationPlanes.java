@@ -2,7 +2,7 @@ package co.edu.uptc.model;
 
 import co.edu.uptc.pojo.Plane;
 import co.edu.uptc.presenter.Contract;
-import co.edu.uptc.view.globals.ValuesGlobals;
+import util.ValuesGlobals;
 
 import java.awt.*;
 import java.time.LocalDate;

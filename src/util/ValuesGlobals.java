@@ -1,4 +1,4 @@
-package co.edu.uptc.view.globals;
+package util;
 
 import java.awt.*;
 
