@@ -35,10 +35,9 @@ public class Presenter implements Contract.Presenter {
     }
 
     @Override
-    public void addPointToPath(Plane plane, Point point) {
-
+    public void addPointToPath(Point point) {
+        model.addPointToPath(point);
     }
-
     @Override
     public Contract.Model getModel() {
         return model;
@@ -57,5 +56,10 @@ public class Presenter implements Contract.Presenter {
     @Override
     public void pauseGame() {
         model.pauseGame();
+    }
+
+    @Override
+    public void selectedPlaneNull() {
+        model.selectedPlaneNull();
     }
 }

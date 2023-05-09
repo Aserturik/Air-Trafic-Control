@@ -35,6 +35,7 @@ public class ManagerGeneral {
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
+            view.chargeBackground();
         }).start();
             presenter.startGame();
     }

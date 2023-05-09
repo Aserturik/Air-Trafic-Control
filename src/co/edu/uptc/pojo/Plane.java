@@ -66,6 +66,6 @@ public class Plane {
     }
 
     public void setNewPlane(boolean b) {
-         this.newPlane = b;
+        this.newPlane = b;
     }
 }

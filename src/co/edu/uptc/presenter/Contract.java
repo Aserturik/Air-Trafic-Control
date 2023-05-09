@@ -22,6 +22,8 @@ public interface Contract {
         void stopGame();
 
         void paintPlanes(List<Plane> planes);
+
+        void chargeBackground();
     }
 
     public interface Presenter {
@@ -34,7 +36,7 @@ public interface Contract {
         List<Plane> getPlanes();
 
         void isSelectedPlane(Point point);
-        void addPointToPath(Plane plane, Point point);
+        void addPointToPath(Point point);
 
         Contract.Model getModel();
 
@@ -43,6 +45,8 @@ public interface Contract {
         void notifyModel();
 
         void pauseGame();
+
+        void selectedPlaneNull();
     }
 
     public interface Model {
@@ -51,7 +55,7 @@ public interface Contract {
         List<Plane> getPlanes();
         void setPlanes(List<Plane> planes);
 
-        void addPointToPath(Plane plane, Point point);
+        void addPointToPath(Point point);
 
         void startGame();
 
@@ -74,5 +78,7 @@ public interface Contract {
         Plane getPlaneSelected(Point point);
 
         void viewIsReady();
+
+        void selectedPlaneNull();
     }
 }

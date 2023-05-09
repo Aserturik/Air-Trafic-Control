@@ -21,8 +21,8 @@ public class ManagerModel implements Contract.Model {
     }
 
     @Override
-    public void addPointToPath(Plane plane, Point point) {
-        operationPlanes.addPointToPath(plane, point);
+    public void addPointToPath(Point point) {
+        operationPlanes.addPointToPath(point);
     }
 
     @Override
@@ -89,5 +89,10 @@ public class ManagerModel implements Contract.Model {
     @Override
     public void viewIsReady() {
         operationPlanes.viewIsReady();
+    }
+
+    @Override
+    public void selectedPlaneNull() {
+         operationPlanes.selectedPlaneNull();
     }
 }

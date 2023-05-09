@@ -12,8 +12,10 @@ import java.util.Random;
 
 public class OperationPlanes {
     private List<Plane> planes;
+    private List<Point> temporalPath;
     private static final int SPEED = 5;
     private Contract.Model model;
+    private Plane planeSelected;
     private boolean isStartGame = false;
     private boolean isPauseGame = false;
     private LocalDate dateStartGame;
@@ -24,10 +26,7 @@ public class OperationPlanes {
         lock = new Object();
         this.model = model;
         planes = new ArrayList<>();
-    }
-
-    public void addPointToPath(Plane plane, Point point) {
-        plane.addPoint(point);
+        temporalPath = new ArrayList<>();
     }
 
 
@@ -48,8 +47,8 @@ public class OperationPlanes {
             while (!isPauseGame) {
                 try {
                     synchronized (lock) {
-                        model.setPlanes(planes);
                         advance();
+                        model.setPlanes(planes);
                         lock.notifyAll();
                     }
                     Thread.sleep(ValuesGlobals.TIME_SLEEP);
@@ -155,13 +154,13 @@ public class OperationPlanes {
                 plane.addPoint(new Point(random.nextInt(ValuesGlobals.WIDTH_FRAME - 10 + 1) + 10, ValuesGlobals.HEIGHT_FRAME));
                 break;
         }
+        plane.setPosition(plane.getPath().get(0));
         plane.setNextPosition(getInversePosition(plane));
         planes.add(plane);
     }
 
     public void moveToRoute(Plane plane) {
         double distance = getDistanceTo(plane, plane.getNextPosition());
-        //System.out.println("la distancia es: " + distance);
         double dx = plane.getNextPosition().x - plane.getPosition().x;
         double dy = plane.getNextPosition().y - plane.getPosition().y;
 
@@ -182,38 +181,42 @@ public class OperationPlanes {
             if (plane.isNewPlane()) {
                 moveToRoute(plane);
             } else {
-                double radians = Math.toRadians(plane.getAngle());
-                int dx = (int) Math.round(SPEED * Math.sin(radians));
-                int dy = (int) Math.round(-SPEED * Math.cos(radians));
-                plane.getPosition().translate(dx, dy);
+                if (planeSelected.getPath().size() >= 2) {
+                    System.out.println("entro");
+                    planeSelected.setNextPosition(getNewRectPosition(planeSelected));
+                    followTemporalPath();
+                } else {
+                    System.out.println("el tamaño del path es " + planeSelected.getPath().size());
+                    //planeSelected.setNewPlane(true);
+                    followTemporalPath();
+                    //planeSelected.setNextPosition(getNewRectPosition(planeSelected));
+                    planeSelected.setAngle(getAngle(planeSelected));
+                }
             }
         }
     }
 
-    public boolean checkBounds(Rectangle bounds) {
-        int imgWidth = 40;
-        int imgHeight = 40;
-        for (Plane plane : planes) {
-            int x = plane.getPosition().x;
-            int y = plane.getPosition().y;
-            if (bounds.contains(x, y, imgWidth, imgHeight)) {
-                return true;
-            }
-        }
-        return false;
+    private Point getNewRectPosition(Plane planeSelected) {
+        double radianes = Math.toRadians(planeSelected.getAngle());
+
+        int deltaX = (int) Math.round(SPEED * Math.cos(radianes));
+        int deltaY = (int) Math.round(SPEED * Math.sin(radianes));
+
+        int nextX = planeSelected.getPosition().x + deltaX;
+        int nextY = planeSelected.getPosition().y + deltaY;
+        return new Point(nextX, nextY);
     }
 
-    public Plane getPlaneSelected(Rectangle bounds) {
-        int imgWidth = 40;
-        int imgHeight = 40;
-        for (Plane plane : planes) {
-            int x = plane.getPosition().x;
-            int y = plane.getPosition().y;
-            if (bounds.contains(x, y, imgWidth, imgHeight)) {
-                return plane;
-            }
+    private void followTemporalPath() {
+        planeSelected.setPosition(planeSelected.getPath().get(0));
+        if (planeSelected.getPath().size() == 1) {
+            planeSelected.setNextPosition(getNewRectPosition(planeSelected));
+            System.out.println("el tamaño del path es " + planeSelected.getPath().size());
+        } else {
+            planeSelected.setNextPosition(planeSelected.getPath().get(1));
+            planeSelected.getPath().remove(0);
         }
-        return null;
+        planeSelected.setAngle(getAngle(planeSelected, planeSelected.getPath().get(1)));
     }
 
     private void getNextPosition(Plane plane) {
@@ -224,6 +227,17 @@ public class OperationPlanes {
         getNextPosition(plane);
         int x1 = plane.getNextPosition().x;
         int y1 = plane.getNextPosition().y;
+        int x2 = plane.getPosition().x;
+        int y2 = plane.getPosition().y;
+
+        double angle = Math.atan2(y2 - y1, x2 - x1);
+
+        return Math.toDegrees(angle);
+    }
+
+    private double getAngle(Plane plane, Point point) {
+        int x1 = point.x;
+        int y1 = point.y;
         int x2 = plane.getPosition().x;
         int y2 = plane.getPosition().y;
 
@@ -245,7 +259,6 @@ public class OperationPlanes {
         } else {
             plane.getPath().remove(0);
             plane.setNextPosition(plane.getPath().get(0));
-
         }
     }
 
@@ -265,15 +278,47 @@ public class OperationPlanes {
         }
     }
 
+    private Rectangle getRectangle(Plane plane) {
+        Rectangle rectangle = new Rectangle();
+        int drawX = plane.getPosition().x - 20;
+        int drawY = plane.getPosition().y - 20;
+        rectangle.setBounds(drawX, drawY, 40, 40);
+        return rectangle;
+    }
+
     public void isSelectedPlane(Point point) {
-        Rectangle re = new Rectangle(point.x, point.y, 60, 60);
-        if (checkBounds(re)) {
-            Plane plane = getPlaneSelected(re);
-            plane.addPoint(point);
-            plane.setNewPlane(false);
-            plane.setAngle(getAngle(plane));
-            //moveToRoute(plane);
-            advance();
+        for (Plane plane : planes) {
+            if (getRectangle(plane).contains(point)) {
+                planeSelected = plane;
+            }
+        }
+    }
+
+    private List<Point> calculateIntermediePoints(List<Point> points) {
+        List<Point> intermediatePoints = new ArrayList<>();
+        if (points.size() < 2) {
+            return intermediatePoints;
+        }
+
+        for (int i = 0; i < points.size() - 1; i++) {
+            Point point1 = points.get(i);
+            Point point2 = points.get(i + 1);
+            double distance = point1.distance(point2);
+            double numberOfPoints = distance / this.SPEED;
+            double xIncrement = (point2.x - point1.x) / numberOfPoints;
+            double yIncrement = (point2.y - point1.y) / numberOfPoints;
+            for (int j = 1; j < numberOfPoints; j++) {
+                int x = (int) (point1.x + j * xIncrement);
+                int y = (int) (point1.y + j * yIncrement);
+                intermediatePoints.add(new Point(x, y));
+            }
+        }
+        return intermediatePoints;
+    }
+
+    public void addPointToPath(Point point) {
+        if (planeSelected != null) {
+            planeSelected.addPoint(point);
         }
     }
 
@@ -289,5 +334,12 @@ public class OperationPlanes {
     private void returnGame() {
         startThread();
         eliminatePlanes();
+    }
+
+    public void selectedPlaneNull() {
+        if (planeSelected != null) {
+            planeSelected.setPath(calculateIntermediePoints(planeSelected.getPath()));
+            planeSelected.setNewPlane(false);
+        }
     }
 }

@@ -9,6 +9,10 @@ import java.io.IOException;
 
 public class UtilImages {
 
+    public static Image getImageBackground() {
+         return new UtilImages().loadImage("assets/airport.png");
+    }
+
     public BufferedImage loadImage(String imagenName) {
         BufferedImage img;
         try {
@@ -25,7 +29,6 @@ public class UtilImages {
         ImageIcon imgIcon = new ImageIcon(img);
         Image scaledImage = imgIcon.getImage().getScaledInstance(width,
                 height, Image.SCALE_SMOOTH);
-        Icon iconoEscalado = new ImageIcon(scaledImage);
         return scaledImage;
     }
 
