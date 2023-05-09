@@ -22,6 +22,8 @@ public interface Contract {
         void stopGame();
 
         void paintPlanes(List<Plane> planes);
+
+        void chargeBackground();
     }
 
     public interface Presenter {

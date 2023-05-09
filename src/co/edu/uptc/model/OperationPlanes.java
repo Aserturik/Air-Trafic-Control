@@ -181,28 +181,42 @@ public class OperationPlanes {
             if (plane.isNewPlane()) {
                 moveToRoute(plane);
             } else {
-                if (planeSelected.getPath().size() == 0) {
-                    System.out.println("No hay mas puntos");
-                    setNewNextPlanePosition(planeSelected);
-                    planeSelected.addPoint(planeSelected.getNextPosition());
+                if (planeSelected.getPath().size() >= 2) {
+                    System.out.println("entro");
+                    planeSelected.setNextPosition(getNewRectPosition(planeSelected));
+                    followTemporalPath();
                 } else {
-                    if(planeSelected.getPath().size() >= 2){
-                        followTemporalPath();
-                    }else {
-                        planeSelected.setNewPlane(true);
-                        planeSelected.setNextPosition(getInversePosition(planeSelected));
-                        planeSelected.setAngle(getAngle(planeSelected));
-                    }
+                    System.out.println("el tamaño del path es " + planeSelected.getPath().size());
+                    //planeSelected.setNewPlane(true);
+                    followTemporalPath();
+                    //planeSelected.setNextPosition(getNewRectPosition(planeSelected));
+                    planeSelected.setAngle(getAngle(planeSelected));
                 }
             }
         }
     }
 
-    private void followTemporalPath(){
+    private Point getNewRectPosition(Plane planeSelected) {
+        double radianes = Math.toRadians(planeSelected.getAngle());
+
+        int deltaX = (int) Math.round(SPEED * Math.cos(radianes));
+        int deltaY = (int) Math.round(SPEED * Math.sin(radianes));
+
+        int nextX = planeSelected.getPosition().x + deltaX;
+        int nextY = planeSelected.getPosition().y + deltaY;
+        return new Point(nextX, nextY);
+    }
+
+    private void followTemporalPath() {
         planeSelected.setPosition(planeSelected.getPath().get(0));
-        planeSelected.setNextPosition(planeSelected.getPath().get(1));
+        if (planeSelected.getPath().size() == 1) {
+            planeSelected.setNextPosition(getNewRectPosition(planeSelected));
+            System.out.println("el tamaño del path es " + planeSelected.getPath().size());
+        } else {
+            planeSelected.setNextPosition(planeSelected.getPath().get(1));
+            planeSelected.getPath().remove(0);
+        }
         planeSelected.setAngle(getAngle(planeSelected, planeSelected.getPath().get(1)));
-        planeSelected.getPath().remove(0);
     }
 
     private void getNextPosition(Plane plane) {
@@ -267,7 +281,7 @@ public class OperationPlanes {
     private Rectangle getRectangle(Plane plane) {
         Rectangle rectangle = new Rectangle();
         int drawX = plane.getPosition().x - 20;
-        int drawY = plane.getPosition().y -20;
+        int drawY = plane.getPosition().y - 20;
         rectangle.setBounds(drawX, drawY, 40, 40);
         return rectangle;
     }
@@ -323,7 +337,9 @@ public class OperationPlanes {
     }
 
     public void selectedPlaneNull() {
-        planeSelected.setPath(calculateIntermediePoints(planeSelected.getPath()));
-        planeSelected.setNewPlane(false);
+        if (planeSelected != null) {
+            planeSelected.setPath(calculateIntermediePoints(planeSelected.getPath()));
+            planeSelected.setNewPlane(false);
+        }
     }
 }

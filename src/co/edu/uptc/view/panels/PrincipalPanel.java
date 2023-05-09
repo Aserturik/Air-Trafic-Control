@@ -40,8 +40,8 @@ public class PrincipalPanel extends JPanel {
     }
 
     public void showMenu() {
-        panelMenu.setVisible(true);
         panelGame.setVisible(false);
+        panelMenu.setVisible(true);
         panelMenu.setFocusable(true);
         panelMenu.requestFocus();
         frame.getPresenter().pauseGame();

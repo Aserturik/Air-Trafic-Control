@@ -79,6 +79,11 @@ public class MyFrame extends JFrame implements Contract.View {
         principalPanel.getPanelGame().repaint();
     }
 
+    @Override
+    public void chargeBackground() {
+         //principalPanel.getPanelGame().chargeBackground();
+    }
+
     public Contract.Presenter getPresenter() {
         return presenter;
     }
