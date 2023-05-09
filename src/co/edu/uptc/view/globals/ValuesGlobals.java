@@ -13,6 +13,7 @@ public class ValuesGlobals {
     public static final long TIME_SLEEP = 50;
     public static final int TIME_GENERATE_PLANE = 6000;
     public static final long TIME_ELIMINATE_PLANE = 80;
+    public static final Rectangle LANDED_RECTANGLE = new Rectangle(300, 250, 46, 46);
 
     public static Point getCenterFrame() {
         return new Point(WIDTH_FRAME / 2, HEIGHT_FRAME / 2);

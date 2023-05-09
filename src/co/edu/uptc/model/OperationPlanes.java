@@ -20,6 +20,7 @@ public class OperationPlanes {
     private boolean isPauseGame = false;
     private LocalDate dateStartGame;
     private LocalDate datePauseGame;
+    private int landedPlanes = 0;
     private Object lock;
 
     public OperationPlanes(Contract.Model model) {
@@ -49,6 +50,7 @@ public class OperationPlanes {
                     synchronized (lock) {
                         advance();
                         model.setPlanes(planes);
+                        landedPlanes();
                         lock.notifyAll();
                     }
                     Thread.sleep(ValuesGlobals.TIME_SLEEP);
@@ -75,6 +77,18 @@ public class OperationPlanes {
             }
         });
         addPlanes.start();
+    }
+
+    public void landedPlanes(){
+        for(Plane plane: planes){
+            if(ValuesGlobals.LANDED_RECTANGLE.contains(plane.getPosition())){
+                landedPlanes++;
+                planes.remove(plane);
+                break;
+            }
+        }
+
+        model.setLandedPlanes(landedPlanes);
     }
 
     private void eliminatePlanes() {

@@ -21,6 +21,8 @@ public class PanelGame extends JPanel implements MouseListener, MouseMotionListe
     private ImageIcon imageAirPort;
     private JLabel imageLabel;
     private Font font;
+    private int landedPlanes;
+    private RenderingHints renderingHints;
 
     public PanelGame(MyFrame myFrame) {
         super();
@@ -38,14 +40,15 @@ public class PanelGame extends JPanel implements MouseListener, MouseMotionListe
         this.addMouseListener(this);
         this.addMouseMotionListener(this);
         this.addKeyListener(this);
+        renderingHints = new RenderingHints(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
         this.setVisible(true);
     }
 
 
     public void chargeBackground(Graphics2D g2d) {
-         g2d.drawImage(imageAirPort.getImage(), 300, 250, null);
-         g2d.setColor(Color.GREEN);
-         g2d.drawRect(300,250,46,46);
+        g2d.drawImage(imageAirPort.getImage(), 300, 250, null);
+        g2d.setColor(Color.GREEN);
+        g2d.drawRect(ValuesGlobals.LANDED_RECTANGLE.x, ValuesGlobals.LANDED_RECTANGLE.y, ValuesGlobals.LANDED_RECTANGLE.width, ValuesGlobals.LANDED_RECTANGLE.height);
     }
 
     @Override
@@ -57,16 +60,16 @@ public class PanelGame extends JPanel implements MouseListener, MouseMotionListe
         drawAllPlanes(g2d);
         drawAllPaths(g2d);
         g2d.drawRect(0, 0, ValuesGlobals.WIDTH_FRAME, ValuesGlobals.HEIGHT_FRAME);
+        g2d.setColor(Color.WHITE);
+        g2d.setRenderingHints(renderingHints);
+        g2d.setFont(font);
         printNumberPlanes();
         frame.getPresenter().notifyModel();
     }
 
     private void printNumberPlanes() {
-        g2d.setColor(Color.WHITE);
-        RenderingHints renderingHints = new RenderingHints(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
-        g2d.setRenderingHints(renderingHints);
-        g2d.setFont(font);
         g2d.drawString("Cantidad de Aviones: " + planes.size(), 10, 20);
+        g2d.drawString("Cantidad de Aviones Aterrizados: " + landedPlanes, 220, 20);
     }
 
     public void paintRecorrides() {
@@ -116,14 +119,13 @@ public class PanelGame extends JPanel implements MouseListener, MouseMotionListe
     }
 
 
-
     private ImageIcon getImageAirPort() {
-         UtilImages utilImages = new UtilImages();
-         JLabel imageLabel = new JLabel();
-         imageLabel.setBounds(0, 0, 192, 48);
-         Icon img = utilImages.loadScaleImage(ValuesGlobals.PHAT_AIRPORT_IMAGE_ORIGINAL, imageLabel.getWidth(), imageLabel.getHeight());
-         imageLabel.setIcon(img);
-         return new ImageIcon(((ImageIcon) img).getImage().getScaledInstance(imageLabel.getWidth(), imageLabel.getHeight(), Image.SCALE_DEFAULT));
+        UtilImages utilImages = new UtilImages();
+        JLabel imageLabel = new JLabel();
+        imageLabel.setBounds(0, 0, 192, 48);
+        Icon img = utilImages.loadScaleImage(ValuesGlobals.PHAT_AIRPORT_IMAGE_ORIGINAL, imageLabel.getWidth(), imageLabel.getHeight());
+        imageLabel.setIcon(img);
+        return new ImageIcon(((ImageIcon) img).getImage().getScaledInstance(imageLabel.getWidth(), imageLabel.getHeight(), Image.SCALE_DEFAULT));
     }
 
     private ImageIcon getImagePlane() {
@@ -144,6 +146,10 @@ public class PanelGame extends JPanel implements MouseListener, MouseMotionListe
         this.setLocation(0, 0);
         //System.out.println("El tamaño del PanelGame es: " + this.getWidth() + " " + this.getHeight());
         this.setVisible(true);
+    }
+
+    public void setLandedPlanes(int landedPlanes) {
+        this.landedPlanes = landedPlanes;
     }
 
     @Override

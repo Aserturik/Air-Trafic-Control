@@ -95,4 +95,9 @@ public class ManagerModel implements Contract.Model {
     public void selectedPlaneNull() {
          operationPlanes.selectedPlaneNull();
     }
+
+    @Override
+    public void setLandedPlanes(int landedPlanes) {
+         presenter.getView().setLandedPlanes(landedPlanes);
+    }
 }

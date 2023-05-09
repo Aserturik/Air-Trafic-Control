@@ -24,6 +24,8 @@ public interface Contract {
         void paintPlanes(List<Plane> planes);
 
         void chargeBackground();
+
+        void setLandedPlanes(int landedPlanes);
     }
 
     public interface Presenter {
@@ -80,5 +82,7 @@ public interface Contract {
         void viewIsReady();
 
         void selectedPlaneNull();
+
+        void setLandedPlanes(int landedPlanes);
     }
 }
