@@ -27,6 +27,7 @@ public class PanelMenu extends JPanel implements KeyListener {
         this.setMinimumSize(new Dimension(ValuesGlobals.WIDTH_MENU, ValuesGlobals.HEIGHT_MENU));
         this.setMaximumSize(new Dimension(ValuesGlobals.WIDTH_MENU, ValuesGlobals.HEIGHT_MENU));
         gbc = new GridBagConstraints();
+        gbc.insets = new Insets(15, 15, 15, 15);
         this.setLayout(new GridBagLayout());
         this.setVisible(false);
     }
@@ -45,7 +46,7 @@ public class PanelMenu extends JPanel implements KeyListener {
         gbc.gridwidth = width;
         gbc.gridheight = height;
         //gbc.fill = fill;
-        gbc.anchor = anchor;
+        //gbc.anchor = anchor;
     }
 
     public void title() {
@@ -78,7 +79,6 @@ public class PanelMenu extends JPanel implements KeyListener {
             if (!source.getValueIsAdjusting()) {
                 int speed = source.getValue();
                 frame.getPresenter().setPlaneSpeed(speed);
-                System.out.println(speed);
             }
         });
     }
@@ -90,16 +90,16 @@ public class PanelMenu extends JPanel implements KeyListener {
         this.add(colorPlane, gbc);
         configGBC(0, 4, 1, 1, GridBagConstraints.BOTH, GridBagConstraints.CENTER);
         JLabel labelImagePlaneRed = new JLabel();
-        labelImagePlaneRed.setIcon(new ImageIcon(("assets/plane.png")));
+        labelImagePlaneRed.setIcon(new ImageIcon(("assets/planeRed.png")));
         this.add(labelImagePlaneRed, gbc);
         configGBC(1, 4, 1, 1, GridBagConstraints.BOTH, GridBagConstraints.CENTER);
         JLabel labelImagePlaneBlue = new JLabel();
-        labelImagePlaneBlue.setIcon(new ImageIcon(("assets/plane.png")));
+        labelImagePlaneBlue.setIcon(new ImageIcon(("assets/planeBlue.png")));
         this.add(labelImagePlaneBlue, gbc);
         configGBC(2, 4, 1, 1, GridBagConstraints.BOTH, GridBagConstraints.CENTER);
-        JLabel labelImagePlaneGreen = new JLabel();
-        labelImagePlaneGreen.setIcon(new ImageIcon(("assets/plane.png")));
-        this.add(labelImagePlaneGreen, gbc);
+        JLabel labelImagePlaneYellow = new JLabel();
+        labelImagePlaneYellow.setIcon(new ImageIcon(("assets/planeYellow.png")));
+        this.add(labelImagePlaneYellow, gbc);
     }
 
     public void selectPlane() {
@@ -108,14 +108,14 @@ public class PanelMenu extends JPanel implements KeyListener {
         imageSelectedPlane.setFont(new Font("Arial", Font.BOLD, 20));
         this.add(imageSelectedPlane, gbc);
 
-        configGBC(1, 5, 1, 1, GridBagConstraints.BOTH, GridBagConstraints.CENTER);
+        configGBC(0, 6, 1, 2, GridBagConstraints.BOTH, GridBagConstraints.CENTER);
         JLabel labelImagePlaneSelected = new JLabel();
-        labelImagePlaneSelected.setIcon(new ImageIcon(("assets/plane.png")));
+        labelImagePlaneSelected.setIcon(new ImageIcon(("assets/planeBlue.png")));
         this.add(labelImagePlaneSelected, gbc);
     }
 
     public void optionButtons() {
-        configGBC(0, 6, 2, 1, GridBagConstraints.BOTH, GridBagConstraints.CENTER);
+        configGBC(1, 5, 2, 1, GridBagConstraints.BOTH, GridBagConstraints.CENTER);
          JButton buttonResume = new JButton("Reanudar");
          buttonResume.setFont(new Font("Arial", Font.BOLD, 20));
          buttonResume.setBackground(Color.white);
@@ -125,7 +125,7 @@ public class PanelMenu extends JPanel implements KeyListener {
          });
          this.add(buttonResume, gbc);
 
-         configGBC(2, 6, 1, 1, GridBagConstraints.BOTH, GridBagConstraints.CENTER);
+         configGBC(1, 6, 2, 1, GridBagConstraints.BOTH, GridBagConstraints.CENTER);
          JButton buttonRestart = new JButton("Reiniciar");
          buttonRestart.setFont(new Font("Arial", Font.BOLD, 20));
          buttonRestart.setBackground(Color.white);
@@ -135,7 +135,7 @@ public class PanelMenu extends JPanel implements KeyListener {
          });
          this.add(buttonRestart, gbc);
 
-         configGBC(0, 7, 3, 1, GridBagConstraints.BOTH, GridBagConstraints.CENTER);
+         configGBC(1, 7, 2, 1, GridBagConstraints.BOTH, GridBagConstraints.CENTER);
          JButton buttonExit = new JButton("Salir");
          buttonExit.setFont(new Font("Arial", Font.BOLD, 20));
          buttonExit.setBackground(Color.white);
