@@ -16,6 +16,8 @@ public interface Contract {
         void setLandedPlanes(int landedPlanes);
 
         void gameOver();
+
+        void dispose();
     }
 
     public interface Presenter {

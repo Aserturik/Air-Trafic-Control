@@ -45,7 +45,7 @@ public class ManagerGeneral {
     public void restartGame() {
         presenter = null;
         model = null;
-        view = null;
+        view.dispose();
         runProject();
     }
 }

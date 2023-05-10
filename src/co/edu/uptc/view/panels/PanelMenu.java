@@ -27,7 +27,7 @@ public class PanelMenu extends JPanel implements KeyListener {
         this.setMinimumSize(new Dimension(ValuesGlobals.WIDTH_MENU, ValuesGlobals.HEIGHT_MENU));
         this.setMaximumSize(new Dimension(ValuesGlobals.WIDTH_MENU, ValuesGlobals.HEIGHT_MENU));
         gbc = new GridBagConstraints();
-        gbc.insets = new Insets(15, 15, 15, 15);
+        gbc.insets = new Insets(12, 12, 12, 12);
         this.setLayout(new GridBagLayout());
         this.setVisible(false);
     }
@@ -45,8 +45,8 @@ public class PanelMenu extends JPanel implements KeyListener {
         gbc.gridy = y;
         gbc.gridwidth = width;
         gbc.gridheight = height;
-        //gbc.fill = fill;
-        //gbc.anchor = anchor;
+        gbc.fill = fill;
+        gbc.anchor = anchor;
     }
 
     public void title() {
@@ -88,14 +88,18 @@ public class PanelMenu extends JPanel implements KeyListener {
         JLabel colorPlane = new JLabel("Color del avión");
         colorPlane.setFont(new Font("Arial", Font.BOLD, 20));
         this.add(colorPlane, gbc);
-        configGBC(0, 4, 1, 1, GridBagConstraints.BOTH, GridBagConstraints.CENTER);
+
+        // A la derecha
+        configGBC(0, 4, 1, 1, GridBagConstraints.EAST , GridBagConstraints.CENTER);
         JLabel labelImagePlaneRed = new JLabel();
         labelImagePlaneRed.setIcon(new ImageIcon(("assets/planeRed.png")));
         this.add(labelImagePlaneRed, gbc);
-        configGBC(1, 4, 1, 1, GridBagConstraints.BOTH, GridBagConstraints.CENTER);
+
+        configGBC(1, 4, 1, 1, GridBagConstraints.CENTER, GridBagConstraints.CENTER);
         JLabel labelImagePlaneBlue = new JLabel();
         labelImagePlaneBlue.setIcon(new ImageIcon(("assets/planeBlue.png")));
         this.add(labelImagePlaneBlue, gbc);
+
         configGBC(2, 4, 1, 1, GridBagConstraints.BOTH, GridBagConstraints.CENTER);
         JLabel labelImagePlaneYellow = new JLabel();
         labelImagePlaneYellow.setIcon(new ImageIcon(("assets/planeYellow.png")));
@@ -104,11 +108,11 @@ public class PanelMenu extends JPanel implements KeyListener {
 
     public void selectPlane() {
         configGBC(0, 5, 1, 1, GridBagConstraints.BOTH, GridBagConstraints.CENTER);
-        JLabel imageSelectedPlane = new JLabel("Avión seleccionado");
+        JLabel imageSelectedPlane = new JLabel("<html><body>Avión<br>seleccionado</body></html>");
         imageSelectedPlane.setFont(new Font("Arial", Font.BOLD, 20));
         this.add(imageSelectedPlane, gbc);
 
-        configGBC(0, 6, 1, 2, GridBagConstraints.BOTH, GridBagConstraints.CENTER);
+        configGBC(0, 6, 1, 2, GridBagConstraints.EAST, GridBagConstraints.CENTER);
         JLabel labelImagePlaneSelected = new JLabel();
         labelImagePlaneSelected.setIcon(new ImageIcon(("assets/planeBlue.png")));
         this.add(labelImagePlaneSelected, gbc);
