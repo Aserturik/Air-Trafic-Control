@@ -1,10 +1,11 @@
 package co.edu.uptc.model;
 
 import java.util.Calendar;
-import java.util.Date;
 
 public class Cronometer {
     private int initialTime;
+    private int actualTime;
+    private int timePause;
     private static Cronometer instance;
 
     private Cronometer() {
@@ -24,7 +25,12 @@ public class Cronometer {
         return time + "";
     }
 
-    public void stop() {
-        initialTime = 0;
+    public void continueTime() {
+        actualTime = Calendar.getInstance().get(Calendar.SECOND);
+        initialTime = initialTime + (actualTime - timePause);
+    }
+
+    public void pauseTime() {
+        timePause = Calendar.getInstance().get(Calendar.SECOND);
     }
 }

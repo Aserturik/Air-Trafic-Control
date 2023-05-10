@@ -340,11 +340,11 @@ public class OperationPlanes {
     public void pauseGame() {
         if (isPauseGame) {
             isPauseGame = false;
-            Cronometer.getInstance().start();
+            Cronometer.getInstance().continueTime();
             returnGame();
         } else {
             isPauseGame = true;
-            Cronometer.getInstance().stop();
+            Cronometer.getInstance().pauseTime();
         }
     }
 
