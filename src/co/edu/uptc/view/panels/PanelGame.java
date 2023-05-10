@@ -74,11 +74,6 @@ public class PanelGame extends JPanel implements MouseListener, MouseMotionListe
         g2d.drawString("Tiempo de Juego: " + Cronometer.getInstance().getTime(), 10, 40);
     }
 
-    public void paintRecorrides() {
-        //planes = getFrame().getModelPhoto();
-        //drawAllPlanes();
-    }
-
     public void drawAllPlanes(Graphics2D g2d) {
         for (Plane plane : planes) {
             drawImage(plane, g2d);
@@ -117,7 +112,6 @@ public class PanelGame extends JPanel implements MouseListener, MouseMotionListe
         g2d.rotate(rotationRequired, plane.getPosition().x, plane.getPosition().y);
         g2d.drawImage(imagePlane.getImage(), drawX, drawY, null);
         g2d.setTransform(tx);
-        //System.out.println("Dibujando en: " + drawX + " " + drawY);
     }
 
 
@@ -182,8 +176,6 @@ public class PanelGame extends JPanel implements MouseListener, MouseMotionListe
     @Override
     public void mouseDragged(MouseEvent e) {
         frame.getPresenter().addPointToPath(e.getPoint());
-        //Plane planeSelected = frame.getPresenter().getModel().getPlaneSelected(e.getPoint());
-        //System.out.println("El avion seleccionado es: " + planeSelected);
     }
 
     @Override
@@ -214,7 +206,7 @@ public class PanelGame extends JPanel implements MouseListener, MouseMotionListe
     public void gameOver() {
         JOptionPane optionPane = new JOptionPane();
         optionPane.setMessage("GAME OVER");
-        if (optionPane.showConfirmDialog(this, "¿Desea volver a jugar?" + "\n El numero de aviones aterrizados es " + landedPlanes + "\n El tiempo es: " + Cronometer.getInstance().getTime(), "GAME OVER", optionPane.YES_NO_OPTION) == optionPane.YES_OPTION) {
+        if (optionPane.showConfirmDialog(this, "El numero de aviones aterrizados es " + landedPlanes + "\n El tiempo es: " + Cronometer.getInstance().getTime() + "\n¿Desea volver a jugar?", "GAME OVER", optionPane.YES_NO_OPTION) == optionPane.YES_OPTION) {
             frame.setVisible(false);
             frame.getPresenter().restartGame();
         } else {

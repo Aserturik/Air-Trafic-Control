@@ -11,19 +11,7 @@ public interface Contract {
 
         void setPresenter(Presenter presenter);
 
-        void startGame();
-
-        void restartGame();
-
-        void pauseGame();
-
-        void resumeGame();
-
-        void stopGame();
-
         void paintPlanes(List<Plane> planes);
-
-        void chargeBackground();
 
         void setLandedPlanes(int landedPlanes);
 
