@@ -10,14 +10,25 @@ import java.awt.event.*;
 public class PanelMenu extends JPanel implements KeyListener {
     private MyFrame frame;
     private GridBagConstraints gbc;
+    private String colorPlaneSelected;
     private final Color BACKGROUND_COLOR = new Color(0, 0, 0, 0.5f);
+    private Graphics2D g2d;
+    private JLabel labelImagePlaneSelected;
 
     public PanelMenu(MyFrame frame) {
         super();
         this.frame = frame;
         this.addKeyListener(this);
         this.setSizes();
+        repaint();
         initComponents();
+    }
+
+    @Override
+    public void paintComponent(Graphics g) {
+        super.paintComponent(g);
+        g2d = (Graphics2D) g;
+        paintPlaneSelect();
     }
 
     private void setSizes() {
@@ -102,7 +113,8 @@ public class PanelMenu extends JPanel implements KeyListener {
         labelImagePlaneRed.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                System.out.println("Rojo");
+                colorPlaneSelected = "assets/planeRed.png";
+                repaint();
             }
         });
     }
@@ -116,7 +128,8 @@ public class PanelMenu extends JPanel implements KeyListener {
         labelImagePlaneBlue.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                System.out.println("Azul");
+                colorPlaneSelected = "assets/planeBlue.png";
+                repaint();
             }
         });
     }
@@ -130,7 +143,8 @@ public class PanelMenu extends JPanel implements KeyListener {
         labelImagePlaneYellow.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                System.out.println("Amarillo");
+                colorPlaneSelected = "assets/planeYellow.png";
+                repaint();
             }
         });
     }
@@ -142,9 +156,16 @@ public class PanelMenu extends JPanel implements KeyListener {
         this.add(imageSelectedPlane, gbc);
 
         configGBC(0, 6, 1, 2, GridBagConstraints.EAST, GridBagConstraints.CENTER);
-        JLabel labelImagePlaneSelected = new JLabel();
-        labelImagePlaneSelected.setIcon(new ImageIcon(("assets/planeBlue.png")));
+        labelImagePlaneSelected = new JLabel();
+        labelImagePlaneSelected.setIcon(new ImageIcon((colorPlaneSelected)));
         this.add(labelImagePlaneSelected, gbc);
+    }
+
+    private void paintPlaneSelect() {
+        ImageIcon imageIcon = new ImageIcon(colorPlaneSelected);
+        Image image = imageIcon.getImage();
+
+        g2d.drawImage(image, 346, 440, null);
     }
 
     public void optionButtons() {
