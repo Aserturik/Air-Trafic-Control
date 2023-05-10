@@ -114,6 +114,7 @@ public class PanelMenu extends JPanel implements KeyListener {
             @Override
             public void mouseClicked(MouseEvent e) {
                 colorPlaneSelected = "assets/planeRed.png";
+                frame.getPrincipalPanel().getPanelGame().setImagePlaneSelected(colorPlaneSelected);
                 repaint();
             }
         });
@@ -129,6 +130,7 @@ public class PanelMenu extends JPanel implements KeyListener {
             @Override
             public void mouseClicked(MouseEvent e) {
                 colorPlaneSelected = "assets/planeBlue.png";
+                frame.getPrincipalPanel().getPanelGame().setImagePlaneSelected(colorPlaneSelected);
                 repaint();
             }
         });
@@ -144,6 +146,7 @@ public class PanelMenu extends JPanel implements KeyListener {
             @Override
             public void mouseClicked(MouseEvent e) {
                 colorPlaneSelected = "assets/planeYellow.png";
+                frame.getPrincipalPanel().getPanelGame().setImagePlaneSelected(colorPlaneSelected);
                 repaint();
             }
         });

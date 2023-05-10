@@ -23,6 +23,7 @@ public class PanelGame extends JPanel implements MouseListener, MouseMotionListe
     private Font font;
     private int landedPlanes;
     private RenderingHints renderingHints;
+    private String imagePlaneSelected = "assets/planeYellow.png";
     private String timeGame = "";
 
     public PanelGame(MyFrame myFrame) {
@@ -124,7 +125,7 @@ public class PanelGame extends JPanel implements MouseListener, MouseMotionListe
         UtilImages utilImages = new UtilImages();
         imageLabel = new JLabel();
         imageLabel.setBounds(10, 10, 40, 40);
-        Icon img = utilImages.loadScaleImage(ValuesGlobals.PHAT_PLANE_IMAGE_ORIGINAL, imageLabel.getWidth(), imageLabel.getHeight());
+        Icon img = utilImages.loadScaleImage(imagePlaneSelected, imageLabel.getWidth(), imageLabel.getHeight());
         imageLabel.setIcon(img);
         return new ImageIcon(((ImageIcon) img).getImage().getScaledInstance(imageLabel.getWidth(), imageLabel.getHeight(), Image.SCALE_DEFAULT));
     }
@@ -136,7 +137,6 @@ public class PanelGame extends JPanel implements MouseListener, MouseMotionListe
         this.setMaximumSize(new Dimension(ValuesGlobals.WIDTH_FRAME, ValuesGlobals.HEIGHT_FRAME));
         this.setLayout(new BorderLayout());
         this.setLocation(0, 0);
-        //System.out.println("El tamaño del PanelGame es: " + this.getWidth() + " " + this.getHeight());
         this.setVisible(true);
     }
 
@@ -212,5 +212,10 @@ public class PanelGame extends JPanel implements MouseListener, MouseMotionListe
 
     public void setTimeGame(String timeGame) {
         this.timeGame = timeGame;
+    }
+
+    public void setImagePlaneSelected(String colorPlaneSelected) {
+        imagePlaneSelected = colorPlaneSelected;
+        imagePlane.setImage(new ImageIcon((imagePlaneSelected)).getImage());
     }
 }

@@ -50,6 +50,7 @@ public class MyFrame extends JFrame implements Contract.View {
         principalPanel.getPanelGame().setPlanes(planes);
         principalPanel.getPanelGame().repaint();
     }
+
     @Override
     public void setLandedPlanes(int landedPlanes) {
         principalPanel.getPanelGame().setLandedPlanes(landedPlanes);
@@ -74,5 +75,9 @@ public class MyFrame extends JFrame implements Contract.View {
 
     public void selectedPlaneNull() {
         presenter.selectedPlaneNull();
+    }
+
+    public PrincipalPanel getPrincipalPanel() {
+        return principalPanel;
     }
 }
