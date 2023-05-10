@@ -27,7 +27,8 @@ public class ManagerGeneral {
         presenter.setModel(model);
     }
 
-    public void runProject() {CreateMVP();
+    public void runProject() {
+        CreateMVP();
         CreateMVP();
         new Thread(() -> {
             view.start();
@@ -44,6 +45,7 @@ public class ManagerGeneral {
     public void restartGame() {
         presenter = null;
         model = null;
+        view = null;
         runProject();
     }
 }

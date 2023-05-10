@@ -13,7 +13,7 @@ import java.util.Random;
 public class OperationPlanes {
     private List<Plane> planes;
     private List<Point> temporalPath;
-    private static final int SPEED = 5;
+    private int SPEED = 5;
     private Contract.Model model;
     private Plane planeSelected;
     private boolean isStartGame = false;
@@ -305,7 +305,7 @@ public class OperationPlanes {
         for (Plane plane : planes) {
             if (getRectangle(plane).contains(point)) {
                 planeSelected = plane;
-            }else {
+            } else {
                 planeSelected = null;
             }
         }
@@ -360,5 +360,9 @@ public class OperationPlanes {
             planeSelected.setPath(calculateIntermediePoints(planeSelected.getPath()));
             planeSelected.setNewPlane(false);
         }
+    }
+
+    public void setSpeed(int speed) {
+        this.SPEED = speed;
     }
 }

@@ -36,6 +36,8 @@ public interface Contract {
         void selectedPlaneNull();
 
         void restartGame();
+
+        void setPlaneSpeed(int speed);
     }
 
     public interface Model {
@@ -57,5 +59,7 @@ public interface Contract {
         void setLandedPlanes(int landedPlanes);
 
         void gameOver();
+
+        void setSpeed(int speed);
     }
 }

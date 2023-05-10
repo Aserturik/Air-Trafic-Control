@@ -77,7 +77,7 @@ public class PanelMenu extends JPanel implements KeyListener {
             JSlider source = (JSlider) e.getSource();
             if (!source.getValueIsAdjusting()) {
                 int speed = source.getValue();
-                //presenter.setPlaneSpeed(planeSelected.getId(), speed);
+                frame.getPresenter().setPlaneSpeed(speed);
                 System.out.println(speed);
             }
         });

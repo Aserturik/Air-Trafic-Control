@@ -64,4 +64,9 @@ public class Presenter implements Contract.Presenter {
     public void restartGame() {
         managerGeneral.restartGame();
     }
+
+    @Override
+    public void setPlaneSpeed(int speed) {
+        model.setSpeed(speed);
+    }
 }

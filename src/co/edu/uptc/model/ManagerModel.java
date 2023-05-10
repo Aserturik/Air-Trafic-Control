@@ -63,4 +63,9 @@ public class ManagerModel implements Contract.Model {
     public void gameOver() {
         presenter.getView().gameOver();
     }
+
+    @Override
+    public void setSpeed(int speed) {
+        operationPlanes.setSpeed(speed);
+    }
 }
