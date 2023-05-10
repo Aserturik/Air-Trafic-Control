@@ -96,10 +96,6 @@ public class PanelGame extends JPanel implements MouseListener, MouseMotionListe
         }
     }
 
-    private MyFrame getFrame() {
-        return this.frame;
-    }
-
     private void drawImage(Plane plane, Graphics2D g2d) {
         double rotationRequired = Math.toRadians(plane.getAngle());
         AffineTransform tx = g2d.getTransform();
