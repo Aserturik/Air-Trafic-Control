@@ -5,8 +5,7 @@ import util.ValuesGlobals;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
+import java.awt.event.*;
 
 public class PanelMenu extends JPanel implements KeyListener {
     private MyFrame frame;
@@ -89,21 +88,51 @@ public class PanelMenu extends JPanel implements KeyListener {
         colorPlane.setFont(new Font("Arial", Font.BOLD, 20));
         this.add(colorPlane, gbc);
 
-        // A la derecha
-        configGBC(0, 4, 1, 1, GridBagConstraints.EAST , GridBagConstraints.CENTER);
+        labelImagePlaneRed();
+        labelImagePlaneBlue();
+        labelImagePlaneYellow();
+    }
+
+    private void labelImagePlaneRed() {
+        configGBC(0, 4, 1, 1, GridBagConstraints.EAST, GridBagConstraints.CENTER);
         JLabel labelImagePlaneRed = new JLabel();
         labelImagePlaneRed.setIcon(new ImageIcon(("assets/planeRed.png")));
         this.add(labelImagePlaneRed, gbc);
 
+        labelImagePlaneRed.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                System.out.println("Rojo");
+            }
+        });
+    }
+
+    private void labelImagePlaneBlue() {
         configGBC(1, 4, 1, 1, GridBagConstraints.CENTER, GridBagConstraints.CENTER);
         JLabel labelImagePlaneBlue = new JLabel();
         labelImagePlaneBlue.setIcon(new ImageIcon(("assets/planeBlue.png")));
         this.add(labelImagePlaneBlue, gbc);
 
+        labelImagePlaneBlue.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                System.out.println("Azul");
+            }
+        });
+    }
+
+    private void labelImagePlaneYellow() {
         configGBC(2, 4, 1, 1, GridBagConstraints.BOTH, GridBagConstraints.CENTER);
         JLabel labelImagePlaneYellow = new JLabel();
         labelImagePlaneYellow.setIcon(new ImageIcon(("assets/planeYellow.png")));
         this.add(labelImagePlaneYellow, gbc);
+
+        labelImagePlaneYellow.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                System.out.println("Amarillo");
+            }
+        });
     }
 
     public void selectPlane() {
@@ -120,34 +149,34 @@ public class PanelMenu extends JPanel implements KeyListener {
 
     public void optionButtons() {
         configGBC(1, 5, 2, 1, GridBagConstraints.BOTH, GridBagConstraints.CENTER);
-         JButton buttonResume = new JButton("Reanudar");
-         buttonResume.setFont(new Font("Arial", Font.BOLD, 20));
-         buttonResume.setBackground(Color.white);
-         buttonResume.setForeground(Color.black);
-         buttonResume.addActionListener(e -> {
-             frame.showGame();
-         });
-         this.add(buttonResume, gbc);
+        JButton buttonResume = new JButton("Reanudar");
+        buttonResume.setFont(new Font("Arial", Font.BOLD, 20));
+        buttonResume.setBackground(Color.white);
+        buttonResume.setForeground(Color.black);
+        buttonResume.addActionListener(e -> {
+            frame.showGame();
+        });
+        this.add(buttonResume, gbc);
 
-         configGBC(1, 6, 2, 1, GridBagConstraints.BOTH, GridBagConstraints.CENTER);
-         JButton buttonRestart = new JButton("Reiniciar");
-         buttonRestart.setFont(new Font("Arial", Font.BOLD, 20));
-         buttonRestart.setBackground(Color.white);
-         buttonRestart.setForeground(Color.black);
-         buttonRestart.addActionListener(e -> {
-             frame.getPresenter().restartGame();
-         });
-         this.add(buttonRestart, gbc);
+        configGBC(1, 6, 2, 1, GridBagConstraints.BOTH, GridBagConstraints.CENTER);
+        JButton buttonRestart = new JButton("Reiniciar");
+        buttonRestart.setFont(new Font("Arial", Font.BOLD, 20));
+        buttonRestart.setBackground(Color.white);
+        buttonRestart.setForeground(Color.black);
+        buttonRestart.addActionListener(e -> {
+            frame.getPresenter().restartGame();
+        });
+        this.add(buttonRestart, gbc);
 
-         configGBC(1, 7, 2, 1, GridBagConstraints.BOTH, GridBagConstraints.CENTER);
-         JButton buttonExit = new JButton("Salir");
-         buttonExit.setFont(new Font("Arial", Font.BOLD, 20));
-         buttonExit.setBackground(Color.white);
-         buttonExit.setForeground(Color.black);
-         buttonExit.addActionListener(e -> {
-             System.exit(0);
-         });
-         this.add(buttonExit, gbc);
+        configGBC(1, 7, 2, 1, GridBagConstraints.BOTH, GridBagConstraints.CENTER);
+        JButton buttonExit = new JButton("Salir");
+        buttonExit.setFont(new Font("Arial", Font.BOLD, 20));
+        buttonExit.setBackground(Color.white);
+        buttonExit.setForeground(Color.black);
+        buttonExit.addActionListener(e -> {
+            System.exit(0);
+        });
+        this.add(buttonExit, gbc);
     }
 
 
