@@ -1,5 +1,6 @@
 package co.edu.uptc.presenter;
 
+import co.edu.uptc.model.Cronometer;
 import co.edu.uptc.model.ManagerModel;
 import co.edu.uptc.view.MyFrame;
 
@@ -18,7 +19,7 @@ public class ManagerGeneral {
 
     private void CreateMVP() {
         model = new ManagerModel();
-        presenter = new Presenter();
+        presenter = new Presenter(this);
         view = new MyFrame();
         view.setPresenter(presenter);
         model.setPresenter(presenter);
@@ -28,6 +29,7 @@ public class ManagerGeneral {
 
     public void runProject() {
         CreateMVP();
+        CreateMVP();
         new Thread(() -> {
             view.start();
             try {
@@ -35,8 +37,15 @@ public class ManagerGeneral {
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
-            view.chargeBackground();
         }).start();
-            presenter.startGame();
+        presenter.startGame();
+        Cronometer.getInstance().start();
+    }
+
+    public void restartGame() {
+        presenter = null;
+        model = null;
+        view.dispose();
+        runProject();
     }
 }

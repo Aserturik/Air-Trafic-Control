@@ -2,13 +2,11 @@ package co.edu.uptc.view;
 
 import co.edu.uptc.pojo.Plane;
 import co.edu.uptc.presenter.Contract;
-import co.edu.uptc.view.globals.ValuesGlobals;
+import util.ValuesGlobals;
 import co.edu.uptc.view.panels.PrincipalPanel;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
 import java.util.List;
 
 public class MyFrame extends JFrame implements Contract.View {
@@ -29,7 +27,6 @@ public class MyFrame extends JFrame implements Contract.View {
         this.setMinimumSize(new Dimension(ValuesGlobals.WIDTH_FRAME, ValuesGlobals.HEIGHT_FRAME + 36));
         this.setMaximumSize(new Dimension(ValuesGlobals.WIDTH_FRAME, ValuesGlobals.HEIGHT_FRAME + 36));
         this.setLocationRelativeTo(null);
-        //System.out.println("El tamaño del Frame es: " + this.getWidth() + " " + this.getHeight());
         this.setResizable(false);
     }
 
@@ -49,47 +46,23 @@ public class MyFrame extends JFrame implements Contract.View {
     }
 
     @Override
-    public void startGame() {
-        principalPanel.getPanelGame().paintRecorrides();
-    }
-
-    @Override
-    public void restartGame() {
-
-    }
-
-    @Override
-    public void pauseGame() {
-
-    }
-
-    @Override
-    public void resumeGame() {
-
-    }
-
-    @Override
-    public void stopGame() {
-
-    }
-
-    @Override
     public void paintPlanes(List<Plane> planes) {
         principalPanel.getPanelGame().setPlanes(planes);
         principalPanel.getPanelGame().repaint();
     }
 
     @Override
-    public void chargeBackground() {
-         //principalPanel.getPanelGame().chargeBackground();
+    public void setLandedPlanes(int landedPlanes) {
+        principalPanel.getPanelGame().setLandedPlanes(landedPlanes);
+    }
+
+    @Override
+    public void gameOver() {
+        principalPanel.getPanelGame().gameOver();
     }
 
     public Contract.Presenter getPresenter() {
         return presenter;
-    }
-
-    public List<Plane> getModelPhoto() {
-        return presenter.getPlanes();
     }
 
     public void showMenu() {
@@ -102,5 +75,9 @@ public class MyFrame extends JFrame implements Contract.View {
 
     public void selectedPlaneNull() {
         presenter.selectedPlaneNull();
+    }
+
+    public PrincipalPanel getPrincipalPanel() {
+        return principalPanel;
     }
 }
