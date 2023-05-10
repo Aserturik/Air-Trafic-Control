@@ -20,8 +20,8 @@ public class ManagerModel implements Contract.Model {
     }
 
     @Override
-    public void addPointToPath(Point point) {
-        operationPlanes.addPointToPath(point);
+    public void addPointToPath(int id,Point point) {
+        operationPlanes.addPointToPath(id,point);
     }
 
     @Override
@@ -40,8 +40,8 @@ public class ManagerModel implements Contract.Model {
     }
 
     @Override
-    public void isSelectedPlane(Point point) {
-        operationPlanes.isSelectedPlane(point);
+    public int isSelectedPlane(Point point) {
+        return operationPlanes.isSelectedPlane(point);
     }
 
     @Override
@@ -50,8 +50,8 @@ public class ManagerModel implements Contract.Model {
     }
 
     @Override
-    public void selectedPlaneNull() {
-        operationPlanes.selectedPlaneNull();
+    public void selectedPlaneNull(int id) {
+        operationPlanes.selectedPlaneNull(id);
     }
 
     @Override

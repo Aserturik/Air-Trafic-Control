@@ -27,15 +27,15 @@ public interface Contract {
 
         void startGame();
 
-        void isSelectedPlane(Point point);
-        void addPointToPath(Point point);
+        int isSelectedPlane(Point point);
+        void addPointToPath(int id, Point point);
         View getView();
 
         void notifyModel();
 
         void pauseGame();
 
-        void selectedPlaneNull();
+        void selectedPlaneNull(int id);
 
         void restartGame();
 
@@ -46,17 +46,17 @@ public interface Contract {
         void setPresenter(Presenter presenter);
         void setPlanes(List<Plane> planes);
 
-        void addPointToPath(Point point);
+        void addPointToPath(int id, Point point);
 
         void startGame();
 
         void pauseGame();
 
-        void isSelectedPlane(Point point);
+        int isSelectedPlane(Point point);
 
         void viewIsReady();
 
-        void selectedPlaneNull();
+        void selectedPlaneNull(int id);
 
         void setLandedPlanes(int landedPlanes);
 

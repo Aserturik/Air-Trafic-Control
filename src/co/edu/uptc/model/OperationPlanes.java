@@ -12,6 +12,7 @@ import java.util.Random;
 public class OperationPlanes {
     private List<Plane> planes;
     private List<Point> temporalPath;
+    private List<Integer> idsPlanesWhitoutPath;
     private int SPEED = 5;
     private Contract.Model model;
     private Plane planeSelected;
@@ -25,6 +26,7 @@ public class OperationPlanes {
         this.model = model;
         planes = new ArrayList<>();
         temporalPath = new ArrayList<>();
+        idsPlanesWhitoutPath = new ArrayList<>();
     }
 
     public void startGame() {
@@ -75,11 +77,6 @@ public class OperationPlanes {
         addPlanes.start();
     }
 
-
-
-    private void returnGame() {
-        startGame();
-    }
     public void landedPlanes() {
         for (Plane plane : planes) {
             if (ValuesGlobals.LANDED_RECTANGLE.contains(plane.getPosition())) {
@@ -297,6 +294,15 @@ public class OperationPlanes {
         }
     }
 
+    private Plane getPlaneById(int id) {
+        for (Plane plane : planes) {
+            if (plane.getId() == id) {
+                return plane;
+            }
+        }
+        return null;
+    }
+
     private Rectangle getRectangle(Plane plane) {
         Rectangle rectangle = new Rectangle();
         int drawX = plane.getPosition().x - 20;
@@ -305,14 +311,18 @@ public class OperationPlanes {
         return rectangle;
     }
 
-    public void isSelectedPlane(Point point) {
+    public int isSelectedPlane(Point point) {
         for (Plane plane : planes) {
             if (getRectangle(plane).contains(point)) {
-                planeSelected = plane;
+                plane.setFollowPath(true);
+                //idsPlanesWhitoutPath.add(plane.getId());
+                //planeSelected = plane;
+                return plane.getId();
             } else {
                 planeSelected = null;
             }
         }
+        return -1;
     }
 
     private List<Point> calculateIntermediePoints(List<Point> points) {
@@ -337,9 +347,9 @@ public class OperationPlanes {
         return intermediatePoints;
     }
 
-    public void addPointToPath(Point point) {
-        if (planeSelected != null) {
-            planeSelected.addPoint(point);
+    public void addPointToPath(int id, Point point) {
+        if (getPlaneById(id) != null) {
+            getPlaneById(id).addPoint(point);
         }
     }
 
@@ -347,17 +357,17 @@ public class OperationPlanes {
         if (isPauseGame) {
             isPauseGame = false;
             Cronometer.getInstance().continueTime();
-            returnGame();
+            startGame();
         } else {
             isPauseGame = true;
             Cronometer.getInstance().pauseTime();
         }
     }
 
-    public void selectedPlaneNull() {
-        if (planeSelected != null) {
-            planeSelected.setPath(calculateIntermediePoints(planeSelected.getPath()));
-            planeSelected.setNewPlane(false);
+    public void selectedPlaneNull(int id) {
+        if (getPlaneById(id) != null) {
+            getPlaneById(id).setPath(calculateIntermediePoints(getPlaneById(id).getPath()));
+            //planeSelected.setNewPlane(false);
         }
     }
 

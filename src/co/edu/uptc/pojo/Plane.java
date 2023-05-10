@@ -8,12 +8,15 @@ public class Plane {
     private Double angle = 0.0;
     private List<Point> path;
     private boolean newPlane;
+    boolean isFollowPath = false;
     private Point position;
     private Point nextPosition;
+    private static int id;
 
     public Plane() {
         this.path = new ArrayList<Point>();
         this.newPlane = true;
+        id++;
     }
 
     public void addPoint(Point point) {
@@ -67,5 +70,12 @@ public class Plane {
 
     public void setNewPlane(boolean b) {
         this.newPlane = b;
+    }
+    public void setFollowPath(boolean b) {
+        this.isFollowPath = b;
+    }
+
+    public int getId() {
+        return id;
     }
 }

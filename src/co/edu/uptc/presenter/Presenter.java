@@ -1,9 +1,6 @@
 package co.edu.uptc.presenter;
 
-import co.edu.uptc.pojo.Plane;
-
 import java.awt.*;
-import java.util.List;
 
 public class Presenter implements Contract.Presenter {
     private ManagerGeneral managerGeneral;
@@ -31,13 +28,13 @@ public class Presenter implements Contract.Presenter {
     }
 
     @Override
-    public void isSelectedPlane(Point point) {
-        model.isSelectedPlane(point);
+    public int isSelectedPlane(Point point) {
+        return model.isSelectedPlane(point);
     }
 
     @Override
-    public void addPointToPath(Point point) {
-        model.addPointToPath(point);
+    public void addPointToPath(int id, Point point) {
+        model.addPointToPath(id, point);
     }
 
     @Override
@@ -56,8 +53,8 @@ public class Presenter implements Contract.Presenter {
     }
 
     @Override
-    public void selectedPlaneNull() {
-        model.selectedPlaneNull();
+    public void selectedPlaneNull(int id) {
+        model.selectedPlaneNull(id);
     }
 
     @Override

@@ -73,8 +73,8 @@ public class MyFrame extends JFrame implements Contract.View {
         principalPanel.showGame();
     }
 
-    public void selectedPlaneNull() {
-        presenter.selectedPlaneNull();
+    public void selectedPlaneNull(int id) {
+        presenter.selectedPlaneNull(id);
     }
 
     public PrincipalPanel getPrincipalPanel() {
