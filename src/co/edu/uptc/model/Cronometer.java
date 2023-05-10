@@ -3,34 +3,35 @@ package co.edu.uptc.model;
 import java.util.Calendar;
 
 public class Cronometer {
-    private int initialTime;
-    private int actualTime;
-    private int timePause;
+    private long initialTime;
+    private long pausedTime;
     private static Cronometer instance;
 
     private Cronometer() {
 
     }
 
-    public void start() {
-        initialTime = Calendar.getInstance().get(Calendar.SECOND);
-    }
-
     public static Cronometer getInstance() {
         return instance == null ? instance = new Cronometer() : instance;
     }
 
-    public String getTime() {
-        int time = Calendar.getInstance().get(Calendar.SECOND) - initialTime;
-        return time + "";
-    }
-
-    public void continueTime() {
-        actualTime = Calendar.getInstance().get(Calendar.SECOND);
-        initialTime = initialTime + (actualTime - timePause);
+    public void start() {
+        initialTime = System.currentTimeMillis();
+        pausedTime = 0;
     }
 
     public void pauseTime() {
-        timePause = Calendar.getInstance().get(Calendar.SECOND);
+        pausedTime = System.currentTimeMillis() - initialTime;
+    }
+
+    public void continueTime() {
+        initialTime = System.currentTimeMillis() - pausedTime;
+        pausedTime = 0;
+    }
+    public String getTime() {
+        long time = System.currentTimeMillis() - initialTime;
+        int minutes = (int) (time / 60000);
+        int seconds = (int) ((time % 60000) / 1000);
+        return String.format("%02d:%02d", minutes, seconds);
     }
 }

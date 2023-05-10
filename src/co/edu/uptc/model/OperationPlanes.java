@@ -305,6 +305,8 @@ public class OperationPlanes {
         for (Plane plane : planes) {
             if (getRectangle(plane).contains(point)) {
                 planeSelected = plane;
+            }else {
+                planeSelected = null;
             }
         }
     }

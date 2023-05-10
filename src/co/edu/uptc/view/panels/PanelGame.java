@@ -214,7 +214,7 @@ public class PanelGame extends JPanel implements MouseListener, MouseMotionListe
     public void gameOver() {
         JOptionPane optionPane = new JOptionPane();
         optionPane.setMessage("GAME OVER");
-        if (optionPane.showConfirmDialog(this, "¿Desea volver a jugar?" + "\n El numero de aviones aterrizados es " + landedPlanes + "\n El tiempo es: " + Cronometer.getInstance().getTime()+ " Segundos", "GAME OVER", optionPane.YES_NO_OPTION) == optionPane.YES_OPTION) {
+        if (optionPane.showConfirmDialog(this, "¿Desea volver a jugar?" + "\n El numero de aviones aterrizados es " + landedPlanes + "\n El tiempo es: " + Cronometer.getInstance().getTime(), "GAME OVER", optionPane.YES_NO_OPTION) == optionPane.YES_OPTION) {
             frame.setVisible(false);
             frame.getPresenter().restartGame();
         } else {
