@@ -5,7 +5,6 @@ import co.edu.uptc.presenter.Contract;
 import util.ValuesGlobals;
 
 import java.awt.*;
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -76,6 +75,11 @@ public class OperationPlanes {
         addPlanes.start();
     }
 
+
+
+    private void returnGame() {
+        startGame();
+    }
     public void landedPlanes() {
         for (Plane plane : planes) {
             if (ValuesGlobals.LANDED_RECTANGLE.contains(plane.getPosition())) {
@@ -348,11 +352,6 @@ public class OperationPlanes {
             isPauseGame = true;
             Cronometer.getInstance().pauseTime();
         }
-    }
-
-    private void returnGame() {
-        startThread();
-        eliminatePlanes();
     }
 
     public void selectedPlaneNull() {

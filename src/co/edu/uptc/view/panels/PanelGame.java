@@ -24,7 +24,6 @@ public class PanelGame extends JPanel implements MouseListener, MouseMotionListe
     private int landedPlanes;
     private RenderingHints renderingHints;
     private String imagePlaneSelected = "assets/planeYellow.png";
-    private String timeGame = "";
 
     public PanelGame(MyFrame myFrame) {
         super();
@@ -208,10 +207,6 @@ public class PanelGame extends JPanel implements MouseListener, MouseMotionListe
         } else {
             System.exit(0);
         }
-    }
-
-    public void setTimeGame(String timeGame) {
-        this.timeGame = timeGame;
     }
 
     public void setImagePlaneSelected(String colorPlaneSelected) {
