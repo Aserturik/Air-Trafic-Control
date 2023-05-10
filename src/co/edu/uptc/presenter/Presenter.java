@@ -31,11 +31,6 @@ public class Presenter implements Contract.Presenter {
     }
 
     @Override
-    public List<Plane> getPlanes() {
-        return model.getPlanes();
-    }
-
-    @Override
     public void isSelectedPlane(Point point) {
         model.isSelectedPlane(point);
     }
@@ -43,11 +38,6 @@ public class Presenter implements Contract.Presenter {
     @Override
     public void addPointToPath(Point point) {
         model.addPointToPath(point);
-    }
-
-    @Override
-    public Contract.Model getModel() {
-        return model;
     }
 
     @Override

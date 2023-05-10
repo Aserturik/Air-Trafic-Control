@@ -60,11 +60,6 @@ public class MyFrame extends JFrame implements Contract.View {
         principalPanel.getPanelGame().gameOver();
     }
 
-    @Override
-    public void setTimeGame(String time) {
-        principalPanel.getPanelGame().setTimeGame(time);
-    }
-
     public Contract.Presenter getPresenter() {
         return presenter;
     }
