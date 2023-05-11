@@ -16,6 +16,7 @@ public class OperationPlanes {
     private boolean isPauseGame = false;
     private int landedPlanes = 0;
     private Object lock;
+    private int id= 0;
 
     public OperationPlanes(Contract.Model model) {
         lock = new Object();
@@ -139,6 +140,8 @@ public class OperationPlanes {
     private void randomPositionGenerator() {
         Plane plane = new Plane();
         addNewPlane(plane);
+        plane.setFinalId(id);
+        id++;
         plane.setAngle(getAngle(plane));
         moveToRoute(plane);
     }
@@ -190,8 +193,10 @@ public class OperationPlanes {
         double dy = plane.getNextPosition().y - plane.getPosition().y;
 
         if (distance <= SPEED) {
-            System.out.println("la distancia es" + distance);
-            advanceInPath(plane);
+            if(plane.getPath().size() == 1) {
+                plane.setNextPosition(new Point(0,0));
+            }
+                //advanceInPath(plane);
         } else {
             double angle = Math.atan2(dy, dx);
             int deltaX = (int) Math.round(SPEED * Math.cos(angle));
@@ -210,10 +215,13 @@ public class OperationPlanes {
     }
     public void advance() {
         for (Plane plane : planes) {
-            moveToRoute(plane);
+            if(plane.getPath().size() > 2){
+                advanceInPath(plane);
+            }else {
+                moveToRoute(plane);
+            }
         }
     }
-
     private void followTemporalPath(Plane plane) {
         if (plane.getPath().size() == 0) {
             //setNewNextPlanePosition(planeSelected);
@@ -291,7 +299,7 @@ public class OperationPlanes {
 
     private Plane getPlaneById(int id) {
         for (Plane plane : planes) {
-            if (plane.getId() == id) {
+            if (plane.getFinalId() == id) {
                 return plane;
             }
         }
@@ -309,9 +317,11 @@ public class OperationPlanes {
     public void isSelectedPlane(Point point) {
         for (Plane plane : planes) {
             if (getRectangle(plane).contains(point)) {
+                TemporalPlanes.setId(plane.getFinalId());
                 plane.getPath().remove(1);
                 plane.getPath().add(point);
-                TemporalPlanes.setId(plane.getId());
+
+                System.out.println("El id del temPath es " + TemporalPlanes.getId());
             }
         }
     }
@@ -358,8 +368,8 @@ public class OperationPlanes {
 
     public void selectedPlaneNull() {
         if (TemporalPlanes.getId() != -1) {
+            System.out.println("El id temporal " + TemporalPlanes.getId());
             Plane planeSelected = getPlaneById(TemporalPlanes.getId());
-            assert planeSelected != null;
             planeSelected.setPath(calculateIntermediePoints(planeSelected.getPath()));
             planeSelected.setFollowPath(true);
         }
