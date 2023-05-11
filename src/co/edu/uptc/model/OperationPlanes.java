@@ -5,17 +5,15 @@ import co.edu.uptc.presenter.Contract;
 import util.ValuesGlobals;
 
 import java.awt.*;
-import java.util.ArrayList;
+import java.util.*;
 import java.util.List;
-import java.util.Random;
 
 public class OperationPlanes {
     private List<Plane> planes;
     private List<Point> temporalPath;
-    private List<Integer> idsPlanesWhitoutPath;
+    private Set<Integer> idsPlanesWhitoutPath;
     private int SPEED = 5;
     private Contract.Model model;
-    private Plane planeSelected;
     private boolean isStartGame = false;
     private boolean isPauseGame = false;
     private int landedPlanes = 0;
@@ -26,7 +24,7 @@ public class OperationPlanes {
         this.model = model;
         planes = new ArrayList<>();
         temporalPath = new ArrayList<>();
-        idsPlanesWhitoutPath = new ArrayList<>();
+        idsPlanesWhitoutPath = new HashSet<>();
     }
 
     public void startGame() {
@@ -208,20 +206,29 @@ public class OperationPlanes {
 
     public void advance() {
         for (Plane plane : planes) {
-            if (plane.isNewPlane()) {
-                moveToRoute(plane);
-            } else {
-                if (planeSelected.getPath().size() == 0) {
+            moveToRoute(plane);
+            //followTemporalPath();
+        }
+        if (idsPlanesWhitoutPath.size() > 0) {
+
+            for (int i : idsPlanesWhitoutPath) {
+                if (getPlaneById(i) != null && getPlaneById(i).getPath().size() == 0) {
                     System.out.println("No hay mas puntos");
-                    setNewNextPlanePosition(planeSelected);
-                    planeSelected.addPoint(planeSelected.getNextPosition());
+                    //setNewNextPlanePosition(planeSelected);
+                    //planeSelected.addPoint(planeSelected.getNextPosition());
                 } else {
-                    if (planeSelected.getPath().size() >= 2) {
+                    if (getPlaneById(i) != null && getPlaneById(i).getPath().size() >= 2) {
                         followTemporalPath();
                     } else {
-                        planeSelected.setNewPlane(true);
-                        planeSelected.setNextPosition(getInversePosition(planeSelected));
-                        planeSelected.setAngle(getAngle(planeSelected));
+                        System.out.println("se metio al ultimo else");
+                        followTemporalPath();
+                        /*
+                        Plane planeSelected = getPlaneById(i);
+                        getPlaneById(i).setNewPlane(true);
+                        getPlaneById(i).setNextPosition(getInversePosition(planeSelected));
+                        getPlaneById(i).setAngle(getAngle(planeSelected));
+                        getPlaneById(i).addPoint(getInversePosition(planeSelected));
+                         */
                     }
                 }
             }
@@ -229,10 +236,13 @@ public class OperationPlanes {
     }
 
     private void followTemporalPath() {
-        planeSelected.setPosition(planeSelected.getPath().get(0));
-        planeSelected.setNextPosition(planeSelected.getPath().get(1));
-        planeSelected.setAngle(getAngle(planeSelected, planeSelected.getPath().get(1)));
-        planeSelected.getPath().remove(0);
+        for (int i : idsPlanesWhitoutPath) {
+            Plane planeSelected = getPlaneById(i);
+            planeSelected.setPosition(planeSelected.getPath().get(0));
+            planeSelected.setNextPosition(planeSelected.getPath().get(1));
+            planeSelected.setAngle(getAngle(planeSelected, planeSelected.getPath().get(1)));
+            planeSelected.getPath().remove(0);
+        }
     }
 
     private void getNextPosition(Plane plane) {
@@ -315,11 +325,7 @@ public class OperationPlanes {
         for (Plane plane : planes) {
             if (getRectangle(plane).contains(point)) {
                 plane.setFollowPath(true);
-                //idsPlanesWhitoutPath.add(plane.getId());
-                //planeSelected = plane;
                 return plane.getId();
-            } else {
-                planeSelected = null;
             }
         }
         return -1;
@@ -350,6 +356,9 @@ public class OperationPlanes {
     public void addPointToPath(int id, Point point) {
         if (getPlaneById(id) != null) {
             getPlaneById(id).addPoint(point);
+        }
+        if (id > 0) {
+            idsPlanesWhitoutPath.add(id);
         }
     }
 
