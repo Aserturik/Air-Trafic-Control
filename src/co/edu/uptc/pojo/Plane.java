@@ -52,11 +52,15 @@ public class Plane {
     }
 
     public Point getNextPosition() {
-        return nextPosition;
+        return path.get(1);
     }
 
     public void setNextPosition(Point nextPosition) {
-        this.nextPosition = nextPosition;
+        if(path.size() > 1){
+            path.set(1, nextPosition);
+        }else{
+            path.add(nextPosition);
+        }
     }
 
     @Override
@@ -77,5 +81,9 @@ public class Plane {
 
     public int getId() {
         return id;
+    }
+    public boolean isFollowPath() {
+        System.out.println(id + "tamaño del pat " + path.size());
+        return isFollowPath;
     }
 }

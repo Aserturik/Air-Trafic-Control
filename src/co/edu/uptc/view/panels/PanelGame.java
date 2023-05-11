@@ -23,7 +23,6 @@ public class PanelGame extends JPanel implements MouseListener, MouseMotionListe
     private Font font;
     private int landedPlanes;
     private RenderingHints renderingHints;
-    private int idPlaneSelected;
     private String imagePlaneSelected = "assets/planeYellow.png";
 
     public PanelGame(MyFrame myFrame) {
@@ -150,13 +149,13 @@ public class PanelGame extends JPanel implements MouseListener, MouseMotionListe
 
     @Override
     public void mousePressed(MouseEvent e) {
-        idPlaneSelected = frame.getPresenter().isSelectedPlane(e.getPoint());
+        frame.getPresenter().isSelectedPlane(e.getPoint());
     }
 
 
     @Override
     public void mouseReleased(MouseEvent e) {
-        frame.selectedPlaneNull(idPlaneSelected);
+        frame.selectedPlaneNull();
     }
 
     @Override
@@ -170,7 +169,7 @@ public class PanelGame extends JPanel implements MouseListener, MouseMotionListe
 
     @Override
     public void mouseDragged(MouseEvent e) {
-        frame.getPresenter().addPointToPath(idPlaneSelected, e.getPoint());
+        frame.getPresenter().addPointToPath(e.getPoint());
     }
 
     @Override

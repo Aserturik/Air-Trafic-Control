@@ -28,13 +28,13 @@ public class Presenter implements Contract.Presenter {
     }
 
     @Override
-    public int isSelectedPlane(Point point) {
-        return model.isSelectedPlane(point);
+    public void isSelectedPlane(Point point) {
+        model.isSelectedPlane(point);
     }
 
     @Override
-    public void addPointToPath(int id, Point point) {
-        model.addPointToPath(id, point);
+    public void addPointToPath(Point point) {
+        model.addPointToPath(point);
     }
 
     @Override
@@ -53,8 +53,8 @@ public class Presenter implements Contract.Presenter {
     }
 
     @Override
-    public void selectedPlaneNull(int id) {
-        model.selectedPlaneNull(id);
+    public void selectedPlaneNull() {
+        model.selectedPlaneNull();
     }
 
     @Override

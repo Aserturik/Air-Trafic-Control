@@ -10,9 +10,7 @@ import java.util.List;
 
 public class OperationPlanes {
     private List<Plane> planes;
-    private List<Point> temporalPath;
-    private Set<Integer> idsPlanesWhitoutPath;
-    private int SPEED = 5;
+    private int SPEED = 2;
     private Contract.Model model;
     private boolean isStartGame = false;
     private boolean isPauseGame = false;
@@ -23,8 +21,6 @@ public class OperationPlanes {
         lock = new Object();
         this.model = model;
         planes = new ArrayList<>();
-        temporalPath = new ArrayList<>();
-        idsPlanesWhitoutPath = new HashSet<>();
     }
 
     public void startGame() {
@@ -188,12 +184,14 @@ public class OperationPlanes {
     }
 
     public void moveToRoute(Plane plane) {
+        plane.setNextPosition(plane.getPath().get(1));
         double distance = getDistanceTo(plane, plane.getNextPosition());
         double dx = plane.getNextPosition().x - plane.getPosition().x;
         double dy = plane.getNextPosition().y - plane.getPosition().y;
 
         if (distance <= SPEED) {
-            plane.getPosition().setLocation(plane.getNextPosition());
+            System.out.println("la distancia es" + distance);
+            advanceInPath(plane);
         } else {
             double angle = Math.atan2(dy, dx);
             int deltaX = (int) Math.round(SPEED * Math.cos(angle));
@@ -204,46 +202,33 @@ public class OperationPlanes {
         }
     }
 
+    private void advanceInPath(Plane planeSelected) {
+        planeSelected.setPosition(planeSelected.getPath().get(0));
+        planeSelected.setNextPosition(planeSelected.getPath().get(1));
+        planeSelected.setAngle(getAngle(planeSelected, planeSelected.getPath().get(1)));
+        planeSelected.getPath().remove(0);
+    }
     public void advance() {
         for (Plane plane : planes) {
             moveToRoute(plane);
-            //followTemporalPath();
         }
-        if (idsPlanesWhitoutPath.size() > 0) {
+    }
 
-            for (int i : idsPlanesWhitoutPath) {
-                if (getPlaneById(i) != null && getPlaneById(i).getPath().size() == 0) {
-                    System.out.println("No hay mas puntos");
-                    //setNewNextPlanePosition(planeSelected);
-                    //planeSelected.addPoint(planeSelected.getNextPosition());
-                } else {
-                    if (getPlaneById(i) != null && getPlaneById(i).getPath().size() >= 2) {
-                        followTemporalPath();
-                    } else {
-                        System.out.println("se metio al ultimo else");
-                        followTemporalPath();
-                        /*
-                        Plane planeSelected = getPlaneById(i);
-                        getPlaneById(i).setNewPlane(true);
-                        getPlaneById(i).setNextPosition(getInversePosition(planeSelected));
-                        getPlaneById(i).setAngle(getAngle(planeSelected));
-                        getPlaneById(i).addPoint(getInversePosition(planeSelected));
-                         */
-                    }
-                }
+    private void followTemporalPath(Plane plane) {
+        if (plane.getPath().size() == 0) {
+            //setNewNextPlanePosition(planeSelected);
+            //planeSelected.addPoint(planeSelected.getNextPosition());
+        } else {
+            if (plane.getPath().size() >= 2) {
+                //advanceInPath(plane);
+            } else {
+                System.out.println("se metio al ultimo else");
+                plane.setFollowPath(false);
+                //followTemporalPath();
             }
         }
     }
 
-    private void followTemporalPath() {
-        for (int i : idsPlanesWhitoutPath) {
-            Plane planeSelected = getPlaneById(i);
-            planeSelected.setPosition(planeSelected.getPath().get(0));
-            planeSelected.setNextPosition(planeSelected.getPath().get(1));
-            planeSelected.setAngle(getAngle(planeSelected, planeSelected.getPath().get(1)));
-            planeSelected.getPath().remove(0);
-        }
-    }
 
     private void getNextPosition(Plane plane) {
         setNextPlanePosition(plane);
@@ -321,17 +306,18 @@ public class OperationPlanes {
         return rectangle;
     }
 
-    public int isSelectedPlane(Point point) {
+    public void isSelectedPlane(Point point) {
         for (Plane plane : planes) {
             if (getRectangle(plane).contains(point)) {
-                plane.setFollowPath(true);
-                return plane.getId();
+                plane.getPath().remove(1);
+                plane.getPath().add(point);
+                TemporalPlanes.setId(plane.getId());
             }
         }
-        return -1;
     }
 
     private List<Point> calculateIntermediePoints(List<Point> points) {
+
         List<Point> intermediatePoints = new ArrayList<>();
         if (points.size() < 2) {
             return intermediatePoints;
@@ -353,12 +339,9 @@ public class OperationPlanes {
         return intermediatePoints;
     }
 
-    public void addPointToPath(int id, Point point) {
-        if (getPlaneById(id) != null) {
-            getPlaneById(id).addPoint(point);
-        }
-        if (id > 0) {
-            idsPlanesWhitoutPath.add(id);
+    public void addPointToPath(Point point) {
+        if (TemporalPlanes.getId() != -1) {
+            getPlaneById(TemporalPlanes.getId()).addPoint(point);
         }
     }
 
@@ -373,11 +356,15 @@ public class OperationPlanes {
         }
     }
 
-    public void selectedPlaneNull(int id) {
-        if (getPlaneById(id) != null) {
-            getPlaneById(id).setPath(calculateIntermediePoints(getPlaneById(id).getPath()));
-            //planeSelected.setNewPlane(false);
+    public void selectedPlaneNull() {
+        if (TemporalPlanes.getId() != -1) {
+            Plane planeSelected = getPlaneById(TemporalPlanes.getId());
+            assert planeSelected != null;
+            planeSelected.setPath(calculateIntermediePoints(planeSelected.getPath()));
+            planeSelected.setFollowPath(true);
         }
+
+        TemporalPlanes.setId(-1);
     }
 
     public void setSpeed(int speed) {
