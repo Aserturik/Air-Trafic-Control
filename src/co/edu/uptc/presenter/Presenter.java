@@ -1,9 +1,6 @@
 package co.edu.uptc.presenter;
 
-import co.edu.uptc.pojo.Plane;
-
 import java.awt.*;
-import java.util.List;
 
 public class Presenter implements Contract.Presenter {
     private ManagerGeneral managerGeneral;

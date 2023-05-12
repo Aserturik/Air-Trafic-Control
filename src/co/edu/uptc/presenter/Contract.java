@@ -52,7 +52,7 @@ public interface Contract {
 
         void pauseGame();
 
-        void isSelectedPlane(Point point);
+        int isSelectedPlane(Point point);
 
         void viewIsReady();
 

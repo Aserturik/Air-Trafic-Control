@@ -1,7 +1,5 @@
 package co.edu.uptc.model;
 
-import java.util.Calendar;
-
 public class Cronometer {
     private long initialTime;
     private long pausedTime;

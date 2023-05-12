@@ -40,8 +40,9 @@ public class ManagerModel implements Contract.Model {
     }
 
     @Override
-    public void isSelectedPlane(Point point) {
+    public int isSelectedPlane(Point point) {
         operationPlanes.isSelectedPlane(point);
+        return 0;
     }
 
     @Override
