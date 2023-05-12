@@ -3,14 +3,13 @@ package co.edu.uptc.presenter;
 import java.awt.*;
 
 public class Presenter implements Contract.Presenter {
+    private Contract.View view;
+    private Contract.Model model;
     private ManagerGeneral managerGeneral;
 
     public Presenter(ManagerGeneral managerGeneral) {
         this.managerGeneral = managerGeneral;
     }
-
-    Contract.View view;
-    Contract.Model model;
 
     @Override
     public void setModel(Contract.Model model) {

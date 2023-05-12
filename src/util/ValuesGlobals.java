@@ -3,9 +3,7 @@ package util;
 import java.awt.*;
 
 public class ValuesGlobals {
-    public static final String PHAT_PLANE_IMAGE_ORIGINAL = "assets/planeBlue.png";
     public static final String PHAT_AIRPORT_IMAGE_ORIGINAL = "assets/planeStreet.png";
-    public static final String PHAT_BACKGROUND_IMAGE = "assets/background.jpg";
     public static final int WIDTH_FRAME = 900;
     public static final int WIDTH_MENU = 700;
     public static final int HEIGHT_FRAME = 600;

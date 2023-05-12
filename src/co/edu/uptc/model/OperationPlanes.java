@@ -196,7 +196,6 @@ public class OperationPlanes {
             if(plane.getPath().size() == 1) {
                 plane.setNextPosition(new Point(0,0));
             }
-                //advanceInPath(plane);
         } else {
             double angle = Math.atan2(dy, dx);
             int deltaX = (int) Math.round(SPEED * Math.cos(angle));
@@ -215,28 +214,13 @@ public class OperationPlanes {
     }
     public void advance() {
         for (Plane plane : planes) {
-            if(plane.getPath().size() > 2){
+            if (plane.getPath().size() > 2) {
                 advanceInPath(plane);
-            }else {
+            } else {
                 moveToRoute(plane);
             }
         }
     }
-    private void followTemporalPath(Plane plane) {
-        if (plane.getPath().size() == 0) {
-            //setNewNextPlanePosition(planeSelected);
-            //planeSelected.addPoint(planeSelected.getNextPosition());
-        } else {
-            if (plane.getPath().size() >= 2) {
-                //advanceInPath(plane);
-            } else {
-                System.out.println("se metio al ultimo else");
-                plane.setFollowPath(false);
-                //followTemporalPath();
-            }
-        }
-    }
-
 
     private void getNextPosition(Plane plane) {
         setNextPlanePosition(plane);
@@ -320,8 +304,6 @@ public class OperationPlanes {
                 TemporalPlanes.setId(plane.getFinalId());
                 plane.getPath().remove(1);
                 plane.getPath().add(point);
-
-                System.out.println("El id del temPath es " + TemporalPlanes.getId());
             }
         }
     }
@@ -368,7 +350,6 @@ public class OperationPlanes {
 
     public void selectedPlaneNull() {
         if (TemporalPlanes.getId() != -1) {
-            System.out.println("El id temporal " + TemporalPlanes.getId());
             Plane planeSelected = getPlaneById(TemporalPlanes.getId());
             planeSelected.setPath(calculateIntermediePoints(planeSelected.getPath()));
             planeSelected.setFollowPath(true);
