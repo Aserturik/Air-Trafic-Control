@@ -10,15 +10,16 @@ public class PrincipalPanel extends JPanel {
     private PanelGame panelGame;
     private MyFrame frame;
     private PanelMenu panelMenu;
+    private GridBagConstraints gbc;
 
     public PrincipalPanel(MyFrame myFrame) {
         super();
         this.frame = myFrame;
         this.setSizes();
         panelGame = new PanelGame(myFrame);
-        this.add(panelGame);
+        this.add(panelGame, gbc);
         panelMenu = new PanelMenu(myFrame);
-        this.add(panelMenu, BorderLayout.CENTER);
+        this.add(panelMenu, gbc);
         panelGame.setFocusable(true);
         panelGame.requestFocus();
     }
@@ -28,8 +29,14 @@ public class PrincipalPanel extends JPanel {
         this.setPreferredSize(new Dimension(ValuesGlobals.WIDTH_FRAME, ValuesGlobals.HEIGHT_FRAME));
         this.setMinimumSize(new Dimension(ValuesGlobals.WIDTH_FRAME, ValuesGlobals.HEIGHT_FRAME));
         this.setMaximumSize(new Dimension(ValuesGlobals.WIDTH_FRAME, ValuesGlobals.HEIGHT_FRAME));
-        this.setLayout(new BorderLayout());
-        this.setLocation(0, 0);
+        this.setLayout(new GridBagLayout());
+        this.setBackground(new Color(0, 0, 0));
+        gbc = new GridBagConstraints();
+        gbc.fill = GridBagConstraints.CENTER;
+        gbc.gridx = 0;
+        gbc.gridy = 0;
+        gbc.weightx = 1;
+        gbc.weighty = 1;
         this.setVisible(true);
     }
 
