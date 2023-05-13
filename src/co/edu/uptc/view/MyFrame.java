@@ -81,4 +81,11 @@ public class MyFrame extends JFrame implements Contract.View {
     public PrincipalPanel getPrincipalPanel() {
         return principalPanel;
     }
+
+    public void showPopupMenu(Point point) {
+        if(presenter.isSelectedPlane(point)) {
+            presenter.pauseGame();
+            principalPanel.getPanelGame().showPopupMenu(point);
+        }
+    }
 }

@@ -145,6 +145,10 @@ public class PanelGame extends JPanel implements MouseListener, MouseMotionListe
 
     @Override
     public void mouseClicked(MouseEvent e) {
+        if (e.getButton() == MouseEvent.BUTTON3) {
+            // open popup menu
+            frame.showPopupMenu(e.getPoint());
+        }
     }
 
     @Override
@@ -211,5 +215,26 @@ public class PanelGame extends JPanel implements MouseListener, MouseMotionListe
     public void setImagePlaneSelected(String colorPlaneSelected) {
         imagePlaneSelected = colorPlaneSelected;
         imagePlane.setImage(new ImageIcon((imagePlaneSelected)).getImage());
+    }
+
+    public void showPopupMenu(Point point) {
+        JPopupMenu popupMenu = new JPopupMenu();
+        JMenu menuChangeColor = new JMenu("Cambiar Color");
+        menuChangeColor.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                popupChangeColor();
+                frame.getPresenter().pauseGame();
+            }
+        });
+
+
+        popupMenu.add(menuChangeColor);
+
+        popupMenu.show(this, point.x, point.y);
+    }
+
+    private void popupChangeColor(){
+
     }
 }

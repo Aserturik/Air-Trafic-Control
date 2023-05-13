@@ -27,7 +27,7 @@ public interface Contract {
 
         void startGame();
 
-        void isSelectedPlane(Point point);
+        boolean isSelectedPlane(Point point);
         void addPointToPath(Point point);
         View getView();
 
@@ -52,7 +52,7 @@ public interface Contract {
 
         void pauseGame();
 
-        void isSelectedPlane(Point point);
+        boolean isSelectedPlane(Point point);
 
         void viewIsReady();
 

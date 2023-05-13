@@ -27,8 +27,8 @@ public class Presenter implements Contract.Presenter {
     }
 
     @Override
-    public void isSelectedPlane(Point point) {
-        model.isSelectedPlane(point);
+    public boolean isSelectedPlane(Point point) {
+        return model.isSelectedPlane(point);
     }
 
     @Override
