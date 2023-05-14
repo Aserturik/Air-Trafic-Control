@@ -17,6 +17,8 @@ public class OperationPlanes {
     private int landedPlanes = 0;
     private Object lock;
     private int id = 0;
+    private Plane nextPlaneToRemove;
+    private String colorNewPlane = ValuesGlobals.YELLOW_PLANE;
 
     public OperationPlanes(Contract.Model model) {
         lock = new Object();
@@ -41,9 +43,9 @@ public class OperationPlanes {
                 try {
                     synchronized (lock) {
                         advance();
-                        model.setPlanes(planes);
                         landedPlanes();
                         crashPlanes();
+                        model.setPlanes(planes);
                         lock.notifyAll();
                     }
                     Thread.sleep(ValuesGlobals.TIME_SLEEP);
@@ -107,6 +109,11 @@ public class OperationPlanes {
             while (!isPauseGame) {
                 try {
                     synchronized (lock) {
+                        if(nextPlaneToRemove != null) {
+                            System.out.println("Eliminando avion: " + nextPlaneToRemove.getFinalId());
+                            planes.remove(nextPlaneToRemove);
+                            nextPlaneToRemove = null;
+                        }
                         verifyPlanes();
                         lock.notifyAll();
                     }
@@ -181,13 +188,14 @@ public class OperationPlanes {
                 plane.addPoint(new Point(random.nextInt(ValuesGlobals.WIDTH_FRAME - 10 + 1) + 10, ValuesGlobals.HEIGHT_FRAME));
                 break;
         }
+        plane.setColor(this.colorNewPlane);
         plane.setPosition(plane.getPath().get(0));
         plane.setNextPosition(getInversePosition(plane));
         planes.add(plane);
     }
 
     public void moveToRoute(Plane plane) {
-        if(plane.getSpeed() == 0){
+        if (plane.getSpeed() == 0) {
             plane.setSpeed(SPEED);
         }
         plane.setNextPosition(plane.getPath().get(1));
@@ -195,17 +203,35 @@ public class OperationPlanes {
         double dx = plane.getNextPosition().x - plane.getPosition().x;
         double dy = plane.getNextPosition().y - plane.getPosition().y;
 
-        if (distance <= plane.getSpeed()) {
-            if (plane.getPath().size() == 1) {
-                plane.setNextPosition(new Point(0, 0));
-            }
-        } else {
+        if (distance > plane.getSpeed()) {
             double angle = Math.atan2(dy, dx);
             int deltaX = (int) Math.round(plane.getSpeed() * Math.cos(angle));
             int deltaY = (int) Math.round(plane.getSpeed() * Math.sin(angle));
 
             plane.getPosition().x += deltaX;
             plane.getPosition().y += deltaY;
+        } else {
+            moveForward(plane);
+        }
+    }
+
+    private void moveForward(Plane plane) {
+        Point nextPosition = plane.getPosition();
+
+        double angleRadians = Math.toRadians(plane.getAngle());
+        double dx = Math.cos(angleRadians) * plane.getSpeed();
+        double dy = Math.sin(angleRadians) * plane.getSpeed();
+
+        nextPosition.x -= dx;
+        nextPosition.y -= dy;
+        plane.setNextPosition(nextPosition);
+
+        int x = plane.getPosition().x;
+        int y = plane.getPosition().y;
+
+        if (x == 0 || x == ValuesGlobals.HEIGHT_FRAME || y == 0 || y == ValuesGlobals.WIDTH_FRAME){
+            System.out.println("el avion " + plane.getFinalId() + " ha salido del mapa");
+            nextPlaneToRemove = plane;
         }
     }
 
@@ -365,8 +391,22 @@ public class OperationPlanes {
     }
 
     public void setSpeed(int speed) {
-        if(TemporalPlanes.getId() > 0){
+        if (TemporalPlanes.getId() > 0) {
             getPlaneById(TemporalPlanes.getId()).setSpeed(speed);
+        }
+    }
+
+    public void setImageAllPlanes(String colorPlaneSelected) {
+        for (Plane plane : planes) {
+            plane.setColor(colorPlaneSelected);
+        }
+
+        colorNewPlane = colorPlaneSelected;
+    }
+
+    public void changeColorPlane(String colorPlaneSelected) {
+        if (TemporalPlanes.getId() > 0) {
+            getPlaneById(TemporalPlanes.getId()).setColor(colorPlaneSelected);
         }
     }
 }

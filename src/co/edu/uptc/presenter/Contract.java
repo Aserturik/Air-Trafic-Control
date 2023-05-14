@@ -40,6 +40,10 @@ public interface Contract {
         void restartGame();
 
         void setPlaneSpeed(int speed);
+
+        void setImageAllPlanes(String colorPlaneSelected);
+
+        void changeColorPlane(String colorPlaneSelected);
     }
 
     public interface Model {
@@ -63,5 +67,9 @@ public interface Contract {
         void gameOver();
 
         void setSpeed(int speed);
+
+        void setImageAllPlanes(String colorPlaneSelected);
+
+        void changeColorPlane(String colorPlaneSelected);
     }
 }
