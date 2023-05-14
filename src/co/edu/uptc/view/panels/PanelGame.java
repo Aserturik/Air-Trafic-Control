@@ -213,6 +213,7 @@ public class PanelGame extends JPanel implements MouseListener, MouseMotionListe
     public void mouseClicked(MouseEvent e) {
         if (e.getButton() == MouseEvent.BUTTON3) {
             frame.getPresenter().pauseGame();
+            frame.getPresenter().isSelectedPlane(e.getPoint());
             showPopupMenu(e.getPoint());
         }
     }
@@ -278,8 +279,8 @@ public class PanelGame extends JPanel implements MouseListener, MouseMotionListe
         button.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                // que le setee la velocidad al avion
                 dialogVelocity.setVisible(false);
+                frame.getPresenter().setPlaneSpeed(speedSlider.getValue());
                 frame.getPresenter().pauseGame();
             }
         });
