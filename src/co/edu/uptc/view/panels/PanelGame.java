@@ -144,10 +144,6 @@ public class PanelGame extends JPanel implements MouseListener, MouseMotionListe
     }
 
     @Override
-    public void mouseClicked(MouseEvent e) {
-    }
-
-    @Override
     public void mousePressed(MouseEvent e) {
         frame.getPresenter().isSelectedPlane(e.getPoint());
     }
@@ -211,5 +207,141 @@ public class PanelGame extends JPanel implements MouseListener, MouseMotionListe
     public void setImagePlaneSelected(String colorPlaneSelected) {
         imagePlaneSelected = colorPlaneSelected;
         imagePlane.setImage(new ImageIcon((imagePlaneSelected)).getImage());
+    }
+
+    @Override
+    public void mouseClicked(MouseEvent e) {
+        if (e.getButton() == MouseEvent.BUTTON3) {
+            frame.getPresenter().pauseGame();
+            showPopupMenu(e.getPoint());
+        }
+    }
+
+    public void showPopupMenu(Point point) {
+        JPopupMenu popupMenu = new JPopupMenu();
+        JMenu menuChangeColor = menuChangeColor();
+
+        JMenuItem menuItemBlue = menuItemBlue();
+        JMenuItem menuItemRed = menuItemRed();
+        JMenuItem menuItemYellow = menuItemYellow();
+
+
+        menuChangeColor.add(menuItemBlue);
+        menuChangeColor.add(menuItemRed);
+        menuChangeColor.add(menuItemYellow);
+
+        popupMenu.add(menuChangeColor);
+        JMenuItem changeVelocity = changeVelocity();
+        popupMenu.add(changeVelocity);
+
+        popupMenu.show(this, point.x, point.y);
+    }
+
+    private JMenu menuChangeColor() {
+        JMenu menuChangeColor = new JMenu("Cambiar Color");
+        menuChangeColor.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                frame.getPresenter().pauseGame();
+            }
+        });
+
+        return menuChangeColor;
+    }
+
+    private JMenuItem changeVelocity() {
+        JMenuItem changeVelocity = new JMenuItem("Cambiar Velocidad");
+        changeVelocity.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                JDialog dialogVelocity = dialogVelocity();
+                dialogVelocity.setSize(300, 300);
+                dialogVelocity.setVisible(true);
+            }
+        });
+
+        return changeVelocity;
+    }
+
+    private JDialog dialogVelocity() {
+        JDialog dialogVelocity = new JDialog();
+
+        JPanel panel = new JPanel(new BorderLayout());
+
+        JLabel label = new JLabel("<html><body>Seleccione la velocidad del avion<br>0 es la velocidad mas baja y 10 la mas alta</body></html>");
+        label.setForeground(Color.BLACK);
+
+        JSlider speedSlider = new JSlider(JSlider.HORIZONTAL, 0, 10, 5);
+        speedSliderFeatures(speedSlider);
+
+        JButton button = new JButton("Aceptar");
+        button.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                // que le setee la velocidad al avion
+                dialogVelocity.setVisible(false);
+                frame.getPresenter().pauseGame();
+            }
+        });
+
+        panel.add(label, BorderLayout.NORTH);
+        panel.add(speedSlider, BorderLayout.CENTER);
+        panel.add(button, BorderLayout.SOUTH);
+
+        dialogVelocity.getContentPane().add(panel);
+
+        return dialogVelocity;
+    }
+
+    private void speedSliderFeatures(JSlider speedSlider) {
+        speedSlider.setMajorTickSpacing(1);
+        speedSlider.setMinorTickSpacing(1);
+        speedSlider.setPaintTicks(true);
+        speedSlider.setPaintLabels(true);
+        speedSlider.setBackground(Color.black);
+        speedSlider.setForeground(Color.white);
+        speedSlider.addChangeListener(e -> {
+            JSlider source = (JSlider) e.getSource();
+            if (!source.getValueIsAdjusting()) {
+                int speed = source.getValue();
+                frame.getPresenter().setPlaneSpeed(speed);
+            }
+        });
+    }
+
+    private JMenuItem menuItemBlue() {
+        JMenuItem menuItemBlue = new JMenuItem("Azul");
+        menuItemBlue.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                //frame.getPresenter().changeColorPlane("images/avionAzul.png");
+            }
+        });
+
+        return menuItemBlue;
+    }
+
+    private JMenuItem menuItemRed() {
+        JMenuItem menuItemRed = new JMenuItem("Rojo");
+        menuItemRed.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                //frame.getPresenter().changeColorPlane("images/avionRojo.png");
+            }
+        });
+
+        return menuItemRed;
+    }
+
+    private JMenuItem menuItemYellow() {
+        JMenuItem menuItemYellow = new JMenuItem("Amarillo");
+        menuItemYellow.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                //frame.getPresenter().changeColorPlane("images/avionAmarillo.png");
+            }
+        });
+
+        return menuItemYellow;
     }
 }

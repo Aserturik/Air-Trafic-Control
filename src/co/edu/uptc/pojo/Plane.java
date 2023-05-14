@@ -12,13 +12,10 @@ public class Plane {
     private Point position;
     private Point nextPosition;
     private int finalId;
-    private static int id;
 
     public Plane() {
         this.path = new ArrayList<Point>();
         this.newPlane = true;
-        id++;
-        System.out.println(id);
     }
 
     public void addPoint(Point point) {
@@ -65,30 +62,8 @@ public class Plane {
         }
     }
 
-    @Override
-    public String toString() {
-        return "Plane{" +
-                "angle=" + angle +
-                ", path=" + path +
-                ", position=" + getPosition() +
-                '}';
-    }
-
-    public void setNewPlane(boolean b) {
-        this.newPlane = b;
-    }
-
     public void setFollowPath(boolean b) {
         this.isFollowPath = b;
-    }
-
-    public int getId() {
-        return id;
-    }
-
-    public boolean isFollowPath() {
-        //System.out.println(id + "tamaño del pat " + path.size());
-        return isFollowPath;
     }
 
     public int getFinalId() {
@@ -98,8 +73,12 @@ public class Plane {
     public void setFinalId(int finalId) {
         this.finalId = finalId;
     }
-
-    public static void setId(int id) {
-        Plane.id = id;
+    @Override
+    public String toString() {
+        return "Plane{" +
+                "angle=" + angle +
+                ", path=" + path +
+                ", position=" + getPosition() +
+                '}';
     }
 }

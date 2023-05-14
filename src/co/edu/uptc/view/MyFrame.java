@@ -28,6 +28,7 @@ public class MyFrame extends JFrame implements Contract.View {
         this.setMaximumSize(new Dimension(ValuesGlobals.WIDTH_FRAME, ValuesGlobals.HEIGHT_FRAME + 36));
         this.setLocationRelativeTo(null);
         this.setResizable(false);
+        this.setBackground(new Color(0, 0, 0));
     }
 
     private void initComponents() {

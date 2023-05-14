@@ -11,7 +11,6 @@ public class PanelMenu extends JPanel implements KeyListener {
     private MyFrame frame;
     private GridBagConstraints gbc;
     private String colorPlaneSelected;
-    private final Color BACKGROUND_COLOR = new Color(0, 0, 0, 0.5f);
     private Graphics2D g2d;
     private JLabel labelImagePlaneSelected;
 
@@ -37,7 +36,8 @@ public class PanelMenu extends JPanel implements KeyListener {
         this.setMinimumSize(new Dimension(ValuesGlobals.WIDTH_MENU, ValuesGlobals.HEIGHT_MENU));
         this.setMaximumSize(new Dimension(ValuesGlobals.WIDTH_MENU, ValuesGlobals.HEIGHT_MENU));
         gbc = new GridBagConstraints();
-        gbc.insets = new Insets(12, 12, 12, 12);
+        gbc.insets = new Insets(10, 10, 10, 10);
+        this.setBackground(new Color(0, 0, 0));
         this.setLayout(new GridBagLayout());
         this.setVisible(false);
     }
@@ -63,6 +63,7 @@ public class PanelMenu extends JPanel implements KeyListener {
         configGBC(0, 0, 3, 1, GridBagConstraints.BOTH, GridBagConstraints.CENTER);
         JLabel title = new JLabel("Juego en Pausa");
         title.setFont(new Font("Arial", Font.BOLD, 30));
+        title.setForeground(Color.white);
         this.add(title, gbc);
     }
 
@@ -70,6 +71,7 @@ public class PanelMenu extends JPanel implements KeyListener {
         configGBC(0, 1, 3, 1, GridBagConstraints.BOTH, GridBagConstraints.CENTER);
         JLabel velocityPlane = new JLabel("Velocidad del avión");
         velocityPlane.setFont(new Font("Arial", Font.BOLD, 20));
+        velocityPlane.setForeground(Color.white);
         this.add(velocityPlane, gbc);
         configGBC(0, 2, 3, 1, GridBagConstraints.BOTH, GridBagConstraints.CENTER);
         JSlider speedSlider = new JSlider(JSlider.HORIZONTAL, 0, 10, 5);
@@ -82,7 +84,7 @@ public class PanelMenu extends JPanel implements KeyListener {
         speedSlider.setMinorTickSpacing(1);
         speedSlider.setPaintTicks(true);
         speedSlider.setPaintLabels(true);
-        speedSlider.setBackground(BACKGROUND_COLOR);
+        speedSlider.setBackground(Color.black);
         speedSlider.setForeground(Color.white);
         speedSlider.addChangeListener(e -> {
             JSlider source = (JSlider) e.getSource();
@@ -97,6 +99,7 @@ public class PanelMenu extends JPanel implements KeyListener {
         configGBC(0, 3, 3, 1, GridBagConstraints.BOTH, GridBagConstraints.CENTER);
         JLabel colorPlane = new JLabel("Color del avión");
         colorPlane.setFont(new Font("Arial", Font.BOLD, 20));
+        colorPlane.setForeground(Color.white);
         this.add(colorPlane, gbc);
 
         labelImagePlaneRed();
@@ -108,6 +111,7 @@ public class PanelMenu extends JPanel implements KeyListener {
         configGBC(0, 4, 1, 1, GridBagConstraints.EAST, GridBagConstraints.CENTER);
         JLabel labelImagePlaneRed = new JLabel();
         labelImagePlaneRed.setIcon(new ImageIcon(("assets/planeRed.png")));
+        labelImagePlaneRed.setForeground(Color.white);
         this.add(labelImagePlaneRed, gbc);
 
         labelImagePlaneRed.addMouseListener(new MouseAdapter() {
@@ -156,6 +160,7 @@ public class PanelMenu extends JPanel implements KeyListener {
         configGBC(0, 5, 1, 1, GridBagConstraints.BOTH, GridBagConstraints.CENTER);
         JLabel imageSelectedPlane = new JLabel("<html><body>Avión<br>seleccionado</body></html>");
         imageSelectedPlane.setFont(new Font("Arial", Font.BOLD, 20));
+        imageSelectedPlane.setForeground(Color.white);
         this.add(imageSelectedPlane, gbc);
 
         configGBC(0, 6, 1, 2, GridBagConstraints.EAST, GridBagConstraints.CENTER);
@@ -168,7 +173,7 @@ public class PanelMenu extends JPanel implements KeyListener {
         ImageIcon imageIcon = new ImageIcon(colorPlaneSelected);
         Image image = imageIcon.getImage();
 
-        g2d.drawImage(image, 346, 440, null);
+        g2d.drawImage(image, 306, 400, null);
     }
 
     public void optionButtons() {
