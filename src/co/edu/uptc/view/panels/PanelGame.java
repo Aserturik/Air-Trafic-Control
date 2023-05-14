@@ -24,6 +24,9 @@ public class PanelGame extends JPanel implements MouseListener, MouseMotionListe
     private int landedPlanes;
     private RenderingHints renderingHints;
     private String imagePlaneSelected = "assets/planeYellow.png";
+    private JMenuItem menuItemBlue;
+    private JMenuItem menuItemRed;
+    private JMenuItem menuItemYellow;
 
     public PanelGame(MyFrame myFrame) {
         super();
@@ -144,14 +147,6 @@ public class PanelGame extends JPanel implements MouseListener, MouseMotionListe
     }
 
     @Override
-    public void mouseClicked(MouseEvent e) {
-        if (e.getButton() == MouseEvent.BUTTON3) {
-            // open popup menu
-            frame.showPopupMenu(e.getPoint());
-        }
-    }
-
-    @Override
     public void mousePressed(MouseEvent e) {
         frame.getPresenter().isSelectedPlane(e.getPoint());
     }
@@ -217,24 +212,91 @@ public class PanelGame extends JPanel implements MouseListener, MouseMotionListe
         imagePlane.setImage(new ImageIcon((imagePlaneSelected)).getImage());
     }
 
+    @Override
+    public void mouseClicked(MouseEvent e) {
+        if (e.getButton() == MouseEvent.BUTTON3) {
+            frame.getPresenter().pauseGame();
+            showPopupMenu(e.getPoint());
+        }
+    }
+
     public void showPopupMenu(Point point) {
         JPopupMenu popupMenu = new JPopupMenu();
-        JMenu menuChangeColor = new JMenu("Cambiar Color");
-        menuChangeColor.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                popupChangeColor();
-                frame.getPresenter().pauseGame();
-            }
-        });
+        JMenu menuChangeColor = menuChangeColor();
 
+        JMenuItem menuItemBlue = menuItemBlue();
+        JMenuItem menuItemRed = menuItemRed();
+        JMenuItem menuItemYellow = menuItemYellow();
+
+
+        menuChangeColor.add(menuItemBlue);
+        menuChangeColor.add(menuItemRed);
+        menuChangeColor.add(menuItemYellow);
 
         popupMenu.add(menuChangeColor);
+        JMenuItem changeVelocity = changeVelocity();
+        popupMenu.add(changeVelocity);
 
         popupMenu.show(this, point.x, point.y);
     }
 
-    private void popupChangeColor(){
+    private JMenu menuChangeColor() {
+        JMenu menuChangeColor = new JMenu("Cambiar Color");
+        menuChangeColor.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                frame.getPresenter().pauseGame();
+            }
+        });
 
+        return menuChangeColor;
+    }
+
+    private JMenuItem changeVelocity() {
+        JMenuItem changeVelocity = new JMenuItem("Cambiar Velocidad");
+        changeVelocity.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                frame.getPresenter().pauseGame();
+            }
+        });
+
+        return changeVelocity;
+    }
+
+    private JMenuItem menuItemBlue() {
+        JMenuItem menuItemBlue = new JMenuItem("Azul");
+        menuItemBlue.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                //frame.getPresenter().changeColorPlane("images/avionAzul.png");
+            }
+        });
+
+        return menuItemBlue;
+    }
+
+    private JMenuItem menuItemRed() {
+        JMenuItem menuItemRed = new JMenuItem("Rojo");
+        menuItemRed.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                //frame.getPresenter().changeColorPlane("images/avionRojo.png");
+            }
+        });
+
+        return menuItemRed;
+    }
+
+    private JMenuItem menuItemYellow() {
+        JMenuItem menuItemYellow = new JMenuItem("Amarillo");
+        menuItemYellow.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                //frame.getPresenter().changeColorPlane("images/avionAmarillo.png");
+            }
+        });
+
+        return menuItemYellow;
     }
 }
