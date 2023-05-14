@@ -24,9 +24,6 @@ public class PanelGame extends JPanel implements MouseListener, MouseMotionListe
     private int landedPlanes;
     private RenderingHints renderingHints;
     private String imagePlaneSelected = "assets/planeYellow.png";
-    private JMenuItem menuItemBlue;
-    private JMenuItem menuItemRed;
-    private JMenuItem menuItemYellow;
 
     public PanelGame(MyFrame myFrame) {
         super();
@@ -257,11 +254,59 @@ public class PanelGame extends JPanel implements MouseListener, MouseMotionListe
         changeVelocity.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                frame.getPresenter().pauseGame();
+                JDialog dialogVelocity = dialogVelocity();
+                dialogVelocity.setSize(300, 300);
+                dialogVelocity.setVisible(true);
             }
         });
 
         return changeVelocity;
+    }
+
+    private JDialog dialogVelocity() {
+        JDialog dialogVelocity = new JDialog();
+
+        JPanel panel = new JPanel(new BorderLayout());
+
+        JLabel label = new JLabel("<html><body>Seleccione la velocidad del avion<br>0 es la velocidad mas baja y 10 la mas alta</body></html>");
+        label.setForeground(Color.BLACK);
+
+        JSlider speedSlider = new JSlider(JSlider.HORIZONTAL, 0, 10, 5);
+        speedSliderFeatures(speedSlider);
+
+        JButton button = new JButton("Aceptar");
+        button.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                // que le setee la velocidad al avion
+                dialogVelocity.setVisible(false);
+                frame.getPresenter().pauseGame();
+            }
+        });
+
+        panel.add(label, BorderLayout.NORTH);
+        panel.add(speedSlider, BorderLayout.CENTER);
+        panel.add(button, BorderLayout.SOUTH);
+
+        dialogVelocity.getContentPane().add(panel);
+
+        return dialogVelocity;
+    }
+
+    private void speedSliderFeatures(JSlider speedSlider) {
+        speedSlider.setMajorTickSpacing(1);
+        speedSlider.setMinorTickSpacing(1);
+        speedSlider.setPaintTicks(true);
+        speedSlider.setPaintLabels(true);
+        speedSlider.setBackground(Color.black);
+        speedSlider.setForeground(Color.white);
+        speedSlider.addChangeListener(e -> {
+            JSlider source = (JSlider) e.getSource();
+            if (!source.getValueIsAdjusting()) {
+                int speed = source.getValue();
+                frame.getPresenter().setPlaneSpeed(speed);
+            }
+        });
     }
 
     private JMenuItem menuItemBlue() {
