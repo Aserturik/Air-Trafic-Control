@@ -78,7 +78,6 @@ public class PanelGame extends JPanel implements MouseListener, MouseMotionListe
         g2d.drawString("Tiempo de Juego: " + Cronometer.getInstance().getTime(), 10, 40);
         g2d.drawString("Presione Esc para ir al menu principal: ", 220, 40);
     }
-
     public void drawAllPlanes(Graphics2D g2d) {
         for (Plane plane : planes) {
             drawImage(plane, g2d);

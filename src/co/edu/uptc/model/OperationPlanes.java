@@ -12,7 +12,6 @@ public class OperationPlanes {
     private List<Plane> planes;
     private int SPEED = 2;
     private Contract.Model model;
-    private boolean isStartGame = false;
     private boolean isPauseGame = false;
     private int landedPlanes = 0;
     private Object lock;
@@ -27,7 +26,6 @@ public class OperationPlanes {
     }
 
     public void startGame() {
-        isStartGame = true;
         startThread();
         createPlanes();
         eliminatePlanes();
@@ -62,8 +60,8 @@ public class OperationPlanes {
             while (!isPauseGame) {
                 try {
                     synchronized (lock) {
-                        lock.wait();
                         randomPositionGenerator();
+                        lock.notifyAll();
                     }
                     Thread.sleep(ValuesGlobals.TIME_GENERATE_PLANE);
                 } catch (InterruptedException e) {
@@ -72,6 +70,27 @@ public class OperationPlanes {
             }
         });
         addPlanes.start();
+    }
+
+    private void eliminatePlanes() {
+        Thread eliminatePlanes = new Thread(() -> {
+            while (!isPauseGame) {
+                try {
+                    synchronized (lock) {
+                        if(nextPlaneToRemove != null) {
+                            planes.remove(nextPlaneToRemove);
+                            nextPlaneToRemove = null;
+                        }
+                        verifyPlanes();
+                        lock.notifyAll();
+                    }
+                    Thread.sleep(ValuesGlobals.TIME_ELIMINATE_PLANE);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+        eliminatePlanes.start();
     }
 
     public void landedPlanes() {
@@ -95,35 +114,12 @@ public class OperationPlanes {
                 Plane plane2 = planes.get(j);
                 Rectangle rectangle2 = getRectangle(plane2);
                 if (rectangle1.intersects(rectangle2)) {
-                    isStartGame = false;
                     model.gameOver();
                     isPauseGame = true;
                     return;
                 }
             }
         }
-    }
-
-    private void eliminatePlanes() {
-        Thread eliminatePlanes = new Thread(() -> {
-            while (!isPauseGame) {
-                try {
-                    synchronized (lock) {
-                        if(nextPlaneToRemove != null) {
-                            System.out.println("Eliminando avion: " + nextPlaneToRemove.getFinalId());
-                            planes.remove(nextPlaneToRemove);
-                            nextPlaneToRemove = null;
-                        }
-                        verifyPlanes();
-                        lock.notifyAll();
-                    }
-                    Thread.sleep(ValuesGlobals.TIME_ELIMINATE_PLANE);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-            }
-        });
-        eliminatePlanes.start();
     }
 
     private void verifyPlanes() {
@@ -216,7 +212,7 @@ public class OperationPlanes {
     }
 
     private void moveForward(Plane plane) {
-        Point nextPosition = plane.getPosition();
+        Point nextPosition = plane.getNextPosition();
 
         double angleRadians = Math.toRadians(plane.getAngle());
         double dx = Math.cos(angleRadians) * plane.getSpeed();
@@ -229,8 +225,7 @@ public class OperationPlanes {
         int x = plane.getPosition().x;
         int y = plane.getPosition().y;
 
-        if (x == 0 || x == ValuesGlobals.HEIGHT_FRAME || y == 0 || y == ValuesGlobals.WIDTH_FRAME){
-            System.out.println("el avion " + plane.getFinalId() + " ha salido del mapa");
+        if (x <= 0 || x >= ValuesGlobals.WIDTH_FRAME || y <= 0 || y >= ValuesGlobals.HEIGHT_FRAME){
             nextPlaneToRemove = plane;
         }
     }
@@ -381,7 +376,7 @@ public class OperationPlanes {
     }
 
     public void selectedPlaneNull() {
-        if (TemporalPlanes.getId() != -1) {
+        if (TemporalPlanes.getId() > 0) {
             Plane planeSelected = getPlaneById(TemporalPlanes.getId());
             planeSelected.setPath(calculateIntermediePoints(planeSelected.getPath(), planeSelected));
             planeSelected.setFollowPath(true);
@@ -408,5 +403,12 @@ public class OperationPlanes {
         if (TemporalPlanes.getId() > 0) {
             getPlaneById(TemporalPlanes.getId()).setColor(colorPlaneSelected);
         }
+    }
+
+    public void setTotalSpeed(int speed) {
+        for (Plane plane : planes) {
+            plane.setSpeed(speed);
+        }
+        this.SPEED = speed;
     }
 }
