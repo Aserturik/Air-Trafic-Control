@@ -70,4 +70,9 @@ public class Presenter implements Contract.Presenter {
     public void setImageAllPlanes(String colorPlaneSelected) {
         model.setImageAllPlanes(colorPlaneSelected);
     }
+
+    @Override
+    public void changeColorPlane(String colorPlaneSelected) {
+        model.changeColorPlane(colorPlaneSelected);
+    }
 }

@@ -379,4 +379,10 @@ public class OperationPlanes {
 
         colorNewPlane = colorPlaneSelected;
     }
+
+    public void changeColorPlane(String colorPlaneSelected) {
+        if (TemporalPlanes.getId() > 0) {
+            getPlaneById(TemporalPlanes.getId()).setColor(colorPlaneSelected);
+        }
+    }
 }

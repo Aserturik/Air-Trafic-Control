@@ -73,4 +73,9 @@ public class ManagerModel implements Contract.Model {
     public void setImageAllPlanes(String colorPlaneSelected) {
         operationPlanes.setImageAllPlanes(colorPlaneSelected);
     }
+
+    @Override
+    public void changeColorPlane(String colorPlaneSelected) {
+        operationPlanes.changeColorPlane(colorPlaneSelected);
+    }
 }

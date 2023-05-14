@@ -42,6 +42,8 @@ public interface Contract {
         void setPlaneSpeed(int speed);
 
         void setImageAllPlanes(String colorPlaneSelected);
+
+        void changeColorPlane(String colorPlaneSelected);
     }
 
     public interface Model {
@@ -67,5 +69,7 @@ public interface Contract {
         void setSpeed(int speed);
 
         void setImageAllPlanes(String colorPlaneSelected);
+
+        void changeColorPlane(String colorPlaneSelected);
     }
 }

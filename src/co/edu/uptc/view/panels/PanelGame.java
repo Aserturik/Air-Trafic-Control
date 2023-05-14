@@ -331,7 +331,8 @@ public class PanelGame extends JPanel implements MouseListener, MouseMotionListe
         menuItemBlue.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                //frame.getPresenter().changeColorPlane("images/avionAzul.png");
+                frame.getPresenter().changeColorPlane(ValuesGlobals.BLUE_PLANE);
+                frame.getPresenter().pauseGame();
             }
         });
 
@@ -343,7 +344,8 @@ public class PanelGame extends JPanel implements MouseListener, MouseMotionListe
         menuItemRed.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                //frame.getPresenter().changeColorPlane("images/avionRojo.png");
+                frame.getPresenter().changeColorPlane(ValuesGlobals.RED_PLANE);
+                frame.getPresenter().pauseGame();
             }
         });
 
@@ -355,7 +357,8 @@ public class PanelGame extends JPanel implements MouseListener, MouseMotionListe
         menuItemYellow.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                //frame.getPresenter().changeColorPlane("images/avionAmarillo.png");
+                frame.getPresenter().changeColorPlane(ValuesGlobals.YELLOW_PLANE);
+                frame.getPresenter().pauseGame();
             }
         });
 
