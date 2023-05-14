@@ -17,6 +17,7 @@ public class OperationPlanes {
     private int landedPlanes = 0;
     private Object lock;
     private int id = 0;
+    private String colorNewPlane = ValuesGlobals.YELLOW_PLANE;
 
     public OperationPlanes(Contract.Model model) {
         lock = new Object();
@@ -181,13 +182,14 @@ public class OperationPlanes {
                 plane.addPoint(new Point(random.nextInt(ValuesGlobals.WIDTH_FRAME - 10 + 1) + 10, ValuesGlobals.HEIGHT_FRAME));
                 break;
         }
+        plane.setColor(this.colorNewPlane);
         plane.setPosition(plane.getPath().get(0));
         plane.setNextPosition(getInversePosition(plane));
         planes.add(plane);
     }
 
     public void moveToRoute(Plane plane) {
-        if(plane.getSpeed() == 0){
+        if (plane.getSpeed() == 0) {
             plane.setSpeed(SPEED);
         }
         plane.setNextPosition(plane.getPath().get(1));
@@ -365,8 +367,16 @@ public class OperationPlanes {
     }
 
     public void setSpeed(int speed) {
-        if(TemporalPlanes.getId() > 0){
+        if (TemporalPlanes.getId() > 0) {
             getPlaneById(TemporalPlanes.getId()).setSpeed(speed);
         }
+    }
+
+    public void setImageAllPlanes(String colorPlaneSelected) {
+        for (Plane plane : planes) {
+            plane.setColor(colorPlaneSelected);
+        }
+
+        colorNewPlane = colorPlaneSelected;
     }
 }

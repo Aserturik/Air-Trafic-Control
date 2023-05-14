@@ -23,13 +23,17 @@ public class PanelGame extends JPanel implements MouseListener, MouseMotionListe
     private Font font;
     private int landedPlanes;
     private RenderingHints renderingHints;
-    private String imagePlaneSelected = "assets/planeYellow.png";
+    private ImageIcon iconPlaneRed;
+    private ImageIcon iconPlaneBlue;
+    private ImageIcon iconPlaneYellow;
 
     public PanelGame(MyFrame myFrame) {
         super();
         this.frame = myFrame;
         planes = new ArrayList<Plane>();
-        imagePlane = getImagePlane();
+        iconPlaneBlue = getImagePlane(ValuesGlobals.BLUE_PLANE);
+        iconPlaneRed = getImagePlane(ValuesGlobals.RED_PLANE);
+        iconPlaneYellow = getImagePlane(ValuesGlobals.YELLOW_PLANE);
         imageAirPort = getImageAirPort();
         font = new Font("Arial", Font.BOLD, 12);
         this.setBackground(Color.BLACK);
@@ -72,6 +76,7 @@ public class PanelGame extends JPanel implements MouseListener, MouseMotionListe
         g2d.drawString("Cantidad de Aviones: " + planes.size(), 10, 20);
         g2d.drawString("Cantidad de Aviones Aterrizados: " + landedPlanes, 220, 20);
         g2d.drawString("Tiempo de Juego: " + Cronometer.getInstance().getTime(), 10, 40);
+        g2d.drawString("Presione Esc para ir al menu principal: ", 220, 40);
     }
 
     public void drawAllPlanes(Graphics2D g2d) {
@@ -100,13 +105,25 @@ public class PanelGame extends JPanel implements MouseListener, MouseMotionListe
         double rotationRequired = Math.toRadians(plane.getAngle());
         AffineTransform tx = g2d.getTransform();
 
-        int imageWidth = imagePlane.getIconWidth();
-        int imageHeight = imagePlane.getIconHeight();
+        int imageWidth = 40;
+        int imageHeight = 40;
         int drawX = plane.getPosition().x - imageWidth / 2;
         int drawY = plane.getPosition().y - imageHeight / 2;
 
         g2d.rotate(rotationRequired, plane.getPosition().x, plane.getPosition().y);
-        g2d.drawImage(imagePlane.getImage(), drawX, drawY, null);
+
+        if (plane.getColor().equals(ValuesGlobals.RED_PLANE)) {
+            g2d.drawImage(iconPlaneRed.getImage(), drawX, drawY, null);
+        }
+
+        if (plane.getColor().equals(ValuesGlobals.BLUE_PLANE)) {
+            g2d.drawImage(iconPlaneBlue.getImage(), drawX, drawY, null);
+        }
+
+        if (plane.getColor().equals(ValuesGlobals.YELLOW_PLANE)) {
+            g2d.drawImage(iconPlaneYellow.getImage(), drawX, drawY, null);
+        }
+
         g2d.setTransform(tx);
     }
 
@@ -120,7 +137,7 @@ public class PanelGame extends JPanel implements MouseListener, MouseMotionListe
         return new ImageIcon(((ImageIcon) img).getImage().getScaledInstance(imageLabel.getWidth(), imageLabel.getHeight(), Image.SCALE_DEFAULT));
     }
 
-    private ImageIcon getImagePlane() {
+    private ImageIcon getImagePlane(String imagePlaneSelected) {
         UtilImages utilImages = new UtilImages();
         imageLabel = new JLabel();
         imageLabel.setBounds(10, 10, 40, 40);
@@ -205,8 +222,7 @@ public class PanelGame extends JPanel implements MouseListener, MouseMotionListe
     }
 
     public void setImagePlaneSelected(String colorPlaneSelected) {
-        imagePlaneSelected = colorPlaneSelected;
-        imagePlane.setImage(new ImageIcon((imagePlaneSelected)).getImage());
+        frame.getPresenter().setImageAllPlanes(colorPlaneSelected);
     }
 
     @Override

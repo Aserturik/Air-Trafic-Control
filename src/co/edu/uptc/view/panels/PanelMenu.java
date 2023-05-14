@@ -110,14 +110,14 @@ public class PanelMenu extends JPanel implements KeyListener {
     private void labelImagePlaneRed() {
         configGBC(0, 4, 1, 1, GridBagConstraints.EAST, GridBagConstraints.CENTER);
         JLabel labelImagePlaneRed = new JLabel();
-        labelImagePlaneRed.setIcon(new ImageIcon(("assets/planeRed.png")));
+        labelImagePlaneRed.setIcon(new ImageIcon((ValuesGlobals.RED_PLANE)));
         labelImagePlaneRed.setForeground(Color.white);
         this.add(labelImagePlaneRed, gbc);
 
         labelImagePlaneRed.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                colorPlaneSelected = "assets/planeRed.png";
+                colorPlaneSelected = ValuesGlobals.RED_PLANE;
                 frame.getPrincipalPanel().getPanelGame().setImagePlaneSelected(colorPlaneSelected);
                 repaint();
             }
@@ -127,13 +127,13 @@ public class PanelMenu extends JPanel implements KeyListener {
     private void labelImagePlaneBlue() {
         configGBC(1, 4, 1, 1, GridBagConstraints.CENTER, GridBagConstraints.CENTER);
         JLabel labelImagePlaneBlue = new JLabel();
-        labelImagePlaneBlue.setIcon(new ImageIcon(("assets/planeBlue.png")));
+        labelImagePlaneBlue.setIcon(new ImageIcon((ValuesGlobals.BLUE_PLANE)));
         this.add(labelImagePlaneBlue, gbc);
 
         labelImagePlaneBlue.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                colorPlaneSelected = "assets/planeBlue.png";
+                colorPlaneSelected = ValuesGlobals.BLUE_PLANE;
                 frame.getPrincipalPanel().getPanelGame().setImagePlaneSelected(colorPlaneSelected);
                 repaint();
             }
@@ -143,13 +143,13 @@ public class PanelMenu extends JPanel implements KeyListener {
     private void labelImagePlaneYellow() {
         configGBC(2, 4, 1, 1, GridBagConstraints.BOTH, GridBagConstraints.CENTER);
         JLabel labelImagePlaneYellow = new JLabel();
-        labelImagePlaneYellow.setIcon(new ImageIcon(("assets/planeYellow.png")));
+        labelImagePlaneYellow.setIcon(new ImageIcon((ValuesGlobals.YELLOW_PLANE)));
         this.add(labelImagePlaneYellow, gbc);
 
         labelImagePlaneYellow.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                colorPlaneSelected = "assets/planeYellow.png";
+                colorPlaneSelected = ValuesGlobals.YELLOW_PLANE;
                 frame.getPrincipalPanel().getPanelGame().setImagePlaneSelected(colorPlaneSelected);
                 repaint();
             }
