@@ -60,8 +60,8 @@ public class OperationPlanes {
             while (!isPauseGame) {
                 try {
                     synchronized (lock) {
-                        randomPositionGenerator();
                         lock.wait();
+                        randomPositionGenerator();
                     }
                     Thread.sleep(ValuesGlobals.TIME_GENERATE_PLANE);
                 } catch (InterruptedException e) {
@@ -140,8 +140,8 @@ public class OperationPlanes {
     private void randomPositionGenerator() {
         Plane plane = new Plane();
         addNewPlane(plane);
-        plane.setFinalId(id);
         id++;
+        plane.setFinalId(id);
         plane.setAngle(getAngle(plane));
         moveToRoute(plane);
     }
@@ -187,19 +187,22 @@ public class OperationPlanes {
     }
 
     public void moveToRoute(Plane plane) {
+        if(plane.getSpeed() == 0){
+            plane.setSpeed(SPEED);
+        }
         plane.setNextPosition(plane.getPath().get(1));
         double distance = getDistanceTo(plane, plane.getNextPosition());
         double dx = plane.getNextPosition().x - plane.getPosition().x;
         double dy = plane.getNextPosition().y - plane.getPosition().y;
 
-        if (distance <= SPEED) {
+        if (distance <= plane.getSpeed()) {
             if (plane.getPath().size() == 1) {
                 plane.setNextPosition(new Point(0, 0));
             }
         } else {
             double angle = Math.atan2(dy, dx);
-            int deltaX = (int) Math.round(SPEED * Math.cos(angle));
-            int deltaY = (int) Math.round(SPEED * Math.sin(angle));
+            int deltaX = (int) Math.round(plane.getSpeed() * Math.cos(angle));
+            int deltaY = (int) Math.round(plane.getSpeed() * Math.sin(angle));
 
             plane.getPosition().x += deltaX;
             plane.getPosition().y += deltaY;
@@ -311,7 +314,7 @@ public class OperationPlanes {
         return false;
     }
 
-    private List<Point> calculateIntermediePoints(List<Point> points) {
+    private List<Point> calculateIntermediePoints(List<Point> points, Plane plane) {
 
         List<Point> intermediatePoints = new ArrayList<>();
         if (points.size() < 2) {
@@ -322,7 +325,7 @@ public class OperationPlanes {
             Point point1 = points.get(i);
             Point point2 = points.get(i + 1);
             double distance = point1.distance(point2);
-            double numberOfPoints = distance / this.SPEED;
+            double numberOfPoints = distance / plane.getSpeed();
             double xIncrement = (point2.x - point1.x) / numberOfPoints;
             double yIncrement = (point2.y - point1.y) / numberOfPoints;
             for (int j = 1; j < numberOfPoints; j++) {
@@ -354,7 +357,7 @@ public class OperationPlanes {
     public void selectedPlaneNull() {
         if (TemporalPlanes.getId() != -1) {
             Plane planeSelected = getPlaneById(TemporalPlanes.getId());
-            planeSelected.setPath(calculateIntermediePoints(planeSelected.getPath()));
+            planeSelected.setPath(calculateIntermediePoints(planeSelected.getPath(), planeSelected));
             planeSelected.setFollowPath(true);
         }
 
@@ -362,6 +365,8 @@ public class OperationPlanes {
     }
 
     public void setSpeed(int speed) {
-        this.SPEED = speed;
+        if(TemporalPlanes.getId() > 0){
+            getPlaneById(TemporalPlanes.getId()).setSpeed(speed);
+        }
     }
 }

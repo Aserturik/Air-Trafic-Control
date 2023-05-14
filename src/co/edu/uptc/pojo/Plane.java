@@ -12,6 +12,8 @@ public class Plane {
     private Point position;
     private Point nextPosition;
     private int finalId;
+    private String color;
+    private int speed;
 
     public Plane() {
         this.path = new ArrayList<Point>();
@@ -73,6 +75,31 @@ public class Plane {
     public void setFinalId(int finalId) {
         this.finalId = finalId;
     }
+
+    public void setNewPlane(boolean newPlane) {
+        this.newPlane = newPlane;
+    }
+
+    public boolean isFollowPath() {
+        return isFollowPath;
+    }
+
+    public String getColor() {
+        return color;
+    }
+
+    public void setColor(String color) {
+        this.color = color;
+    }
+
+    public int getSpeed() {
+        return speed;
+    }
+
+    public void setSpeed(int speed) {
+        this.speed = speed;
+    }
+
     @Override
     public String toString() {
         return "Plane{" +
