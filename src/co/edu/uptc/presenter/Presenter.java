@@ -75,4 +75,9 @@ public class Presenter implements Contract.Presenter {
     public void changeColorPlane(String colorPlaneSelected) {
         model.changeColorPlane(colorPlaneSelected);
     }
+
+    @Override
+    public void setTotalSpeed(int speed) {
+        model.setTotalSpeed(speed);
+    }
 }

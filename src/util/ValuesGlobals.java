@@ -14,5 +14,6 @@ public class ValuesGlobals {
     public static final long TIME_SLEEP = 50;
     public static final int TIME_GENERATE_PLANE = 5000;
     public static final long TIME_ELIMINATE_PLANE = 80;
-    public static final Rectangle LANDED_RECTANGLE = new Rectangle(300, 250, 46, 46);
+    public static final Rectangle LANDED_RECTANGLE = new Rectangle(340, 250, 152, 48);
+    public static final Rectangle CENTER_RECTANGLE = new Rectangle(310, 260, 70, 25);
 }

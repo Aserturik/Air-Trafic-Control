@@ -78,4 +78,9 @@ public class ManagerModel implements Contract.Model {
     public void changeColorPlane(String colorPlaneSelected) {
         operationPlanes.changeColorPlane(colorPlaneSelected);
     }
+
+    @Override
+    public void setTotalSpeed(int speed) {
+        operationPlanes.setTotalSpeed(speed);
+    }
 }
