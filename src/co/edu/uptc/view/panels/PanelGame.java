@@ -229,9 +229,11 @@ public class PanelGame extends JPanel implements MouseListener, MouseMotionListe
     @Override
     public void mouseClicked(MouseEvent e) {
         if (e.getButton() == MouseEvent.BUTTON3) {
-            frame.getPresenter().pauseGame();
-            frame.getPresenter().isSelectedPlane(e.getPoint());
-            showPopupMenu(e.getPoint());
+            if(frame.getPresenter().isSelectedPlane(e.getPoint())) {
+                frame.getPresenter().pauseGame();
+                frame.getPresenter().isSelectedPlane(e.getPoint());
+                showPopupMenu(e.getPoint());
+            }
         }
     }
 
