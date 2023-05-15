@@ -364,7 +364,9 @@ public class OperationPlanes {
 
     public void addPointToPath(Point point) {
         if (TemporalPlanes.getId() > 0) {
-            getPlaneById(TemporalPlanes.getId()).addPoint(point);
+            if(getPlaneById(TemporalPlanes.getId()) != null) {
+                getPlaneById(TemporalPlanes.getId()).addPoint(point);
+            }
         }
     }
 
