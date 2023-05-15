@@ -32,7 +32,9 @@ public class OperationPlanes {
     }
 
     public void viewIsReady() {
-        this.lock = true;
+        synchronized (lock) {
+            lock.notifyAll();
+        }
     }
 
     private synchronized void startThread() {
@@ -45,6 +47,7 @@ public class OperationPlanes {
                         crashPlanes();
                         model.setPlanes(planes);
                         lock.notifyAll();
+                        lock.wait();
                     }
                     Thread.sleep(ValuesGlobals.TIME_SLEEP);
                 } catch (InterruptedException e) {
@@ -60,6 +63,7 @@ public class OperationPlanes {
             while (!isPauseGame) {
                 try {
                     synchronized (lock) {
+                        lock.wait();
                         randomPositionGenerator();
                         lock.notifyAll();
                     }
@@ -77,7 +81,8 @@ public class OperationPlanes {
             while (!isPauseGame) {
                 try {
                     synchronized (lock) {
-                        if(nextPlaneToRemove != null) {
+                        lock.wait();
+                        if (nextPlaneToRemove != null) {
                             planes.remove(nextPlaneToRemove);
                             nextPlaneToRemove = null;
                         }
@@ -225,7 +230,7 @@ public class OperationPlanes {
         int x = plane.getPosition().x;
         int y = plane.getPosition().y;
 
-        if (x <= 0 || x >= ValuesGlobals.WIDTH_FRAME || y <= 0 || y >= ValuesGlobals.HEIGHT_FRAME){
+        if (x <= 0 || x >= ValuesGlobals.WIDTH_FRAME || y <= 0 || y >= ValuesGlobals.HEIGHT_FRAME) {
             nextPlaneToRemove = plane;
         }
     }
@@ -327,8 +332,16 @@ public class OperationPlanes {
         for (Plane plane : planes) {
             if (getRectangle(plane).contains(point)) {
                 TemporalPlanes.setId(plane.getFinalId());
-                plane.getPath().remove(1);
-                plane.getPath().add(point);
+                if (plane.getPath().size() < 2) {
+                    plane.getPath().add(point);
+                } else {
+                    Point point1 = plane.getPath().get(0);
+                    Point point2 = plane.getPath().get(1);
+                    plane.getPath().clear();
+                    plane.getPath().add(point1);
+                    plane.getPath().add(point2);
+                }
+                plane.getPath().set(1, point);
                 return true;
             }
         }
@@ -356,7 +369,7 @@ public class OperationPlanes {
     }
 
     public void addPointToPath(Point point) {
-        if (TemporalPlanes.getId() != -1) {
+        if (TemporalPlanes.getId() > 0 && getPlaneById(TemporalPlanes.getId()) != null) {
             getPlaneById(TemporalPlanes.getId()).addPoint(point);
         }
     }
