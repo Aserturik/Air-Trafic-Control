@@ -10,7 +10,7 @@ import java.util.List;
 
 public class OperationPlanes {
     private List<Plane> planes;
-    private int SPEED = 2;
+    private int SPEED = 3;
     private Contract.Model model;
     private boolean isPauseGame = false;
     private int landedPlanes = 0;
@@ -95,7 +95,7 @@ public class OperationPlanes {
 
     public void landedPlanes() {
         for (Plane plane : planes) {
-            if (ValuesGlobals.LANDED_RECTANGLE.contains(plane.getPosition())) {
+            if (ValuesGlobals.LANDED_RECTANGLE.contains(plane.getPosition()) && ValuesGlobals.CENTER_RECTANGLE.contains(plane.getPosition())) {
                 landedPlanes++;
                 planes.remove(plane);
                 break;

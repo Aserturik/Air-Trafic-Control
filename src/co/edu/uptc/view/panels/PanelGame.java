@@ -54,6 +54,8 @@ public class PanelGame extends JPanel implements MouseListener, MouseMotionListe
         g2d.drawImage(imageAirPort.getImage(), 300, 250, null);
         g2d.setColor(Color.GREEN);
         g2d.drawRect(ValuesGlobals.LANDED_RECTANGLE.x, ValuesGlobals.LANDED_RECTANGLE.y, ValuesGlobals.LANDED_RECTANGLE.width, ValuesGlobals.LANDED_RECTANGLE.height);
+        g2d.setColor(Color.RED);
+        g2d.drawRect(ValuesGlobals.CENTER_RECTANGLE.x, ValuesGlobals.CENTER_RECTANGLE.y, ValuesGlobals.CENTER_RECTANGLE.width, ValuesGlobals.CENTER_RECTANGLE.height);
     }
 
     @Override
