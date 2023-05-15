@@ -338,9 +338,6 @@ public class OperationPlanes {
     private List<Point> calculateIntermediePoints(List<Point> points, Plane plane) {
 
         List<Point> intermediatePoints = new ArrayList<>();
-        if (points.size() < 2) {
-            return intermediatePoints;
-        }
 
         for (int i = 0; i < points.size() - 1; i++) {
             Point point1 = points.get(i);
