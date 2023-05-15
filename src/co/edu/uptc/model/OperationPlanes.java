@@ -334,6 +334,12 @@ public class OperationPlanes {
                 TemporalPlanes.setId(plane.getFinalId());
                 if (plane.getPath().size() < 2) {
                     plane.getPath().add(point);
+                } else {
+                    Point point1 = plane.getPath().get(0);
+                    Point point2 = plane.getPath().get(1);
+                    plane.getPath().clear();
+                    plane.getPath().add(point1);
+                    plane.getPath().add(point2);
                 }
                 plane.getPath().set(1, point);
                 return true;
@@ -363,10 +369,8 @@ public class OperationPlanes {
     }
 
     public void addPointToPath(Point point) {
-        if (TemporalPlanes.getId() > 0) {
-            if(getPlaneById(TemporalPlanes.getId()) != null) {
-                getPlaneById(TemporalPlanes.getId()).addPoint(point);
-            }
+        if (TemporalPlanes.getId() > 0 && getPlaneById(TemporalPlanes.getId()) != null) {
+            getPlaneById(TemporalPlanes.getId()).addPoint(point);
         }
     }
 
