@@ -3,5 +3,5 @@ Air Traffic Control game where players control airplanes using the mouse to land
 
 Game images: 
 
-![image1](game images/1.png)
-![image2](game images/2.png)
+![Pause_Menu](.screenshots/1.png)
+![Game](.screenshots/2.png)
